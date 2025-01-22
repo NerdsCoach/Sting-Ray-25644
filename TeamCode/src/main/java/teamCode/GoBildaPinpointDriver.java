@@ -48,7 +48,8 @@ import java.util.Arrays;
         description ="goBILDA® Pinpoint Odometry Computer (IMU Sensor Fusion for 2 Wheel Odometry)"
         )
 
-public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSimple> {
+public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSimple>
+{
 
     private int deviceStatus   = 0;
     private int loopTime       = 0;
@@ -283,10 +284,10 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
     /**
      * Sets the odometry pod positions relative to the point that the odometry computer tracks around.<br><br>
      * The most common tracking position is the center of the robot. <br> <br>
-     * The X pod offset refers to how far sideways (in mm) from the tracking point the X (forward) odometry pod is. Left of the center is a positive number, right of center is a negative number. <br>
-     * the Y pod offset refers to how far forwards (in mm) from the tracking point the Y (strafe) odometry pod is. forward of center is a positive number, backwards is a negative number.<br>
-     * @param xOffset how sideways from the center of the robot is the X (forward) pod? Left increases
-     * @param yOffset how far forward from the center of the robot is the Y (Strafe) pod? forward increases
+     * The perp pod offset refers to how far sideways (in mm) from the tracking point the perp (forward) odometry pod is. Left of the center is a positive number, right of center is a negative number. <br>
+     * the par pod offset refers to how far forwards (in mm) from the tracking point the par (strafe) odometry pod is. forward of center is a positive number, backwards is a negative number.<br>
+     * @param xOffset how sideways from the center of the robot is the perp (forward) pod? Left increases
+     * @param yOffset how far forward from the center of the robot is the par (Strafe) pod? forward increases
      */
     public void setOffsets(double xOffset, double yOffset){
         writeFloat(Register.X_POD_OFFSET, (float) xOffset);
@@ -309,8 +310,8 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
 
     /**
      * Can reverse the direction of each encoder.
-     * @param xEncoder FORWARD or REVERSED, X (forward) pod should increase when the robot is moving forward
-     * @param yEncoder FORWARD or REVERSED, Y (strafe) pod should increase when the robot is moving left
+     * @param xEncoder FORWARD or REVERSED, perp (forward) pod should increase when the robot is moving forward
+     * @param yEncoder FORWARD or REVERSED, par (strafe) pod should increase when the robot is moving left
      */
     public void setEncoderDirections(EncoderDirection xEncoder, EncoderDirection yEncoder){
         if (xEncoder == EncoderDirection.FORWARD){
@@ -372,7 +373,7 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
      * When you start your code, send a Pose2D that describes the starting position on the field of your robot. <br>
      * Say you're on the red alliance, your robot is against the wall and closer to the audience side,
      * and the front of your robot is pointing towards the center of the field.
-     * You can send a setPosition with something like -600mm x, -1200mm Y, and 90 degrees. The pinpoint would then always
+     * You can send a setPosition with something like -600mm x, -1200mm par, and 90 degrees. The pinpoint would then always
      * keep track of how far away from the center of the field you are. <br><br>
      * <strong>Using this feature to update your position with additional sensors: </strong><br>
      * Some robots have a secondary way to locate their robot on the field. This is commonly
@@ -412,8 +413,8 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
      * READY - The device is currently functioning as normal. GREEN LED<br>
      * CALIBRATING - The device is currently recalibrating the gyro. RED LED<br>
      * FAULT_NO_PODS_DETECTED - the device does not detect any pods plugged in. PURPLE LED <br>
-     * FAULT_X_POD_NOT_DETECTED - The device does not detect an X pod plugged in. BLUE LED <br>
-     * FAULT_Y_POD_NOT_DETECTED - The device does not detect a Y pod plugged in. ORANGE LED <br>
+     * FAULT_X_POD_NOT_DETECTED - The device does not detect an perp pod plugged in. BLUE LED <br>
+     * FAULT_Y_POD_NOT_DETECTED - The device does not detect a par pod plugged in. ORANGE LED <br>
      */
     public DeviceStatus getDeviceStatus(){return lookupStatus(deviceStatus); }
 
@@ -439,22 +440,22 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
     }
 
     /**
-     * @return the raw value of the X (forward) encoder in ticks
+     * @return the raw value of the perp (forward) encoder in ticks
      */
     public int getEncoderX(){return xEncoderValue; }
 
     /**
-     * @return the raw value of the Y (strafe) encoder in ticks
+     * @return the raw value of the par (strafe) encoder in ticks
      */
     public int getEncoderY(){return yEncoderValue; }
 
     /**
-     * @return the estimated X (forward) position of the robot in mm
+     * @return the estimated perp (forward) position of the robot in mm
      */
     public double getPosX(){return xPosition; }
 
     /**
-     * @return the estimated Y (Strafe) position of the robot in mm
+     * @return the estimated par (Strafe) position of the robot in mm
      */
     public double getPosY(){return yPosition; }
 
@@ -464,12 +465,12 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
     public double getHeading(){return hOrientation;}
 
     /**
-     * @return the estimated X (forward) velocity of the robot in mm/sec
+     * @return the estimated perp (forward) velocity of the robot in mm/sec
      */
     public double getVelX(){return xVelocity; }
 
     /**
-     * @return the estimated Y (strafe) velocity of the robot in mm/sec
+     * @return the estimated par (strafe) velocity of the robot in mm/sec
      */
     public double getVelY(){return yVelocity; }
 
@@ -480,13 +481,13 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
 
     /**
      * <strong> This uses its own I2C read, avoid calling this every loop. </strong>
-     * @return the user-set offset for the X (forward) pod
+     * @return the user-set offset for the perp (forward) pod
      */
     public float getXOffset(){return readFloat(Register.X_POD_OFFSET);}
 
     /**
      * <strong> This uses its own I2C read, avoid calling this every loop. </strong>
-     * @return the user-set offset for the Y (strafe) pod
+     * @return the user-set offset for the par (strafe) pod
      */
     public float getYOffset(){return readFloat(Register.Y_POD_OFFSET);}
 

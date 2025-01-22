@@ -13,6 +13,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import teamCode.commands.ArmFudgeFactorDownCommand;
 import teamCode.commands.ArmFudgeFactorUpCommand;
@@ -86,7 +87,8 @@ public class RobotContainer extends CommandOpMode
     private DcMotor m_climbArmMotor;
     private CRServo m_intakeWheelServo;
 
-
+    /* Sensors */
+    private TouchSensor m_touch;
 
     /* Subsystems */
     private DriveSubsystem m_driveSubsystem;
@@ -137,16 +139,16 @@ public class RobotContainer extends CommandOpMode
 
         this.m_drive = new MecanumDrive
                 (
-                        new Motor(hardwareMap, "frontLeft", Motor.GoBILDA.RPM_312),
-                        new Motor(hardwareMap, "frontRight", Motor.GoBILDA.RPM_312),
-                        new Motor(hardwareMap, "backLeft", Motor.GoBILDA.RPM_312),
-                        new Motor(hardwareMap, "backRight", Motor.GoBILDA.RPM_312)
+                        new Motor(hardwareMap, "leftFront", Motor.GoBILDA.RPM_312),
+                        new Motor(hardwareMap, "rightFront_perp", Motor.GoBILDA.RPM_312),
+                        new Motor(hardwareMap, "leftBack_par", Motor.GoBILDA.RPM_312),
+                        new Motor(hardwareMap, "rightBack", Motor.GoBILDA.RPM_312)
                 );
 
 
         /* IMU */
 
-        this.m_imu = hardwareMap.get(IMU.class, "imu");
+        this.m_imu = hardwareMap.get(IMU.class, "m_imu");
         this.m_imuParameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
@@ -168,6 +170,9 @@ public class RobotContainer extends CommandOpMode
         this.m_climbArmMotor = hardwareMap.get(DcMotor.class, "climbArmMotor");
         this.m_intakeWheelServo = new CRServo(hardwareMap, "intakeWheelServo");
 
+        /* Sensors */
+        this.m_touch = hardwareMap.get(TouchSensor.class, "intakeTouchSensor");
+
         /* PID */
 
         this.m_pIDController = new PIDController(0, 0, 0);
@@ -181,7 +186,7 @@ public class RobotContainer extends CommandOpMode
         this.m_liftArmSubsystem = new LiftArmSubsystem(this.m_liftArmMotor)/*() -> this.m_pIDController.calculate(this.m_liftArmMotor.getCurrentPosition()))*/;
         this.m_climbArmSubsystem = new ClimbArmSubsystem(this.m_climbArmMotor);
         this.m_intakePivotSubsystem = new IntakePivotSubsystem(hardwareMap, "intakePivotServo");
-        this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo);
+        this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo, this.m_touch);
         this.m_ascentArmSubsystem = new AscentArmSubsystem(hardwareMap, "ascentArmServo");
         this.m_gyroSubsystem = new GyroSubsystem(this.m_imu);
 //        this.m_pinPointOdometrySubsystem = new PinPointOdometrySubsystem(m_goBilda);

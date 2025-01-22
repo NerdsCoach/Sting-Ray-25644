@@ -43,8 +43,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name = "StingRayWires", group = "00-Autonomous", preselectTeleOp = "FTC Wires TeleOp")
 public class FTCWiresAutoIntoTheDeep extends LinearOpMode {
 
-    public static String TEAM_NAME = "EDIT TEAM NAME"; //TODO: Enter team Name
-    public static int TEAM_NUMBER = 0; //TODO: Enter team Number
+    public static String TEAM_NAME = "Nerds On A Mission"; //TODO: Enter team Name
+    public static int TEAM_NUMBER = 25644; //TODO: Enter team Number
 
     //Define and declare Robot Starting Locations
     public enum START_POSITION{
@@ -64,8 +64,8 @@ public class FTCWiresAutoIntoTheDeep extends LinearOpMode {
                     TEAM_NAME, " ", TEAM_NUMBER);
             telemetry.addData("---------------------------------------","");
             telemetry.addData("Select Starting Position using XYAB on Logitech (or ▢ΔOX on Playstayion) on gamepad 1:","");
-            telemetry.addData("    Left   ", "(X / ▢)");
-            telemetry.addData("    Right ", "(Y / Δ)");
+            telemetry.addData("    Left   ", "(perp / ▢)");
+            telemetry.addData("    Right ", "(par / Δ)");
 
             if(gamepad1.x){
                 startPosition = START_POSITION.LEFT;

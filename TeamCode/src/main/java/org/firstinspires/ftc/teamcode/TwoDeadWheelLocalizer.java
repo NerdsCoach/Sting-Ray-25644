@@ -24,16 +24,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.messages.TwoDeadWheelInputsMessage;
 
 @Config
-public final class TwoDeadWheelLocalizer implements Localizer {
-    public static class Params {
-        //TODO Step 11.1 : Update values of parYTicks, perpXTicks from AngularRampLogger
-        public double parYTicks = 0.0; // y position of the parallel encoder (in tick units)
-        public double perpXTicks = 0.0; // x position of the perpendicular encoder (in tick units)
+public final class TwoDeadWheelLocalizer implements Localizer
+{
+    public static class Params
+    {
+        //TODOStep 11.1 : Update values of parYTicks, perpXTicks from AngularRampLogger
+        public double parYTicks = -1272.5276822725987; // y position of the parallel encoder (in tick units)
+        public double perpXTicks = -2746.802496279267; // x position of the perpendicular encoder (in tick units)
     }
 
     public static Params PARAMS = new Params();
 
-    public final Encoder par, perp;
+    public final Encoder perp,par;
     public final IMU imu;
 
     private int lastParPos, lastPerpPos;
@@ -44,18 +46,19 @@ public final class TwoDeadWheelLocalizer implements Localizer {
     private double lastRawHeadingVel, headingVelOffset;
     private boolean initialized;
 
-    public TwoDeadWheelLocalizer(HardwareMap hardwareMap, IMU imu, double inPerTick) {
+    public TwoDeadWheelLocalizer(HardwareMap hardwareMap, IMU imu, double inPerTick)
+    {
         //TODO Step 3.1 : Update hardware configuration names for dead wheel encoders
         // TODO: make sure your config has **motors** with these names (or change them)
         //   the encoders should be plugged into the slot matching the named motor
         //   Recommend to use Port 0 and 3 on Robot Controller and Expansion Hub to plug in drive motors and dead wheel encoders
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
-        par = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "leftFront_par")));
-        perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "leftBack_perp")));
+        perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "leftBack_par")));
+        par = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "rightFront_perp")));
 
         // TODO Step 4.3: Run DeadWheelDirectionDebugger and reverse encoder directions if needed
-        //   par.setDirection(DcMotorSimple.Direction.REVERSE);
-        //   perp.setDirection(DcMotorSimple.Direction.REVERSE);
+           perp.setDirection(DcMotorSimple.Direction.REVERSE);
+           par.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.imu = imu;
 
@@ -65,8 +68,8 @@ public final class TwoDeadWheelLocalizer implements Localizer {
     }
 
     public Twist2dDual<Time> update() {
-        PositionVelocityPair parPosVel = par.getPositionAndVelocity();
-        PositionVelocityPair perpPosVel = perp.getPositionAndVelocity();
+        PositionVelocityPair parPosVel = perp.getPositionAndVelocity();
+        PositionVelocityPair perpPosVel = par.getPositionAndVelocity();
 
         YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
         // Use degrees here to work around https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/1070

@@ -29,7 +29,17 @@ public class IntakeWheelCommand extends CommandBase
     @Override
     public void execute()
     {
-        this.m_intakeWheelSubsystem.spinIntake(
+        if (this.m_intakeWheelSubsystem.isLoaded())
+        {
+            this.m_intakeWheelSubsystem.spinIntake(0.0);
+
+        }
+        else
+        {
+            this.m_intakeWheelSubsystem.spinIntake(
                 this.m_rightTriggerValue.getAsDouble() * -1 - this.m_leftTriggerValue.getAsDouble() * -0.5);
+
+        }
+        System.out.println(this.m_intakeWheelSubsystem.isLoaded());
     }
 }

@@ -34,7 +34,6 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -55,38 +54,38 @@ import java.util.List;
 public final class MecanumDrive {
     public static class Params {
         // IMU orientation
-        // TODO Step 2 : Update direction of IMU by updating orientation of Driver Hub below
+        // Step 2 : Update direction of IMU by updating orientation of Driver Hub below
         // TODO: fill in these values based on
         //   see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.UP;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
-        //TODO End Step 2
+                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
+        // End Step 2
 
         // drive model parameters
-        //TODO Step 5 Set value of inPerTick after running ForwardPushTest
-        //TODO Step 14 Make value of inPerTick accurate after running LocalizationTest
-        public double inPerTick = 1;
+        //Step 5 Set value of inPerTick after running ForwardPushTest
+        //TODOStep 14 Make value of inPerTick accurate after running LocalizationTest
+        public double inPerTick = 0.00197527207;
 
-        //TODO Step 6 (Only for DriveEncoder Localizer) Set value of lateralInPerTick after running LateralPushTest
-        //TODO Step 8 (Only for DeadWheel Localizer) Set value of lateralInPerTick after running LateralRampLogger
-        //TODO Step 14 Make value of lateralInPerTick accurate after running LocalizationTest
-        public double lateralInPerTick = inPerTick; //Replace with a numerical value when tuning.
+        //TODOStep 6 (Only for DriveEncoder Localizer) Set value of lateralInPerTick after running LateralPushTest
+        //Step 8 (Only for DeadWheel Localizer) Set value of lateralInPerTick after running LateralRampLogger
+        //TODOStep 14 Make value of lateralInPerTick accurate after running LocalizationTest
+        public double lateralInPerTick = 0.0013893695691896354; //Replace with a numerical value when tuning.
 
-        //TODO Step 10 (Only for DriveEncoder Localizer) Set value of trackWidthTicks after running AngularRampLogger
-        //TODO Step 11 (Only for DeadWheel Localizer) Set value of trackWidthTicks after running AngularRampLogger
+        //TODOStep 10 (Only for DriveEncoder Localizer) Set value of trackWidthTicks after running AngularRampLogger
+        //TODOStep 11 (Only for DeadWheel Localizer) Set value of trackWidthTicks after running AngularRampLogger
         //      Go to Step 11.1 in Three or Two DeadWheelLocalizer and updated  values of par0YTicks, part1YTicks, perpXTicks
-        public double trackWidthTicks = 0;
+        public double trackWidthTicks = 7462.853099911868;
 
         // feedforward parameters (in tick units)
-        //TODO Step 7 (Only for DeadWheel Localizer) Set value for kS and KV after running ForwardRampLogger
-        //TODO Step 9 (Only for DriveEncoder Localizer) Set value for kS and kV after running AngularRampLogger
-        public double kS = 0;
-        public double kV = 0;
-        //TODO Step 12 Set value of kA after running ManualFeedforwardTuner.
+        // Step 7 (Only for DeadWheel Localizer) Set value for kS and KV after running ForwardRampLogger
+        //TODOStep 9 (Only for DriveEncoder Localizer) Set value for kS and kV after running AngularRampLogger
+        public double kS = 1.314042869883922;
+        public double kV = 0.00035084022576081775;
+        //TODOStep 12 Set value of kA after running ManualFeedforwardTuner.
         //   In this emperical process update value in increments of 0.0001 for drive encoders and 0.00001 for dead-wheel encoders
-        public double kA = 0;
+        public double kA = 0.0001;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -98,10 +97,10 @@ public final class MecanumDrive {
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        //TODO Step 13 Set value of Gains after running ManualFeedbackTuner
-        public double axialGain = 0.0;
-        public double lateralGain = 0.0;
-        public double headingGain = 0.0; // shared with turn
+        //TODOStep 13 Set value of Gains after running ManualFeedbackTuner
+        public double axialGain = 5.5;
+        public double lateralGain = 1.5;
+        public double headingGain = 1.0; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0 ;
@@ -123,7 +122,7 @@ public final class MecanumDrive {
     public final AccelConstraint defaultAccelConstraint =
             new ProfileAccelConstraint(PARAMS.minProfileAccel, PARAMS.maxProfileAccel);
 
-    public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
+    public final DcMotorEx leftFront, leftBack_par, rightBack, rightFront_perp;
 
     public final VoltageSensor voltageSensor;
 
@@ -140,8 +139,8 @@ public final class MecanumDrive {
     private final DownsampledWriter mecanumCommandWriter = new DownsampledWriter("MECANUM_COMMAND", 50_000_000);
 
     public class DriveLocalizer implements Localizer {
-        public final Encoder leftFront, leftBack, rightBack, rightFront;
-        public final IMU imu;
+        public final Encoder leftFront, leftBack_par, rightBack, rightFront_perp;
+        public final IMU m_imu;
 
         private int lastLeftFrontPos, lastLeftBackPos, lastRightBackPos, lastRightFrontPos;
         private Rotation2d lastHeading;
@@ -149,29 +148,29 @@ public final class MecanumDrive {
 
         public DriveLocalizer() {
             leftFront = new OverflowEncoder(new RawEncoder(MecanumDrive.this.leftFront));
-            leftBack = new OverflowEncoder(new RawEncoder(MecanumDrive.this.leftBack));
+            leftBack_par = new OverflowEncoder(new RawEncoder(MecanumDrive.this.leftBack_par));
             rightBack = new OverflowEncoder(new RawEncoder(MecanumDrive.this.rightBack));
-            rightFront = new OverflowEncoder(new RawEncoder(MecanumDrive.this.rightFront));
+            rightFront_perp = new OverflowEncoder(new RawEncoder(MecanumDrive.this.rightFront_perp));
 
-            imu = lazyImu.get();
+            m_imu = lazyImu.get();
 
-            //TODO Step 4.2 Run MecanumDirectionDebugger Tuning OpMode to set motor direction correctly
+            //Step 4.2 Run MecanumDirectionDebugger Tuning OpMode to set motor direction correctly
             //Uncomment the lines for which the motorDirection need to be reversed to ensure all motors run forward in test
-            //leftFront.setDirection(DcMotorEx.Direction.REVERSE);
-            //leftBack.setDirection(DcMotorEx.Direction.REVERSE);
+            leftFront.setDirection(DcMotorEx.Direction.REVERSE);
+            leftBack_par.setDirection(DcMotorEx.Direction.REVERSE);
             //rightBack.setDirection(DcMotorEx.Direction.REVERSE);
-            //rightFront.setDirection(DcMotorEx.Direction.REVERSE);
-            //TODO End Step 4.2
+            //rightFront_perp.setDirection(DcMotorEx.Direction.REVERSE);
+            //TODOEnd Step 4.2
         }
 
         @Override
         public Twist2dDual<Time> update() {
             PositionVelocityPair leftFrontPosVel = leftFront.getPositionAndVelocity();
-            PositionVelocityPair leftBackPosVel = leftBack.getPositionAndVelocity();
+            PositionVelocityPair leftBackPosVel = leftBack_par.getPositionAndVelocity();
             PositionVelocityPair rightBackPosVel = rightBack.getPositionAndVelocity();
-            PositionVelocityPair rightFrontPosVel = rightFront.getPositionAndVelocity();
+            PositionVelocityPair rightFrontPosVel = rightFront_perp.getPositionAndVelocity();
 
-            YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
+            YawPitchRollAngles angles = m_imu.getRobotYawPitchRollAngles();
 
             FlightRecorder.write("MECANUM_LOCALIZER_INPUTS", new MecanumLocalizerInputsMessage(
                     leftFrontPosVel, leftBackPosVel, rightBackPosVel, rightFrontPosVel, angles));
@@ -237,50 +236,51 @@ public final class MecanumDrive {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        //TODO Step 1 Drive Classes : get basic hardware configured. Update motor names to what is used in robot configuration
-        // TODO: make sure your config has motors with these names (or change them)
+        //Step 1 Drive Classes : get basic hardware configured. Update motor names to what is used in robot configuration
+        //TODO:make sure your config has motors with these names (or change them)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
-        leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
+        leftBack_par = hardwareMap.get(DcMotorEx.class, "leftBack_par");
+        rightFront_perp = hardwareMap.get(DcMotorEx.class, "rightFront_perp");
         rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
 
         //Names for 3 dead wheel localizer, where the odometry modules are connected to the encoder ports of the motors. Recommend Use Port 0 and 3 on Robot controller and Expansion Hub
         //leftFront = hardwareMap.get(DcMotorEx.class, "leftFront_par0");
-        //leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
+        //leftBack_par = hardwareMap.get(DcMotorEx.class, "leftBack_par");
         //rightBack = hardwareMap.get(DcMotorEx.class, "rightBack_perp");
-        //rightFront = hardwareMap.get(DcMotorEx.class, "rightFront_par1");
-        //TODO End Step 1
+        //rightFront_perp = hardwareMap.get(DcMotorEx.class, "rightFront_par1");
+        //TODOEnd Step 1
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBack_par.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront_perp.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        //TODO Step 4.1 Run MecanumDirectionDebugger Tuning OpMode to set motor direction correctly
+        //Step 4.1 Run MecanumDirectionDebugger Tuning OpMode to set motor direction correctly
         //Uncomment the lines for which the motorDirection need to be reversed to ensure all motors run forward in test
-        //leftFront.setDirection(DcMotorEx.Direction.REVERSE);
-        //leftBack.setDirection(DcMotorEx.Direction.REVERSE);
-        //rightFront.setDirection(DcMotorEx.Direction.REVERSE);
+        leftFront.setDirection(DcMotorEx.Direction.REVERSE);
+        leftBack_par.setDirection(DcMotorEx.Direction.REVERSE);
+        //rightFront_perp.setDirection(DcMotorEx.Direction.REVERSE);
         //rightBack.setDirection(DcMotorEx.Direction.REVERSE);
         //TODO Make the same update in DriveLocalizer() function. Search for Step 4.2
-        //TODO End Step 4.1
+        //End Step 4.1
 
-        lazyImu = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
+        lazyImu = new LazyImu(hardwareMap, "m_imu", new RevHubOrientationOnRobot(
                 PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
         //TODO Step 3: Specify how the robot should track its position
         //Comment this line if NOT using Drive Encoder localization
-        localizer = new DriveLocalizer();
+//        localizer = new DriveLocalizer();
         //Uncomment next line if using Two Dead Wheel Localizer and also check TwoDeadWheelLocalizer.java for Step 3.1
-        //localizer = new TwoDeadWheelLocalizer(hardwareMap, imu, PARAMS.inPerTick)
+//        localizer = new TwoDeadWheelLocalizer(hardwareMap, m_imu, PARAMS.inPerTick);
+        IMU m_imu = lazyImu.get();
+        localizer = new TwoDeadWheelLocalizer(hardwareMap, m_imu , PARAMS.inPerTick);
 
         //Uncomment next line if using Three Dead Wheel Localizer and also check ThreeDeadWheelLocalizer.java for Step 3.1
         //localizer = new ThreeDeadWheelLocalizer(hardwareMap, PARAMS.inPerTick);
         //TODO End Step 3
-
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }
 
@@ -294,9 +294,9 @@ public final class MecanumDrive {
         }
 
         leftFront.setPower(wheelVels.leftFront.get(0) / maxPowerMag);
-        leftBack.setPower(wheelVels.leftBack.get(0) / maxPowerMag);
+        leftBack_par.setPower(wheelVels.leftBack.get(0) / maxPowerMag);
         rightBack.setPower(wheelVels.rightBack.get(0) / maxPowerMag);
-        rightFront.setPower(wheelVels.rightFront.get(0) / maxPowerMag);
+        rightFront_perp.setPower(wheelVels.rightFront.get(0) / maxPowerMag);
     }
 
     public final class FollowTrajectoryAction implements Action {
@@ -332,9 +332,9 @@ public final class MecanumDrive {
 
             if (t >= timeTrajectory.duration) {
                 leftFront.setPower(0);
-                leftBack.setPower(0);
+                leftBack_par.setPower(0);
                 rightBack.setPower(0);
-                rightFront.setPower(0);
+                rightFront_perp.setPower(0);
 
                 return false;
             }
@@ -365,9 +365,9 @@ public final class MecanumDrive {
             ));
 
             leftFront.setPower(leftFrontPower);
-            leftBack.setPower(leftBackPower);
+            leftBack_par.setPower(leftBackPower);
             rightBack.setPower(rightBackPower);
-            rightFront.setPower(rightFrontPower);
+            rightFront_perp.setPower(rightFrontPower);
 
             p.put("x", pose.position.x);
             p.put("y", pose.position.y);
@@ -424,9 +424,9 @@ public final class MecanumDrive {
 
             if (t >= turn.duration) {
                 leftFront.setPower(0);
-                leftBack.setPower(0);
+                leftBack_par.setPower(0);
                 rightBack.setPower(0);
-                rightFront.setPower(0);
+                rightFront_perp.setPower(0);
 
                 return false;
             }
@@ -456,9 +456,9 @@ public final class MecanumDrive {
             ));
 
             leftFront.setPower(feedforward.compute(wheelVels.leftFront) / voltage);
-            leftBack.setPower(feedforward.compute(wheelVels.leftBack) / voltage);
+            leftBack_par.setPower(feedforward.compute(wheelVels.leftBack) / voltage);
             rightBack.setPower(feedforward.compute(wheelVels.rightBack) / voltage);
-            rightFront.setPower(feedforward.compute(wheelVels.rightFront) / voltage);
+            rightFront_perp.setPower(feedforward.compute(wheelVels.rightFront) / voltage);
 
             Canvas c = p.fieldOverlay();
             drawPoseHistory(c);

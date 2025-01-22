@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import java.util.function.BooleanSupplier;
 
@@ -33,6 +34,7 @@ public class AutoDoubleSpecimen extends LinearOpMode
     private DcMotor m_liftArmMotor;
     private DcMotor m_slideArmMotor;
     private CRServo m_intakeWheelServo;
+    private TouchSensor m_touch;
     private IntakePivotSubsystem m_intakePivotSubsystem;
     private AscentArmSubsystem m_ascentArmSubsystem;
     private AutoDriveSubsystem m_autoDriveSubsystem;
@@ -53,10 +55,10 @@ public class AutoDoubleSpecimen extends LinearOpMode
     public void runOpMode()
     {
         Logic.OpModeType.opMode = "Auto Double Specimen";
-        this.m_fLMotor = hardwareMap.get(DcMotor.class, "frontLeft");
-        this.m_fRMotor = hardwareMap.get(DcMotor.class, "frontRight");
-        this.m_bLMotor = hardwareMap.get(DcMotor.class, "backLeft");
-        this.m_bRMotor = hardwareMap.get(DcMotor.class, "backRight");
+        this.m_fLMotor = hardwareMap.get(DcMotor.class, "leftFront");
+        this.m_fRMotor = hardwareMap.get(DcMotor.class, "rightFront_perp");
+        this.m_bLMotor = hardwareMap.get(DcMotor.class, "leftBack_par");
+        this.m_bRMotor = hardwareMap.get(DcMotor.class, "rightBack");
 
         this.m_fLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.m_fRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -79,13 +81,14 @@ public class AutoDoubleSpecimen extends LinearOpMode
         this.m_liftArmMotor = hardwareMap.get(DcMotor.class, "liftArmMotor");
         this.m_slideArmMotor = hardwareMap.get(DcMotor.class, "slideArmMotor");
         this.m_intakeWheelServo = new CRServo(hardwareMap, "intakeWheelServo");
+        this.m_touch = hardwareMap.get(TouchSensor.class, "intakeTouchSensor");
         this.m_intakePivotSubsystem = new IntakePivotSubsystem(hardwareMap, "intakePivotServo");
         this.m_ascentArmSubsystem = new AscentArmSubsystem(hardwareMap, "ascentArmServo");
 
         this.m_autoDriveSubsystem = new AutoDriveSubsystem(this.m_fLMotor, this.m_fRMotor, this.m_bLMotor, this.m_bRMotor);
         this.m_liftArmSubsystem = new LiftArmSubsystem(this.m_liftArmMotor);
         this.m_slideArmSubsystem = new SlideArmSubsystem(this.m_slideArmMotor);
-        this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo);
+        this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo,this.m_touch);
 
         this.m_armPositionHomeCommand = new ArmPositionHomeCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
         this.m_armPositionCloseSampleCommand = new ArmPositionCloseSampleCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);

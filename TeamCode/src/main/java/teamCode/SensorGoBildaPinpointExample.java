@@ -35,7 +35,7 @@ import java.util.Locale;
 This opmode shows how to use the goBILDA® Pinpoint Odometry Computer.
 The goBILDA Odometry Computer is a device designed to solve the Pose Exponential calculation
 commonly associated with Dead Wheel Odometry systems. It reads two encoders, and an integrated
-system of senors to determine the robot's current heading, X position, and Y position.
+system of senors to determine the robot's current heading, perp position, and par position.
 
 it uses an ESP32-S3 as a main cpu, with an STM LSM6DSV16X IMU.
 It is validated with goBILDA "Dead Wheel" Odometry pods, but should be compatible with any
@@ -77,10 +77,10 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
 
         /*
         Set the odometry pod positions relative to the point that the odometry computer tracks around.
-        The X pod offset refers to how far sideways from the tracking point the
-        X (forward) odometry pod is. Left of the center is a positive number,
-        right of center is a negative number. the Y pod offset refers to how far forwards from
-        the tracking point the Y (strafe) odometry pod is. forward of center is a positive number,
+        The perp pod offset refers to how far sideways from the tracking point the
+        perp (forward) odometry pod is. Left of the center is a positive number,
+        right of center is a negative number. the par pod offset refers to how far forwards from
+        the tracking point the par (strafe) odometry pod is. forward of center is a positive number,
         backwards is a negative number.
          */
         odo.setOffsets(68, -178); //these are tuned for 3110-0002-0001 Product Insight #1
@@ -96,8 +96,8 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
 
 
         /*
-        Set the direction that each of the two odometry pods count. The X (forward) pod should
-        increase when you move the robot forward. And the Y (strafe) pod should increase when
+        Set the direction that each of the two odometry pods count. The perp (forward) pod should
+        increase when you move the robot forward. And the par (strafe) pod should increase when
         you move the robot to the left.
          */
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
@@ -115,8 +115,8 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         odo.resetPosAndIMU();
 
         telemetry.addData("Status", "Initialized");
-        telemetry.addData("X offset", odo.getXOffset());
-        telemetry.addData("Y offset", odo.getYOffset());
+        telemetry.addData("perp offset", odo.getXOffset());
+        telemetry.addData("par offset", odo.getYOffset());
         telemetry.addData("Device Version Number:", odo.getDeviceVersion());
         telemetry.addData("Device Scalar", odo.getYawScalar());
         telemetry.update();
@@ -166,7 +166,7 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
             gets the current Position (x & y in mm, and heading in degrees) of the robot, and prints it.
              */
             Pose2D pos = odo.getPosition();
-            String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
+            String data = String.format(Locale.US, "{perp: %.3f, par: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
             telemetry.addData("Position", data);
 
             /*
@@ -183,8 +183,8 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
             CALIBRATING: the device is calibrating and outputs are put on hold
             NOT_READY: the device is resetting from scratch. This should only happen after a power-cycle
             FAULT_NO_PODS_DETECTED - the device does not detect any pods plugged in
-            FAULT_X_POD_NOT_DETECTED - The device does not detect an X pod plugged in
-            FAULT_Y_POD_NOT_DETECTED - The device does not detect a Y pod plugged in
+            FAULT_X_POD_NOT_DETECTED - The device does not detect an perp pod plugged in
+            FAULT_Y_POD_NOT_DETECTED - The device does not detect a par pod plugged in
             */
             telemetry.addData("Status", odo.getDeviceStatus());
 

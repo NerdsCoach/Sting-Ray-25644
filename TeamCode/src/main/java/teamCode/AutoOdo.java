@@ -72,10 +72,10 @@ package teamCode;//package teamCode;
 //        double oldTime = 0;
 //
 //        Logic.OpModeType.opMode = "Auto Odo";
-//        this.m_fLMotor = hardwareMap.get(DcMotor.class, "frontLeft");
-//        this.m_fRMotor = hardwareMap.get(DcMotor.class, "frontRight");
-//        this.m_bLMotor = hardwareMap.get(DcMotor.class, "backLeft");
-//        this.m_bRMotor = hardwareMap.get(DcMotor.class, "backRight");
+//        this.m_fLMotor = hardwareMap.get(DcMotor.class, "leftFront");
+//        this.m_fRMotor = hardwareMap.get(DcMotor.class, "rightFront_perp");
+//        this.m_bLMotor = hardwareMap.get(DcMotor.class, "leftBack_par");
+//        this.m_bRMotor = hardwareMap.get(DcMotor.class, "rightBack");
 //
 //        this.m_fLMotor.setDirection(DcMotor.Direction.REVERSE);
 //        this.m_bLMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -94,7 +94,7 @@ package teamCode;//package teamCode;
 //
 //        /* IMU */
 //
-//        this.m_imu = hardwareMap.get(IMU.class, "imu");
+//        this.m_imu = hardwareMap.get(IMU.class, "m_imu");
 //        this.m_imuParameters = new IMU.Parameters(new RevHubOrientationOnRobot(
 //                RevHubOrientationOnRobot.LogoFacingDirection.UP,
 //                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
@@ -105,10 +105,10 @@ package teamCode;//package teamCode;
 //        this.m_driveSubsystem = new DriveSubsystem(new MecanumDrive
 //                        (
 //                                false,
-//                                new Motor(hardwareMap, "frontLeft", Motor.GoBILDA.RPM_312),
-//                                new Motor(hardwareMap, "frontRight", Motor.GoBILDA.RPM_312),
-//                                new Motor(hardwareMap, "backLeft", Motor.GoBILDA.RPM_312),
-//                                new Motor(hardwareMap, "backRight", Motor.GoBILDA.RPM_312)
+//                                new Motor(hardwareMap, "leftFront", Motor.GoBILDA.RPM_312),
+//                                new Motor(hardwareMap, "rightFront_perp", Motor.GoBILDA.RPM_312),
+//                                new Motor(hardwareMap, "leftBack_par", Motor.GoBILDA.RPM_312),
+//                                new Motor(hardwareMap, "rightBack", Motor.GoBILDA.RPM_312)
 //                        ),
 //                m_imu,
 //                m_odo
@@ -143,8 +143,8 @@ package teamCode;//package teamCode;
 //
 //            m_odo.update();
 //            telemetry.addData("Status", "Initialized");
-//            telemetry.addData("X = ", m_odo.getPosX());
-//            telemetry.addData("Y = ", m_odo.getPosY());
+//            telemetry.addData("perp = ", m_odo.getPosX());
+//            telemetry.addData("par = ", m_odo.getPosY());
 //            telemetry.update();
 //        }
 //    }

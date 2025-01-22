@@ -53,10 +53,10 @@ public class AutoSpecimen extends LinearOpMode
     public void runOpMode()
     {
         Logic.OpModeType.opMode = "Auto Specimen";
-        this.m_fLMotor = hardwareMap.get(DcMotor.class, "frontLeft");
-        this.m_fRMotor = hardwareMap.get(DcMotor.class, "frontRight");
-        this.m_bLMotor = hardwareMap.get(DcMotor.class, "backLeft");
-        this.m_bRMotor = hardwareMap.get(DcMotor.class, "backRight");
+        this.m_fLMotor = hardwareMap.get(DcMotor.class, "leftFront");
+        this.m_fRMotor = hardwareMap.get(DcMotor.class, "rightFront_perp");
+        this.m_bLMotor = hardwareMap.get(DcMotor.class, "leftBack_par");
+        this.m_bRMotor = hardwareMap.get(DcMotor.class, "rightBack");
 
         this.m_fLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.m_fRMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -85,7 +85,7 @@ public class AutoSpecimen extends LinearOpMode
         this.m_autoDriveSubsystem = new AutoDriveSubsystem(this.m_fLMotor, this.m_fRMotor, this.m_bLMotor, this.m_bRMotor);
         this.m_liftArmSubsystem = new LiftArmSubsystem(this.m_liftArmMotor);
         this.m_slideArmSubsystem = new SlideArmSubsystem(this.m_slideArmMotor);
-        this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo);
+        this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo, this.m_intakeWheelSubsystem.m_touchSensor);
 
         this.m_armPositionHomeCommand = new ArmPositionHomeCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
         this.m_armPositionCloseSampleCommand = new ArmPositionCloseSampleCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
