@@ -31,30 +31,96 @@ package org.firstinspires.ftc.teamcode;
 
 import static com.qualcomm.robotcore.util.ElapsedTime.Resolution.SECONDS;
 
+import static teamCode.Constants.LiftArmConstants.kLiftArmCloseSample;
+import static teamCode.Constants.LiftArmConstants.kLiftArmHighBasket;
+import static teamCode.Constants.LiftArmConstants.kLiftArmIntakeReset;
+import static teamCode.Constants.PivotIntakeConstants.kIntakePivotPickUp;
+import static teamCode.Constants.PivotIntakeConstants.kIntakePivotScore;
+import static teamCode.Constants.SlideArmConstants.kSlideArmCloseSample;
+import static teamCode.Constants.SlideArmConstants.kSlideArmHighBasket;
+
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import teamCode.autoSubsystems.AutoDriveSubsystem;
+import teamCode.commands.ArmIntakeResetCommand;
+import teamCode.commands.ArmPositionCloseSampleCommand;
+import teamCode.commands.ArmPositionHighBasketCommand;
+import teamCode.commands.ArmPositionHighChamberCommand;
+import teamCode.commands.ArmPositionHomeCommand;
+import teamCode.commands.IntakePivotCommand;
+import teamCode.commands.ScoreSpecimenCommand;
+import teamCode.commands.StingrayArmCommand;
+import teamCode.subsystems.AscentArmSubsystem;
+import teamCode.subsystems.IntakePivotSubsystem;
+import teamCode.subsystems.IntakeWheelSubsystem;
+import teamCode.subsystems.LiftArmSubsystem;
+import teamCode.subsystems.SlideArmSubsystem;
 
 /**
  * FTC WIRES Autonomous Example for only vision detection using tensorflow and park
  */
 @Autonomous(name = "StingRayWires", group = "00-Autonomous", preselectTeleOp = "FTC Wires TeleOp")
-public class FTCWiresAutoIntoTheDeep extends LinearOpMode {
+public class FTCWiresAutoIntoTheDeep extends LinearOpMode
+{
+    private DcMotor m_liftArmMotor;
+    private DcMotor m_slideArmMotor;
+    private CRServo m_intakeWheelServo;
+    private IntakePivotSubsystem m_intakePivotSubsystem;
+    private AscentArmSubsystem m_ascentArmSubsystem;
+    private AutoDriveSubsystem m_autoDriveSubsystem;
+    private LiftArmSubsystem m_liftArmSubsystem;
+    private SlideArmSubsystem m_slideArmSubsystem;
+    private IntakeWheelSubsystem m_intakeWheelSubsystem;
+    private ArmPositionHighBasketCommand m_armPositionHighBasketCommand;
+    private ArmPositionHighChamberCommand m_armPositionHighChamberCommand;
+    private ArmPositionHomeCommand m_armPositionHomeCommand;
+    private ArmPositionCloseSampleCommand m_armPositionCloseSampleCommand;
+    private ArmIntakeResetCommand m_armIntakeResetCommand;
+    private IntakePivotCommand m_intakePivotCommand;
+    private StingrayArmCommand m_ascentArmCommand;
+   // private ArmFudgeFactorUpCommand m_armFudgeFactorUpCommand;
+    private ScoreSpecimenCommand m_scoreSpecimenCommand;
 
     public static String TEAM_NAME = "Nerds On A Mission"; //TODO: Enter team Name
     public static int TEAM_NUMBER = 25644; //TODO: Enter team Number
 
     //Define and declare Robot Starting Locations
-    public enum START_POSITION{
+    public enum START_POSITION
+    {
         LEFT,
         RIGHT
     }
     public static START_POSITION startPosition;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() throws InterruptedException
+    {
+        this.m_liftArmMotor = hardwareMap.get(DcMotor.class, "liftArmMotor");
+        this.m_slideArmMotor = hardwareMap.get(DcMotor.class, "slideArmMotor");
+        this.m_intakeWheelServo = new CRServo(hardwareMap, "intakeWheelServo");
+
+        this.m_intakePivotSubsystem = new IntakePivotSubsystem(hardwareMap, "intakePivotServo");
+        this.m_ascentArmSubsystem = new AscentArmSubsystem(hardwareMap, "ascentArmServo");
+
+        this.m_liftArmSubsystem = new LiftArmSubsystem(this.m_liftArmMotor);
+        this.m_slideArmSubsystem = new SlideArmSubsystem(this.m_slideArmMotor);
+        this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo/*,this.m_touch*/);
+
+        this.m_armPositionHomeCommand = new ArmPositionHomeCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
+        this.m_armPositionCloseSampleCommand = new ArmPositionCloseSampleCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
+        this.m_armPositionHighBasketCommand = new ArmPositionHighBasketCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
+        this.m_armPositionHighChamberCommand = new ArmPositionHighChamberCommand(this.m_liftArmSubsystem,this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
+        this.m_intakePivotCommand = new IntakePivotCommand(this.m_intakePivotSubsystem);
+        this.m_ascentArmCommand = new StingrayArmCommand(this.m_ascentArmSubsystem);
+        //this.m_armFudgeFactorUpCommand = new ArmFudgeFactorUpCommand(this.m_liftArmSubsystem);
+        this.m_scoreSpecimenCommand = new ScoreSpecimenCommand(this.m_liftArmSubsystem);
+
 
         //Key Pad input to selecting Starting Position of robot
         telemetry.setAutoClear(true);
@@ -92,13 +158,16 @@ public class FTCWiresAutoIntoTheDeep extends LinearOpMode {
         }
     }   // end runOpMode()
 
-    public void runAutonoumousMode() {
+
+    public void runAutonoumousMode()
+    {
         //Auto Left Positions - Samples
-        Pose2d initPose = new Pose2d(0, 0, Math.toRadians(0)); // Starting Pose
+
+        Pose2d initPose = new Pose2d(0, -6, Math.toRadians(0)); // Starting Pose
         Pose2d submersibleSpecimen = new Pose2d(28,-1,Math.toRadians(0) );
-        Pose2d netZone = new Pose2d(9  ,15,Math.toRadians(-45));
-        Pose2d yellowSampleOne = new Pose2d(18,12,Math.toRadians(-14));
-        Pose2d yellowSampleTwo = new Pose2d(18,18,Math.toRadians(1));
+        Pose2d netZone = new Pose2d(9  ,16,Math.toRadians(-45));
+        Pose2d yellowSampleOne = new Pose2d(24,9,Math.toRadians(0));//(18,12,Math.toRadians(-14)
+        Pose2d yellowSampleTwo = new Pose2d(24,19,Math.toRadians(1));
         Pose2d preSubmersiblePark = new Pose2d(58,11,Math.toRadians(0));
         Pose2d submersiblePark = new Pose2d(59,-15,Math.toRadians(90));
 
@@ -113,21 +182,51 @@ public class FTCWiresAutoIntoTheDeep extends LinearOpMode {
         double waitSecondsBeforeDrop = 0;
         MecanumDrive drive = new MecanumDrive(hardwareMap, initPose);
 
-        if (startPosition == START_POSITION.LEFT) {
+        if (startPosition == START_POSITION.LEFT)
+        {
+//            this.m_armIntakeResetCommand.execute();
+            this.m_liftArmSubsystem.liftArm(kLiftArmIntakeReset);
+            safeWaitSeconds(.5);
+
+//            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
 
             //Move robot to netZone with preloaded sample ready to drop in basket
             Actions.runBlocking(
                     drive.actionBuilder(initPose)
                             .strafeToLinearHeading(netZone.position, netZone.heading)
                             .build());
-            safeWaitSeconds(1);
+//            safeWaitSeconds(.5);
             telemetry.addLine("Move robot to netZone");
             telemetry.update();
 
+            this.m_liftArmSubsystem.liftArm(kLiftArmHighBasket);
+            safeWaitSeconds(.5);
+            this.m_slideArmSubsystem.slideArm(kSlideArmHighBasket);
+            safeWaitSeconds(.5);
+            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
+
             //Add code to drop sample in basket
-            safeWaitSeconds(1);
+            safeWaitSeconds(.5);
+            this.m_intakeWheelSubsystem.spinIntake(0.5);//Spit out
+
+            safeWaitSeconds(1.5);
+            this.m_intakeWheelSubsystem.spinIntake(0.0);
+//
             telemetry.addLine("Drop sample in basket");
             telemetry.update();
+            safeWaitSeconds(1);
+
+            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
+            safeWaitSeconds(.5);
+            this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
+            safeWaitSeconds(.5);
+            this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
+
+            safeWaitSeconds(.5);
+            this.m_intakeWheelSubsystem.spinIntake(-0.5);//Pick Up
+
+//            safeWaitSeconds(1.5);
+//            this.m_intakeWheelSubsystem.spinIntake(0.0);
 
             //Move robot to pick yellow sample one
             Actions.runBlocking(
@@ -138,10 +237,13 @@ public class FTCWiresAutoIntoTheDeep extends LinearOpMode {
             telemetry.addLine("Move robot to pick yellow sample one");
             telemetry.update();
 
+            this.m_intakeWheelSubsystem.spinIntake(0.0);
             //Add code to pick up yellow sample
             safeWaitSeconds(1);
             telemetry.addLine("Pick up yellow sample");
             telemetry.update();
+
+
 
             //Move robot to net zone to drop sample
             Actions.runBlocking(
@@ -200,6 +302,8 @@ public class FTCWiresAutoIntoTheDeep extends LinearOpMode {
             safeWaitSeconds(1);
             telemetry.addLine("hitting bottom rung");
             telemetry.update();
+
+            this.m_ascentArmSubsystem.ascentArm(0.6);
             //add code to hit bottom rung
 
 
