@@ -44,6 +44,7 @@ import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
@@ -87,6 +88,7 @@ public class AutoWiresSpecimenOne extends LinearOpMode
     private StingrayArmCommand m_ascentArmCommand;
    // private ArmFudgeFactorUpCommand m_armFudgeFactorUpCommand;
     private ScoreSpecimenCommand m_scoreSpecimenCommand;
+    private TouchSensor m_touch;
 
     public static String TEAM_NAME = "Nerds On A Mission"; //TODO: Enter team Name
     public static int TEAM_NUMBER = 25644; //TODO: Enter team Number
@@ -111,7 +113,7 @@ public class AutoWiresSpecimenOne extends LinearOpMode
 
         this.m_liftArmSubsystem = new LiftArmSubsystem(this.m_liftArmMotor);
         this.m_slideArmSubsystem = new SlideArmSubsystem(this.m_slideArmMotor);
-        this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo/*,this.m_touch*/);
+        this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo,this.m_touch);
 
         this.m_armPositionHomeCommand = new ArmPositionHomeCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
         this.m_armPositionCloseSampleCommand = new ArmPositionCloseSampleCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);

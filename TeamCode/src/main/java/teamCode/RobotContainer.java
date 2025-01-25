@@ -125,7 +125,8 @@ public class RobotContainer extends CommandOpMode
     private GoBildaPinpointDriver m_goBilda;
     private PinPointOdometryCommand m_pinPointOdometryCommand;
 
-
+    private com.qualcomm.robotcore.hardware.TouchSensor m_touchSensor;
+    private boolean touchSensorIsPressed = false;
 
     /* PID */
     private PIDController m_pIDController;
@@ -171,8 +172,7 @@ public class RobotContainer extends CommandOpMode
         this.m_intakeWheelServo = new CRServo(hardwareMap, "intakeWheelServo");
 
         /* Sensors */
-//        this.m_touch = hardwareMap.get(TouchSensor.class, "intakeTouchSensor");
-//* PID */
+        this.m_touchSensor = hardwareMap.get(com.qualcomm.robotcore.hardware.TouchSensor.class, "intakeTouchSensor");
 
         this.m_pIDController = new PIDController(0, 0, 0);
         this.m_pIDController.setPID(0.0, 0.0, 0.0);
@@ -185,7 +185,7 @@ public class RobotContainer extends CommandOpMode
         this.m_liftArmSubsystem = new LiftArmSubsystem(this.m_liftArmMotor)/*() -> this.m_pIDController.calculate(this.m_liftArmMotor.getCurrentPosition()))*/;
         this.m_climbArmSubsystem = new ClimbArmSubsystem(this.m_climbArmMotor);
         this.m_intakePivotSubsystem = new IntakePivotSubsystem(hardwareMap, "intakePivotServo");
-        this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo);//, this.m_touch);
+        this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo, this.m_touchSensor);
         this.m_ascentArmSubsystem = new AscentArmSubsystem(hardwareMap, "ascentArmServo");
         this.m_gyroSubsystem = new GyroSubsystem(this.m_imu);
 //        this.m_pinPointOdometrySubsystem = new PinPointOdometrySubsystem(m_goBilda);
