@@ -34,6 +34,13 @@ public class SlideArmSubsystem extends SubsystemBase
         return this.m_slideArmMotor.getCurrentPosition() <= target+5 && this.m_slideArmMotor.getCurrentPosition() >= target-5;
     }
 
+    public void autoSlideArm(int slide)
+    {
+        m_slideArmMotor.setTargetPosition(slide);
+        this.m_slideArmMotor.setPower(.5);
+        this.m_slideArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
     public void stop()
     {
         this.m_slideArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

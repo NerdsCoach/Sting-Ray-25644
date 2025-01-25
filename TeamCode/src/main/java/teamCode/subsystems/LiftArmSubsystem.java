@@ -41,6 +41,13 @@ public class LiftArmSubsystem extends SubsystemBase
         return this.m_liftArmMotor.getCurrentPosition() >= target-5 && this.m_liftArmMotor.getCurrentPosition() <= target+5;
     }
 
+    public void liftSlow(int lift)
+    {
+        m_liftArmMotor.setTargetPosition(lift);
+        this.m_liftArmMotor.setPower(0.25);
+        this.m_liftArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
     public void stop()
     {
         this.m_liftArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

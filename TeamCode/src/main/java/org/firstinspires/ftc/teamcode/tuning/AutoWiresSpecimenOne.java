@@ -27,10 +27,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.tuning;
 
 import static com.qualcomm.robotcore.util.ElapsedTime.Resolution.SECONDS;
-
 import static teamCode.Constants.LiftArmConstants.kLiftArmCloseSample;
 import static teamCode.Constants.LiftArmConstants.kLiftArmHighBasket;
 import static teamCode.Constants.LiftArmConstants.kLiftArmIntakeReset;
@@ -46,6 +45,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 import teamCode.autoSubsystems.AutoDriveSubsystem;
 import teamCode.commands.ArmIntakeResetCommand;
@@ -65,8 +66,8 @@ import teamCode.subsystems.SlideArmSubsystem;
 /**
  * FTC WIRES Autonomous Example for only vision detection using tensorflow and park
  */
-@Autonomous(name = "StingRayWires", group = "00-Autonomous", preselectTeleOp = "FTC Wires TeleOp")
-public class FTCWiresAutoIntoTheDeep extends LinearOpMode
+@Autonomous(name = "StingRayAutoSpecimenOne", group = "00-Autonomous", preselectTeleOp = "FTC Wires TeleOp")
+public class AutoWiresSpecimenOne extends LinearOpMode
 {
     private DcMotor m_liftArmMotor;
     private DcMotor m_slideArmMotor;
@@ -129,27 +130,27 @@ public class FTCWiresAutoIntoTheDeep extends LinearOpMode
             telemetry.addData("Initializing FTC Wires (ftcwires.org) Autonomous adopted for Team:",
                     TEAM_NAME, " ", TEAM_NUMBER);
             telemetry.addData("---------------------------------------","");
-            telemetry.addData("Select Starting Position using XYAB on Logitech (or ▢ΔOX on Playstayion) on gamepad 1:","");
-            telemetry.addData("    Left   ", "(perp / ▢)");
-            telemetry.addData("    Right ", "(par / Δ)");
+//            telemetry.addData("Select Starting Position using XYAB on Logitech (or ▢ΔOX on Playstayion) on gamepad 1:","");
+//            telemetry.addData("    Left   ", "(perp / ▢)");
+//            telemetry.addData("    Right ", "(par / Δ)");
 
-            if(gamepad1.x)
-            {
-                startPosition = START_POSITION.LEFT;
-                break;
-            }
-            if(gamepad1.y)
-            {
-                startPosition = START_POSITION.RIGHT;
-                break;
-            }
-            telemetry.update();
+//            if(gamepad1.x)
+//            {
+//                startPosition = START_POSITION.LEFT;
+//                break;
+//            }
+//            if(gamepad1.y)
+//            {
+//                startPosition = START_POSITION.RIGHT;
+//                break;
+//            }
+//            telemetry.update();
         }
-        telemetry.setAutoClear(false);
-        telemetry.clearAll();
+//        telemetry.setAutoClear(false);
+//        telemetry.clearAll();
 
-        telemetry.addData("Selected Starting Position", startPosition);
-        telemetry.update();
+//        telemetry.addData("Selected Starting Position", startPosition);
+//        telemetry.update();
 
         waitForStart();
 
@@ -185,174 +186,177 @@ public class FTCWiresAutoIntoTheDeep extends LinearOpMode
 
         double waitSecondsBeforeDrop = 0;
         MecanumDrive drive = new MecanumDrive(hardwareMap, initPose);
-
-        if (startPosition == START_POSITION.LEFT)
-        {
-            this.m_liftArmSubsystem.liftArm(kLiftArmIntakeReset);
-            safeWaitSeconds(.5);
-
-            //Move robot to netZone with preloaded sample ready to drop in basket
-            Actions.runBlocking(
-                    drive.actionBuilder(initPose)
-                            .strafeToLinearHeading(netZone.position, netZone.heading)
-                            .build());
-
-            telemetry.addLine("Move robot to netZone");
-            telemetry.update();
-
-            this.m_liftArmSubsystem.liftArm(kLiftArmHighBasket);
-            safeWaitSeconds(.5);
-            this.m_slideArmSubsystem.slideArm(kSlideArmHighBasket);
-            safeWaitSeconds(.75);
-            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
-
-            //Add code to drop sample in basket
-            safeWaitSeconds(.5);
-            this.m_intakeWheelSubsystem.spinIntake(0.5);//Score in High Basket #1
-
-            safeWaitSeconds(1);
-            this.m_intakeWheelSubsystem.spinIntake(0.0);
-
-            telemetry.addLine("Drop sample in basket");
-            telemetry.update();
-
-            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
-            safeWaitSeconds(.5);
-            this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
-
-            safeWaitSeconds(.5);
-            this.m_intakeWheelSubsystem.spinIntake(-0.5);//Pick Up Floor #1
-
-            this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
-            safeWaitSeconds(.5);
-
-            //Move robot to pick yellow sample one
-            Actions.runBlocking(
-                    drive.actionBuilder(netZone)
-                            .strafeToLinearHeading(yellowSampleOne.position, yellowSampleOne.heading)
-                            .build());
-            safeWaitSeconds(.75);
-            telemetry.addLine("Move robot to pick yellow sample one");
-            telemetry.update();
-
-            this.m_intakeWheelSubsystem.spinIntake(0.0);
-            //Add code to pick up yellow sample
-            telemetry.addLine("Pick up yellow sample");
-            telemetry.update();
-
-            this.m_liftArmSubsystem.liftArm(kLiftArmIntakeReset);
-            safeWaitSeconds(.5);
-
-            //Move robot to net zone to drop sample
-            Actions.runBlocking(
-                    drive.actionBuilder(yellowSampleOne)
-                            .strafeToLinearHeading(netZoneTwo.position, netZoneTwo.heading)
-                            .build());
-            telemetry.addLine("Move robot to net zone to drop sample");
-            telemetry.update();
-
-            this.m_liftArmSubsystem.liftArm(kLiftArmHighBasket);
-            safeWaitSeconds(.5);
-            this.m_slideArmSubsystem.slideArm(kSlideArmHighBasket);
-            safeWaitSeconds(.75);
-            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
-            //Add code to drop sample in bucket
-            safeWaitSeconds(.75);
-            this.m_intakeWheelSubsystem.spinIntake(0.5);//Score in High Basket #2
-
-            safeWaitSeconds(1);
-            this.m_intakeWheelSubsystem.spinIntake(0.0);
-
-
-            telemetry.addLine("Drop sample in bucket");
-            telemetry.update();
-
-            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
-            safeWaitSeconds(.5);
-            this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
-
-            safeWaitSeconds(.5);
-            this.m_intakeWheelSubsystem.spinIntake(-0.5);//Pick Up Floor #2
-
-            this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
-            safeWaitSeconds(.5);
-
-
-
-
-
-            //Move robot to yellow sample two
-            Actions.runBlocking(
-                    drive.actionBuilder(netZone)
-                            .strafeToLinearHeading(yellowSampleTwo.position, yellowSampleTwo.heading)
-                            .build());
-            safeWaitSeconds(1);
-            telemetry.addLine("Move robot to yellow sample two");
-            telemetry.update();
-
-            this.m_intakeWheelSubsystem.spinIntake(0.0);
-
-            //Add code to pick up yellow sample
-            telemetry.addLine("Pick up yellow sample");
-            telemetry.update();
-
-            this.m_liftArmSubsystem.liftArm(kLiftArmIntakeReset);
-            safeWaitSeconds(.5);
-
-            //Move robot to net zone
-            Actions.runBlocking(
-                    drive.actionBuilder(yellowSampleTwo)
-                            .strafeToLinearHeading(netZoneTwo.position, netZoneTwo.heading)
-                            .build());
-
-            telemetry.addLine("Move robot to net zone");
-            telemetry.update();
-
-            this.m_liftArmSubsystem.liftArm(kLiftArmHighBasket);
-            safeWaitSeconds(.5);
-            this.m_slideArmSubsystem.slideArm(kSlideArmHighBasket);
-            safeWaitSeconds(.75);
-            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
-            //Add code to drop sample in bucket
-            safeWaitSeconds(.5);
-            this.m_intakeWheelSubsystem.spinIntake(0.5);//Spit out
-
-            safeWaitSeconds(1);
-            this.m_intakeWheelSubsystem.spinIntake(0.0);
-
-            //Add code to drop sample in bucket
-            telemetry.addLine("Drop sample in bucket");
-            telemetry.update();
-
-            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
-            safeWaitSeconds(.5);
-            this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
-
-            safeWaitSeconds(.5);//
-            this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
-
-            this.m_ascentArmSubsystem.ascentArm(0.6);
-            safeWaitSeconds(.75);
-            //Move robot to submersible parking
-            Actions.runBlocking(
-                    drive.actionBuilder(netZone)
-                            .strafeToLinearHeading(preSubmersiblePark.position, preSubmersiblePark.heading)
-                            .build());
-            telemetry.addLine("Move robot to preSubmersible parking");
-            telemetry.update();
-            Actions.runBlocking(
-                    drive.actionBuilder(preSubmersiblePark)
-                            .strafeToLinearHeading(submersiblePark.position, submersiblePark.heading)
-                            .build());
-            telemetry.addLine("hitting bottom rung");
-            telemetry.update();
-
-            //add code to hit bottom rung
-
-
-        }
-        else
+//
+//        if (startPosition == START_POSITION.LEFT)
+//        {
+//            this.m_liftArmSubsystem.liftArm(kLiftArmIntakeReset);
+//            safeWaitSeconds(.5);
+//
+//            //Move robot to netZone with preloaded sample ready to drop in basket
+//            Actions.runBlocking(
+//                    drive.actionBuilder(initPose)
+//                            .strafeToLinearHeading(netZone.position, netZone.heading)
+//                            .build());
+//
+//            telemetry.addLine("Move robot to netZone");
+//            telemetry.update();
+//
+//            this.m_liftArmSubsystem.liftArm(kLiftArmHighBasket);
+//            safeWaitSeconds(.5);
+//            this.m_slideArmSubsystem.slideArm(kSlideArmHighBasket);
+//            safeWaitSeconds(.75);
+//            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
+//
+//            //Add code to drop sample in basket
+//            safeWaitSeconds(.5);
+//            this.m_intakeWheelSubsystem.spinIntake(0.5);//Score in High Basket #1
+//
+//            safeWaitSeconds(1);
+//            this.m_intakeWheelSubsystem.spinIntake(0.0);
+//
+//            telemetry.addLine("Drop sample in basket");
+//            telemetry.update();
+//
+//            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
+//            safeWaitSeconds(.5);
+//            this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
+//
+//            safeWaitSeconds(.5);
+//            this.m_intakeWheelSubsystem.spinIntake(-0.5);//Pick Up Floor #1
+//
+//            this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
+//            safeWaitSeconds(.5);
+//
+//            //Move robot to pick yellow sample one
+//            Actions.runBlocking(
+//                    drive.actionBuilder(netZone)
+//                            .strafeToLinearHeading(yellowSampleOne.position, yellowSampleOne.heading)
+//                            .build());
+//            safeWaitSeconds(.75);
+//            telemetry.addLine("Move robot to pick yellow sample one");
+//            telemetry.update();
+//
+//            this.m_intakeWheelSubsystem.spinIntake(0.0);
+//            //Add code to pick up yellow sample
+//            telemetry.addLine("Pick up yellow sample");
+//            telemetry.update();
+//
+//            this.m_liftArmSubsystem.liftArm(kLiftArmIntakeReset);
+//            safeWaitSeconds(.5);
+//
+//            //Move robot to net zone to drop sample
+//            Actions.runBlocking(
+//                    drive.actionBuilder(yellowSampleOne)
+//                            .strafeToLinearHeading(netZoneTwo.position, netZoneTwo.heading)
+//                            .build());
+//            telemetry.addLine("Move robot to net zone to drop sample");
+//            telemetry.update();
+//
+//            this.m_liftArmSubsystem.liftArm(kLiftArmHighBasket);
+//            safeWaitSeconds(.5);
+//            this.m_slideArmSubsystem.slideArm(kSlideArmHighBasket);
+//            safeWaitSeconds(.75);
+//            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
+//            //Add code to drop sample in bucket
+//            safeWaitSeconds(.75);
+//            this.m_intakeWheelSubsystem.spinIntake(0.5);//Score in High Basket #2
+//
+//            safeWaitSeconds(1);
+//            this.m_intakeWheelSubsystem.spinIntake(0.0);
+//
+//
+//            telemetry.addLine("Drop sample in bucket");
+//            telemetry.update();
+//
+//            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
+//            safeWaitSeconds(.5);
+//            this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
+//
+//            safeWaitSeconds(.5);
+//            this.m_intakeWheelSubsystem.spinIntake(-0.5);//Pick Up Floor #2
+//
+//            this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
+//            safeWaitSeconds(.5);
+//
+//
+//
+//
+//
+//            //Move robot to yellow sample two
+//            Actions.runBlocking(
+//                    drive.actionBuilder(netZone)
+//                            .strafeToLinearHeading(yellowSampleTwo.position, yellowSampleTwo.heading)
+//                            .build());
+//            safeWaitSeconds(1);
+//            telemetry.addLine("Move robot to yellow sample two");
+//            telemetry.update();
+//
+//            this.m_intakeWheelSubsystem.spinIntake(0.0);
+//
+//            //Add code to pick up yellow sample
+//            telemetry.addLine("Pick up yellow sample");
+//            telemetry.update();
+//
+//            this.m_liftArmSubsystem.liftArm(kLiftArmIntakeReset);
+//            safeWaitSeconds(.5);
+//
+//            //Move robot to net zone
+//            Actions.runBlocking(
+//                    drive.actionBuilder(yellowSampleTwo)
+//                            .strafeToLinearHeading(netZoneTwo.position, netZoneTwo.heading)
+//                            .build());
+//
+//            telemetry.addLine("Move robot to net zone");
+//            telemetry.update();
+//
+//            this.m_liftArmSubsystem.liftArm(kLiftArmHighBasket);
+//            safeWaitSeconds(.5);
+//            this.m_slideArmSubsystem.slideArm(kSlideArmHighBasket);
+//            safeWaitSeconds(.75);
+//            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
+//            //Add code to drop sample in bucket
+//            safeWaitSeconds(.5);
+//            this.m_intakeWheelSubsystem.spinIntake(0.5);//Spit out
+//
+//            safeWaitSeconds(1);
+//            this.m_intakeWheelSubsystem.spinIntake(0.0);
+//
+//            //Add code to drop sample in bucket
+//            telemetry.addLine("Drop sample in bucket");
+//            telemetry.update();
+//
+//            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
+//            safeWaitSeconds(.5);
+//            this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
+//
+//            safeWaitSeconds(.5);//
+//            this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
+//
+//            this.m_ascentArmSubsystem.ascentArm(0.6);
+//            safeWaitSeconds(.75);
+//            //Move robot to submersible parking
+//            Actions.runBlocking(
+//                    drive.actionBuilder(netZone)
+//                            .strafeToLinearHeading(preSubmersiblePark.position, preSubmersiblePark.heading)
+//                            .build());
+//            telemetry.addLine("Move robot to preSubmersible parking");
+//            telemetry.update();
+//            Actions.runBlocking(
+//                    drive.actionBuilder(preSubmersiblePark)
+//                            .strafeToLinearHeading(submersiblePark.position, submersiblePark.heading)
+//                            .build());
+//            telemetry.addLine("hitting bottom rung");
+//            telemetry.update();
+//
+//            //add code to hit bottom rung
+//
+//
+//        }
+//        else
         { // RIGHT
+
+            this.m_liftArmSubsystem.liftArm(kLiftArmIntakeReset);
+            safeWaitSeconds(.5);
 
             //Move robot with preloaded specimen to submersible to place specimen
             Actions.runBlocking(

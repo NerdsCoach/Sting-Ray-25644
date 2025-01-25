@@ -22,7 +22,7 @@ public class Constants
         public static final int kLiftArmScoreSpecimen = 200;
         public static final int kLiftArmFudgeFactorUp = 50;
         public static final int kLiftArmFudgeFactorDown = -50;
-        public static final int kLiftArmIntakeReset = 500;
+        public static final int kLiftArmIntakeReset = 550;
     }
 
     public static final class SlideArmConstants
@@ -36,6 +36,7 @@ public class Constants
         public static final int kSlideArmLowChamber = 25;
         public static final int kSlideFudgeIn = -100;
         public static final int kSlideFudgeOut = 100;
+        public static final int kSlideSpecimenScore = 200;
     }
     public static final class PivotIntakeConstants
     {
