@@ -26,7 +26,7 @@ package teamCode;//package teamCode;
 //import teamCode.commands.IntakePivotCommand;
 //import teamCode.commands.ScoreSpecimenCommand;
 //import teamCode.commands.StingrayArmCommand;
-//import teamCode.subsystems.AscentArmSubsystem;
+//import teamCode.subsystems.StingRayArmSubsystem;
 //import teamCode.subsystems.DriveSubsystem;
 //import teamCode.subsystems.IntakePivotSubsystem;
 //import teamCode.subsystems.IntakeWheelSubsystem;
@@ -46,7 +46,7 @@ package teamCode;//package teamCode;
 //    private CRServo m_intakeWheelServo;
 //    private GoBildaPinpointDriver m_odo;
 //    private IntakePivotSubsystem m_intakePivotSubsystem;
-//    private AscentArmSubsystem m_ascentArmSubsystem;
+//    private StingRayArmSubsystem m_ascentArmSubsystem;
 //    private DriveSubsystem m_driveSubsystem;
 //    private LiftArmSubsystem m_liftArmSubsystem;
 //    private SlideArmSubsystem m_slideArmSubsystem;
@@ -89,7 +89,7 @@ package teamCode;//package teamCode;
 //        this.m_slideArmMotor = hardwareMap.get(DcMotor.class, "slideArmMotor");
 //        this.m_intakeWheelServo = new CRServo(hardwareMap, "intakeWheelServo");
 //        this.m_intakePivotSubsystem = new IntakePivotSubsystem(hardwareMap, "intakePivotServo");
-//        this.m_ascentArmSubsystem = new AscentArmSubsystem(hardwareMap, "ascentArmServo");
+//        this.m_ascentArmSubsystem = new StingRayArmSubsystem(hardwareMap, "ascentArmServo");
 //        this.m_odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
 //
 //        /* IMU */

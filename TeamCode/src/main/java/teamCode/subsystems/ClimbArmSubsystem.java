@@ -15,13 +15,18 @@ public class ClimbArmSubsystem extends SubsystemBase
         this.m_climberArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void climb(int climb)
+    public void climbing(int climb)
+    {
+        this.m_climberArmMotor.setTargetPosition(climb);
+        this.m_climberArmMotor.setPower(1.0);
+        this.m_climberArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+    public void climbFudgeFactor(int climb)
     {
         this.m_climberArmMotor.setTargetPosition(this.m_climberArmMotor.getCurrentPosition() + climb);
         this.m_climberArmMotor.setPower(1.0);
         this.m_climberArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
-
 
     public boolean atTarget(int target)
     {
@@ -30,6 +35,12 @@ public class ClimbArmSubsystem extends SubsystemBase
 
     public void stop()
     {
-        this.m_climberArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        this.m_climberArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
+
+    public int climbEncoderReading()
+    {
+        return this.m_climberArmMotor.getCurrentPosition();
+    }
+
 }

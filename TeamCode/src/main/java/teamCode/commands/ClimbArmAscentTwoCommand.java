@@ -5,11 +5,11 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import teamCode.Constants;
 import teamCode.subsystems.ClimbArmSubsystem;
 
-public class ClimbArmDownCommand extends CommandBase
+public class ClimbArmAscentTwoCommand extends CommandBase
 {
     private ClimbArmSubsystem m_climbArmSubsystem;
 
-    public ClimbArmDownCommand(ClimbArmSubsystem climbArmSubsystem)
+    public ClimbArmAscentTwoCommand(ClimbArmSubsystem climbArmSubsystem)
     {
         this.m_climbArmSubsystem = climbArmSubsystem;
 
@@ -26,7 +26,7 @@ public class ClimbArmDownCommand extends CommandBase
     {
 //        if (!m_climbArmSubsystem.atTarget(0))
 //        {
-            this.m_climbArmSubsystem.climb(Constants.ClimbArmConstants.kClimberArmDown);
+            this.m_climbArmSubsystem.climbing(Constants.ClimbArmConstants.kClimbArmAscentTwo);
 //        }
     }
 

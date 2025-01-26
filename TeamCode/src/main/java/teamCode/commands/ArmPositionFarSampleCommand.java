@@ -35,7 +35,7 @@ public class ArmPositionFarSampleCommand extends CommandBase
         if (m_liftArmSubsystem.atTarget(Constants.LiftArmConstants.kLiftArmFarSample))
         {
             this.m_slideArmSubsystem.slideArm(Constants.SlideArmConstants.kSlideArmFarSample);
-            this.m_intakePivotSubsytem.pivotIntake(Constants.PivotIntakeConstants.kIntakePivotPickUp);
+            this.m_intakePivotSubsytem.pivotIntake(Constants.PivotIntakeConstants.kIntakePivotFarSample);
         }
     }
 

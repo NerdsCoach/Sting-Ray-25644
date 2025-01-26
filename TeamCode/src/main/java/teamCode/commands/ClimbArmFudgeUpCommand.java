@@ -1,18 +1,20 @@
 package teamCode.commands;
 
+import static teamCode.Constants.ClimbArmConstants.kClimberArmUp;
+
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import teamCode.Constants;
 import teamCode.subsystems.ClimbArmSubsystem;
 
-public class ClimbArmUpCommand extends CommandBase
+public class ClimbArmFudgeUpCommand extends CommandBase
 {
     private ClimbArmSubsystem m_climbArmSubsystem;
 
-    public ClimbArmUpCommand(ClimbArmSubsystem climbArmSubsystem)
+    public ClimbArmFudgeUpCommand(ClimbArmSubsystem climbArmSubsystem)
     {
         this.m_climbArmSubsystem = climbArmSubsystem;
+
         addRequirements(m_climbArmSubsystem);
     }
 
@@ -24,9 +26,14 @@ public class ClimbArmUpCommand extends CommandBase
     @Override
     public void execute()
     {
+        if (!m_climbArmSubsystem.atTarget(kClimberArmUp))
+        {
+            this.m_climbArmSubsystem.climbFudgeFactor(Constants.ClimbArmConstants.kClimberArmFudgeUp);
+        }
+//        System.out.println(this.m_climbArmSubsystem.climbEncoderReading());
 
-            this.m_climbArmSubsystem.climbing(Constants.ClimbArmConstants.kClimberArmUp);
 
+//
     }
 
     @Override
@@ -40,5 +47,4 @@ public class ClimbArmUpCommand extends CommandBase
     {
         return true;
     }
-
 }

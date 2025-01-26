@@ -17,8 +17,10 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import teamCode.commands.ArmFudgeFactorDownCommand;
 import teamCode.commands.ArmFudgeFactorUpCommand;
-import teamCode.commands.ClimbArmDownCommand;
+import teamCode.commands.ClimbArmAscentTwoCommand;
 import teamCode.commands.ClimbArmUpCommand;
+import teamCode.commands.ClimbArmFudgeDownCommand;
+import teamCode.commands.ClimbArmFudgeUpCommand;
 import teamCode.commands.StingrayArmCommand;
 import teamCode.commands.DriveFieldOrientedCommand;
 import teamCode.commands.ArmPositionHomeCommand;
@@ -43,7 +45,7 @@ import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.IntakeWheelSubsystem;
-import teamCode.subsystems.AscentArmSubsystem;
+import teamCode.subsystems.StingRayArmSubsystem;
 import teamCode.subsystems.GyroSubsystem;
 
 @TeleOp(name = "Sting-Ray")
@@ -80,6 +82,8 @@ public class RobotContainer extends CommandOpMode
     private Button m_odoResetButton;
     private Button m_climbUpButton;
     private Button m_climbDownButton;
+    private Button m_climbArmFudgeUp;
+    private Button m_climbArmFudgeDown;
 
     /* Motors */
     private DcMotor m_slideArmMotor;
@@ -96,7 +100,7 @@ public class RobotContainer extends CommandOpMode
     private LiftArmSubsystem m_liftArmSubsystem;
     private IntakePivotSubsystem m_intakePivotSubsystem;
     private IntakeWheelSubsystem m_intakeWheelSubsystem;
-    private AscentArmSubsystem m_ascentArmSubsystem;
+    private StingRayArmSubsystem m_ascentArmSubsystem;
     private GyroSubsystem m_gyroSubsystem;
     private ClimbArmSubsystem m_climbArmSubsystem;
     private PinPointOdometrySubsystem m_pinPointOdometrySubsystem;
@@ -121,7 +125,9 @@ public class RobotContainer extends CommandOpMode
     private SlideFudgeInCommand m_slideFudgeInCommand;
     private SlideFudgeOutCommand m_slideFudgeOutCommand;
     private ClimbArmUpCommand m_climbArmUpCommand;
-    private ClimbArmDownCommand m_climbArmDownCommand;
+    private ClimbArmAscentTwoCommand m_climbArmAscentTwoCommand;
+    private ClimbArmFudgeUpCommand m_climbArmFudgeUpCommand;
+    private ClimbArmFudgeDownCommand m_climbArmFudgeDownCommand;
     private GoBildaPinpointDriver m_goBilda;
     private PinPointOdometryCommand m_pinPointOdometryCommand;
 
@@ -186,7 +192,7 @@ public class RobotContainer extends CommandOpMode
         this.m_climbArmSubsystem = new ClimbArmSubsystem(this.m_climbArmMotor);
         this.m_intakePivotSubsystem = new IntakePivotSubsystem(hardwareMap, "intakePivotServo");
         this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo, this.m_touchSensor);
-        this.m_ascentArmSubsystem = new AscentArmSubsystem(hardwareMap, "ascentArmServo");
+        this.m_ascentArmSubsystem = new StingRayArmSubsystem(hardwareMap, "ascentArmServo");
         this.m_gyroSubsystem = new GyroSubsystem(this.m_imu);
 //        this.m_pinPointOdometrySubsystem = new PinPointOdometrySubsystem(m_goBilda);
 
@@ -255,11 +261,19 @@ public class RobotContainer extends CommandOpMode
 
         this.m_climbArmUpCommand = new ClimbArmUpCommand(m_climbArmSubsystem);
         this.m_climbUpButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.Y))
-                .whileHeld(this.m_climbArmUpCommand);
+                .whenPressed(this.m_climbArmUpCommand);
 
-        this.m_climbArmDownCommand = new ClimbArmDownCommand(m_climbArmSubsystem);
+        this.m_climbArmAscentTwoCommand = new ClimbArmAscentTwoCommand(m_climbArmSubsystem);
         this.m_climbDownButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.A))
-                .whileHeld(this.m_climbArmDownCommand);
+                .whenPressed(this.m_climbArmAscentTwoCommand);
+
+        this.m_climbArmFudgeUpCommand = new ClimbArmFudgeUpCommand(m_climbArmSubsystem);
+        this.m_climbArmFudgeUp = (new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_UP))
+                .whileHeld(this.m_climbArmFudgeUpCommand);
+
+        this.m_climbArmFudgeDownCommand = new ClimbArmFudgeDownCommand(m_climbArmSubsystem);
+        this.m_climbArmFudgeDown = (new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_DOWN))
+                .whileHeld(this.m_climbArmFudgeDownCommand);
 
         this.m_armPositionLowChamberCommand = new ArmPositionLowChamberCommand(m_liftArmSubsystem, m_slideArmSubsystem);
         this.m_dpadBottom = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_DOWN))

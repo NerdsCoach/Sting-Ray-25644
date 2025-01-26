@@ -1,5 +1,7 @@
 package teamCode.commands;
 
+import static teamCode.Constants.SlideArmConstants.kSlideFudgeOutMax;
+
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import teamCode.Constants;
@@ -24,7 +26,7 @@ public class SlideFudgeOutCommand extends CommandBase
     @Override
     public void execute()
     {
-        if (!m_slideArmSubsystem.atTarget(2025))
+        if (!m_slideArmSubsystem.atTarget(kSlideFudgeOutMax))
         {
             this.m_slideArmSubsystem.slideFudgeFactor(Constants.SlideArmConstants.kSlideFudgeOut);
         }

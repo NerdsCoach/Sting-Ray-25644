@@ -61,7 +61,7 @@ import teamCode.commands.IntakePivotCommand;
 import teamCode.commands.ScoreSpecimenCommand;
 import teamCode.commands.SlideFudgeInCommand;
 import teamCode.commands.StingrayArmCommand;
-import teamCode.subsystems.AscentArmSubsystem;
+import teamCode.subsystems.StingRayArmSubsystem;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.IntakeWheelSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
@@ -77,7 +77,7 @@ public class AutoWires extends LinearOpMode
     private DcMotor m_slideArmMotor;
     private CRServo m_intakeWheelServo;
     private IntakePivotSubsystem m_intakePivotSubsystem;
-    private AscentArmSubsystem m_ascentArmSubsystem;
+    private StingRayArmSubsystem m_ascentArmSubsystem;
     private AutoDriveSubsystem m_autoDriveSubsystem;
     private LiftArmSubsystem m_liftArmSubsystem;
     private SlideArmSubsystem m_slideArmSubsystem;
@@ -113,7 +113,7 @@ public class AutoWires extends LinearOpMode
 
         this.m_intakeWheelServo = new CRServo(hardwareMap, "intakeWheelServo");
         this.m_intakePivotSubsystem = new IntakePivotSubsystem(hardwareMap, "intakePivotServo");
-        this.m_ascentArmSubsystem = new AscentArmSubsystem(hardwareMap, "ascentArmServo");
+        this.m_ascentArmSubsystem = new StingRayArmSubsystem(hardwareMap, "ascentArmServo");
 
         this.m_liftArmSubsystem = new LiftArmSubsystem(this.m_liftArmMotor);
         this.m_slideArmSubsystem = new SlideArmSubsystem(this.m_slideArmMotor);
