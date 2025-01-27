@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.tuning;
+package org.firstinspires.ftc.teamcode;
 
 import static com.qualcomm.robotcore.util.ElapsedTime.Resolution.SECONDS;
 import static teamCode.Constants.LiftArmConstants.kLiftArmCloseSample;
@@ -50,14 +50,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.MecanumDrive;
-
 import teamCode.autoSubsystems.AutoDriveSubsystem;
 import teamCode.commands.ArmIntakeResetCommand;
 import teamCode.commands.ArmPositionCloseSampleCommand;
 import teamCode.commands.ArmPositionHighBasketCommand;
 import teamCode.commands.ArmPositionHighChamberCommand;
-import teamCode.commands.ArmPositionHomeCommand;
+import teamCode.commands.ArmPositionTravelCommand;
 import teamCode.commands.IntakePivotCommand;
 import teamCode.commands.ScoreSpecimenCommand;
 import teamCode.commands.SlideFudgeInCommand;
@@ -85,7 +83,7 @@ public class SecondAutoWires extends LinearOpMode
     private IntakeWheelSubsystem m_intakeWheelSubsystem;
     private ArmPositionHighBasketCommand m_armPositionHighBasketCommand;
     private ArmPositionHighChamberCommand m_armPositionHighChamberCommand;
-    private ArmPositionHomeCommand m_armPositionHomeCommand;
+    private ArmPositionTravelCommand m_armPositionHomeCommand;
     private ArmPositionCloseSampleCommand m_armPositionCloseSampleCommand;
     private ArmIntakeResetCommand m_armIntakeResetCommand;
     private IntakePivotCommand m_intakePivotCommand;
@@ -120,7 +118,7 @@ public class SecondAutoWires extends LinearOpMode
         this.m_slideArmSubsystem = new SlideArmSubsystem(this.m_slideArmMotor);
         this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo,this.m_touch);
 
-        this.m_armPositionHomeCommand = new ArmPositionHomeCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
+        this.m_armPositionHomeCommand = new ArmPositionTravelCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
         this.m_armPositionCloseSampleCommand = new ArmPositionCloseSampleCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
         this.m_armPositionHighBasketCommand = new ArmPositionHighBasketCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
         this.m_armPositionHighChamberCommand = new ArmPositionHighChamberCommand(this.m_liftArmSubsystem,this.m_slideArmSubsystem, this.m_intakePivotSubsystem);

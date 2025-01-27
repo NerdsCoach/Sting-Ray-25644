@@ -3,17 +3,16 @@ package teamCode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import teamCode.Constants;
-import teamCode.Logic;
 import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
 
-public class ArmPositionLowChamberCommand extends CommandBase
+public class ArmPositionScoreHighChamberCommand extends CommandBase
 {
     private LiftArmSubsystem m_liftArmSubsystem;
     private SlideArmSubsystem m_slideArmSubsystem;
 
-    public ArmPositionLowChamberCommand(LiftArmSubsystem liftArmSubsystem,
-                                        SlideArmSubsystem slideArmSubsystem)
+    public ArmPositionScoreHighChamberCommand(LiftArmSubsystem liftArmSubsystem,
+                                              SlideArmSubsystem slideArmSubsystem)
     {
         this.m_liftArmSubsystem = liftArmSubsystem;
         this.m_slideArmSubsystem = slideArmSubsystem;
@@ -30,11 +29,11 @@ public class ArmPositionLowChamberCommand extends CommandBase
     public void execute()
     {
 
-        this.m_liftArmSubsystem.liftArm(Constants.LiftArmConstants.kLiftArmLowChamber);
-        if (m_liftArmSubsystem.atTarget(Constants.LiftArmConstants.kLiftArmLowChamber))
-        {
-            this.m_slideArmSubsystem.slideArm(Constants.SlideArmConstants.kSlideArmLowChamber);
-        }
+//        this.m_liftArmSubsystem.liftArm(Constants.LiftArmConstants.kLiftArmLowChamber);
+//        if (m_liftArmSubsystem.atTarget(Constants.LiftArmConstants.kLiftArmLowChamber))
+//        {
+            this.m_slideArmSubsystem.slideArm(Constants.SlideArmConstants.kSlideSpecimenScore);
+//        }
     }
 
 

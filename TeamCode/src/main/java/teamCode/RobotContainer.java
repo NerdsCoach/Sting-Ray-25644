@@ -17,19 +17,19 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import teamCode.commands.ArmFudgeFactorDownCommand;
 import teamCode.commands.ArmFudgeFactorUpCommand;
+import teamCode.commands.ArmPositionTravelCommand;
 import teamCode.commands.ClimbArmAscentTwoCommand;
 import teamCode.commands.ClimbArmUpCommand;
 import teamCode.commands.ClimbArmFudgeDownCommand;
 import teamCode.commands.ClimbArmFudgeUpCommand;
 import teamCode.commands.StingrayArmCommand;
 import teamCode.commands.DriveFieldOrientedCommand;
-import teamCode.commands.ArmPositionHomeCommand;
 import teamCode.commands.ArmPositionCloseSampleCommand;
 import teamCode.commands.ArmPositionFarSampleCommand;
 import teamCode.commands.ArmPositionHighBasketCommand;
 import teamCode.commands.ArmPositionHighChamberCommand;
 import teamCode.commands.ArmPositionLowBasketCommand;
-import teamCode.commands.ArmPositionLowChamberCommand;
+import teamCode.commands.ArmPositionScoreHighChamberCommand;
 import teamCode.commands.IntakePivotCommand;
 import teamCode.commands.IntakeWheelCommand;
 import teamCode.commands.PinPointOdometryCommand;
@@ -115,8 +115,8 @@ public class RobotContainer extends CommandOpMode
     private ArmPositionHighBasketCommand m_armPositionHighBasketCommand;
     private ArmPositionHighChamberCommand m_armPositionHighChamberCommand;
     private ArmPositionLowBasketCommand m_armPositionLowBasketCommand;
-    private ArmPositionLowChamberCommand m_armPositionLowChamberCommand;
-    private ArmPositionHomeCommand m_armPositionHomeCommand;
+    private ArmPositionScoreHighChamberCommand m_armPositionScoreHighChamberCommand;
+    private ArmPositionTravelCommand m_armPositionTravelCommand;
     private IntakePivotCommand m_intakePivotCommand;
     private IntakeWheelCommand m_intakeWheelCommand;
     private StingrayArmCommand m_ascentArmCommand;
@@ -251,9 +251,9 @@ public class RobotContainer extends CommandOpMode
         this.m_dpadTop = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_UP))
                 .whenPressed(this.m_armPositionHighChamberCommand);
 
-        this.m_armPositionHomeCommand = new ArmPositionHomeCommand(m_liftArmSubsystem, m_slideArmSubsystem, this.m_intakePivotSubsystem);
+        this.m_armPositionTravelCommand = new ArmPositionTravelCommand(m_liftArmSubsystem, m_slideArmSubsystem, this.m_intakePivotSubsystem);
         this.m_leftBumper = (new GamepadButton(this.m_driver2, GamepadKeys.Button.LEFT_BUMPER))
-                .whenPressed(this.m_armPositionHomeCommand);
+                .whenPressed(this.m_armPositionTravelCommand);
 
         this.m_armPositionLowBasketCommand = new ArmPositionLowBasketCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
         this.m_a = (new GamepadButton(this.m_driver2, GamepadKeys.Button.A))
@@ -275,9 +275,9 @@ public class RobotContainer extends CommandOpMode
         this.m_climbArmFudgeDown = (new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_DOWN))
                 .whileHeld(this.m_climbArmFudgeDownCommand);
 
-        this.m_armPositionLowChamberCommand = new ArmPositionLowChamberCommand(m_liftArmSubsystem, m_slideArmSubsystem);
+        this.m_armPositionScoreHighChamberCommand = new ArmPositionScoreHighChamberCommand(m_liftArmSubsystem, m_slideArmSubsystem);
         this.m_dpadBottom = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_DOWN))
-                .whenPressed(this.m_armPositionLowChamberCommand);
+                .whenPressed(this.m_armPositionScoreHighChamberCommand);
 
         this.m_intakePivotCommand = new IntakePivotCommand(this.m_intakePivotSubsystem);
         this.m_rightBumper = (new GamepadButton(this.m_driver2, GamepadKeys.Button.RIGHT_BUMPER))

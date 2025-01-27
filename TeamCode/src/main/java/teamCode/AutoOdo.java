@@ -22,7 +22,7 @@ package teamCode;//package teamCode;
 //import teamCode.commands.ArmPositionCloseSampleCommand;
 //import teamCode.commands.ArmPositionHighBasketCommand;
 //import teamCode.commands.ArmPositionHighChamberCommand;
-//import teamCode.commands.ArmPositionHomeCommand;
+//import teamCode.commands.ArmPositionTravelCommand;
 //import teamCode.commands.IntakePivotCommand;
 //import teamCode.commands.ScoreSpecimenCommand;
 //import teamCode.commands.StingrayArmCommand;
@@ -54,7 +54,7 @@ package teamCode;//package teamCode;
 //    private PinPointOdometrySubsystem m_pinPointOdometrySubsystem;
 //    private ArmPositionHighBasketCommand m_armPositionHighBasketCommand;
 //    private ArmPositionHighChamberCommand m_armPositionHighChamberCommand;
-//    private ArmPositionHomeCommand m_armPositionHomeCommand;
+//    private ArmPositionTravelCommand m_armPositionHomeCommand;
 //    private ArmPositionCloseSampleCommand m_armPositionCloseSampleCommand;
 //    private IntakePivotCommand m_intakePivotCommand;
 //    private StingrayArmCommand m_ascentArmCommand;
@@ -118,7 +118,7 @@ package teamCode;//package teamCode;
 //        this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo);
 //
 //
-//        this.m_armPositionHomeCommand = new ArmPositionHomeCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
+//        this.m_armPositionHomeCommand = new ArmPositionTravelCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
 //        this.m_armPositionCloseSampleCommand = new ArmPositionCloseSampleCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
 //        this.m_armPositionHighBasketCommand = new ArmPositionHighBasketCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
 //        this.m_armPositionHighChamberCommand = new ArmPositionHighChamberCommand(this.m_liftArmSubsystem,this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
