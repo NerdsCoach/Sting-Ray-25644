@@ -173,12 +173,12 @@ public class AutoWires extends LinearOpMode
         //Auto Left Positions - Samples
 
         Pose2d initPose = new Pose2d(0, -6, Math.toRadians(0)); // Starting Pose
-        Pose2d netZone = new Pose2d(9  ,16,Math.toRadians(-50));
-        Pose2d netZoneTwo = new Pose2d(9  ,16,Math.toRadians(-40));
-        Pose2d yellowSampleOne = new Pose2d(24,9,Math.toRadians(-2));//(18,12,Math.toRadians(-14)
-        Pose2d yellowSampleTwo = new Pose2d(24,19,Math.toRadians(1));
-        Pose2d preSubmersiblePark = new Pose2d(58,11,Math.toRadians(0));
-        Pose2d submersiblePark = new Pose2d(59,-16,Math.toRadians(90));
+        Pose2d netZone = new Pose2d(8  ,16,Math.toRadians(-50));
+        Pose2d netZoneTwo = new Pose2d(8,16,Math.toRadians(-40));
+        Pose2d yellowSampleOne = new Pose2d(23,9,Math.toRadians(-2));//(18,12,Math.toRadians(-14)
+        Pose2d yellowSampleTwo = new Pose2d(23,19,Math.toRadians(2));
+        Pose2d preSubmersiblePark = new Pose2d(57,11,Math.toRadians(0));
+        Pose2d submersiblePark = new Pose2d(58,-16,Math.toRadians(90));
 
         //Auto Right Positions - Specimens
         Pose2d submersibleSpecimen = new Pose2d(28,-1,Math.toRadians(-180));//moved from above
@@ -244,6 +244,9 @@ public class AutoWires extends LinearOpMode
             telemetry.addLine("Move robot to pick yellow sample one");
             telemetry.update();
 
+            this.m_slideArmSubsystem.autoSlideArm(200);
+            safeWaitSeconds(.1);
+
             this.m_intakeWheelSubsystem.spinIntake(0.0);
             //Add code to pick up yellow sample
             telemetry.addLine("Pick up yellow sample");
@@ -287,9 +290,6 @@ public class AutoWires extends LinearOpMode
             safeWaitSeconds(.5);
 
 
-
-
-
             //Move robot to yellow sample two
             Actions.runBlocking(
                     drive.actionBuilder(netZone)
@@ -298,6 +298,9 @@ public class AutoWires extends LinearOpMode
             safeWaitSeconds(1);
             telemetry.addLine("Move robot to yellow sample two");
             telemetry.update();
+
+            this.m_slideArmSubsystem.autoSlideArm(200);
+            safeWaitSeconds(.1);
 
             this.m_intakeWheelSubsystem.spinIntake(0.0);
 

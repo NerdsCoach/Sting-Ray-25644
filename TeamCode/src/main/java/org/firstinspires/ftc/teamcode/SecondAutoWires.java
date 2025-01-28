@@ -39,6 +39,7 @@ import static teamCode.Constants.PivotIntakeConstants.kIntakePivotScore;
 import static teamCode.Constants.SlideArmConstants.kSlideArmCloseSample;
 import static teamCode.Constants.SlideArmConstants.kSlideArmHighBasket;
 import static teamCode.Constants.SlideArmConstants.kSlideArmHighChamber;
+import static teamCode.Constants.SlideArmConstants.kSlideArmHome;
 import static teamCode.Constants.SlideArmConstants.kSlideSpecimenScore;
 
 import com.acmerobotics.roadrunner.Pose2d;
@@ -171,15 +172,15 @@ public class SecondAutoWires extends LinearOpMode
     {
         //Auto Left Positions - Samples
 
-        Pose2d initPose = new Pose2d(0,-6, Math.toRadians(0)); // Starting Pose
-        Pose2d netZone = new Pose2d(9,16,Math.toRadians(-50));
-        Pose2d netZoneTwo = new Pose2d(9,16,Math.toRadians(-40));
+        Pose2d initPose = new Pose2d(0, -6, Math.toRadians(0)); // Starting Pose
+        Pose2d netZone = new Pose2d(8  ,16,Math.toRadians(-50));
+        Pose2d netZoneTwo = new Pose2d(8,16,Math.toRadians(-40));
         Pose2d yellowSampleOne = new Pose2d(24,9,Math.toRadians(-2));//(18,12,Math.toRadians(-14)
-        Pose2d yellowSampleTwo = new Pose2d(24,19,Math.toRadians(1));
-        Pose2d preSubmersiblePark = new Pose2d(58,11,Math.toRadians(0));
-        Pose2d submersiblePark = new Pose2d(59,-16,Math.toRadians(90));
-        Pose2d prepScoreSpecimen = new Pose2d(28,-25, Math.toRadians(-180));
-        Pose2d finaleScoreSpecimen = new Pose2d(20,-25, Math.toRadians(-180));
+        Pose2d yellowSampleTwo = new Pose2d(23,19,Math.toRadians(0));
+        Pose2d preSubmersiblePark = new Pose2d(57,11,Math.toRadians(0));
+        Pose2d submersiblePark = new Pose2d(58,-16,Math.toRadians(90));
+        Pose2d prepScoreSpecimen = new Pose2d(28,-35, Math.toRadians(-180));
+        Pose2d finaleScoreSpecimen = new Pose2d(20,-35, Math.toRadians(-180));
         Pose2d preYellowSampleOne = new Pose2d(20,-9, Math.toRadians(-2));
 
         //Auto Right Positions - Specimens
@@ -191,10 +192,10 @@ public class SecondAutoWires extends LinearOpMode
         Pose2d colorSampleOne = new Pose2d(51,-40,Math.toRadians(-90));
         Pose2d observationZone = new Pose2d(2,-37,Math.toRadians(-90));
 
-        Pose2d prePushSampleTwo = new Pose2d(51,-44,Math.toRadians(-90));
-        Pose2d observationZoneTwo = new Pose2d(2,-44, Math.toRadians(-90));
-        Pose2d prePushSampleThree = new Pose2d(51,-54,Math.toRadians(-90));
-        Pose2d observationPark = new Pose2d(5,-54,Math.toRadians(-90));
+        Pose2d prePushSampleTwo = new Pose2d(51,-54,Math.toRadians(-90));
+        Pose2d observationZoneTwo = new Pose2d(2,-54, Math.toRadians(-90));
+        Pose2d prePushSampleThree = new Pose2d(51,-58,Math.toRadians(-90));
+        Pose2d observationPark = new Pose2d(5,-58,Math.toRadians(-90));
 
         double waitSecondsBeforeDrop = 0;
         MecanumDrive drive = new MecanumDrive(hardwareMap, initPose);
@@ -237,13 +238,18 @@ public class SecondAutoWires extends LinearOpMode
 
             this.m_intakeWheelSubsystem.spinIntake(0.5);//Spit if still loaded
 
+            safeWaitSeconds(.5);
             Actions.runBlocking(
                     drive.actionBuilder(finaleScoreSpecimen)
                             .strafeToLinearHeading(preYellowSampleOne.position, preYellowSampleOne.heading)
                             .build());
-            safeWaitSeconds(1);
+            safeWaitSeconds(.75);
             telemetry.addLine("Move robot to pre yellow sample 1");
             telemetry.update();
+
+            this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
+
+            this.m_intakeWheelSubsystem.spinIntake(-0.5);
 
             //Move robot to pick yellow sample one
             Actions.runBlocking(
@@ -254,7 +260,14 @@ public class SecondAutoWires extends LinearOpMode
             telemetry.addLine("Move robot to pick yellow sample one");
             telemetry.update();
 
-            this.m_intakeWheelSubsystem.spinIntake(0.0);
+            this.m_slideArmSubsystem.autoSlideArm(200);
+            safeWaitSeconds(.1);
+
+            this.m_intakeWheelSubsystem.spinIntake(0.0);//Pick Up Floor #2
+
+            this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
+            safeWaitSeconds(.5);
+
             //Add code to pick up yellow sample
             telemetry.addLine("Pick up yellow sample");
             telemetry.update();
@@ -279,7 +292,7 @@ public class SecondAutoWires extends LinearOpMode
             safeWaitSeconds(.75);
             this.m_intakeWheelSubsystem.spinIntake(0.5);//Score in High Basket #2
 
-            safeWaitSeconds(1);
+            safeWaitSeconds(.5);
             this.m_intakeWheelSubsystem.spinIntake(0.0);
 
 
@@ -302,9 +315,12 @@ public class SecondAutoWires extends LinearOpMode
                     drive.actionBuilder(netZone)
                             .strafeToLinearHeading(yellowSampleTwo.position, yellowSampleTwo.heading)
                             .build());
-            safeWaitSeconds(1);
+            safeWaitSeconds(.75);
             telemetry.addLine("Move robot to yellow sample two");
             telemetry.update();
+
+            this.m_slideArmSubsystem.autoSlideArm(200);
+            safeWaitSeconds(.1);
 
             this.m_intakeWheelSubsystem.spinIntake(0.0);
 
@@ -330,10 +346,10 @@ public class SecondAutoWires extends LinearOpMode
             safeWaitSeconds(.75);
             this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
             //Add code to drop sample in bucket
-            safeWaitSeconds(.5);
+            safeWaitSeconds(.75);
             this.m_intakeWheelSubsystem.spinIntake(0.5);//Spit out
 
-            safeWaitSeconds(1);
+            safeWaitSeconds(.5);
             this.m_intakeWheelSubsystem.spinIntake(0.0);
 
             //Add code to drop sample in bucket
@@ -344,7 +360,7 @@ public class SecondAutoWires extends LinearOpMode
             safeWaitSeconds(.5);
             this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
 
-            safeWaitSeconds(.5);//
+            safeWaitSeconds(.5);
             this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
 
             this.m_ascentArmSubsystem.ascentArm(0.6);
@@ -459,6 +475,11 @@ public class SecondAutoWires extends LinearOpMode
             telemetry.addLine("Move robot and pushing 2nd sample to observation zone");
             telemetry.update();
 
+            this.m_liftArmSubsystem.liftArm(kLiftArmHighChamber);
+            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
+            this.m_slideArmSubsystem.slideArm(kSlideArmHome);
+            safeWaitSeconds(.15);
+
             Actions.runBlocking(
                     drive.actionBuilder(observationZoneTwo)
                             .strafeToLinearHeading(prePushSampleTwo.position, prePushSampleTwo.heading)
@@ -481,6 +502,8 @@ public class SecondAutoWires extends LinearOpMode
             safeWaitSeconds(1);
             telemetry.addLine("Move robot to observation parking");
             telemetry.update();
+
+            this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
         }
     }
 
@@ -488,7 +511,8 @@ public class SecondAutoWires extends LinearOpMode
     public void safeWaitSeconds(double time) {
         ElapsedTime timer = new ElapsedTime(SECONDS);
         timer.reset();
-        while (!isStopRequested() && timer.time() < time) {
+        while (!isStopRequested() && timer.time() < time)
+        {
         }
     }
 }   // end class

@@ -1,6 +1,9 @@
 package teamCode.commands;
 
+import static com.qualcomm.robotcore.util.ElapsedTime.Resolution.SECONDS;
+
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import teamCode.Constants;
 import teamCode.Logic;
@@ -8,8 +11,7 @@ import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
 
-public class ArmPositionHighChamberCommand extends CommandBase
-{
+public class ArmPositionHighChamberCommand extends CommandBase {
     private LiftArmSubsystem m_liftArmSubsystem;
     private SlideArmSubsystem m_slideArmSubsystem;
     private IntakePivotSubsystem m_intakePivotSubsystem;
@@ -25,29 +27,28 @@ public class ArmPositionHighChamberCommand extends CommandBase
     }
 
     @Override
-    public void initialize()
-    {
+    public void initialize() {
     }
 
     @Override
     public void execute()
     {
         this.m_liftArmSubsystem.liftArm(Constants.LiftArmConstants.kLiftArmHighChamber);
-        if (m_liftArmSubsystem.atTarget(Constants.LiftArmConstants.kLiftArmHighChamber))
-        {
-            this.m_slideArmSubsystem.slideArm(Constants.SlideArmConstants.kSlideArmHighChamber);
-            this.m_intakePivotSubsystem.pivotIntake(Constants.PivotIntakeConstants.kIntakePivotScore);
-        }
+
+//        if (m_liftArmSubsystem.atTarget(Constants.LiftArmConstants.kLiftArmHighChamber))
+//        {
+        this.m_slideArmSubsystem.slideArm(Constants.SlideArmConstants.kSlideArmHighChamber);
+//        this.m_intakePivotSubsystem.pivotIntake(Constants.PivotIntakeConstants.kIntakePivotScore);
+//        }
     }
 
     @Override
-    public void end(boolean interrupted)
-    {
+    public void end(boolean interrupted) {
     }
 
     @Override
-    public boolean isFinished()
-    {
+    public boolean isFinished() {
         return true;
     }
+
 }

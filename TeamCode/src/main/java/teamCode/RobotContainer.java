@@ -275,7 +275,8 @@ public class RobotContainer extends CommandOpMode
         this.m_climbArmFudgeDown = (new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_DOWN))
                 .whileHeld(this.m_climbArmFudgeDownCommand);
 
-        this.m_armPositionScoreHighChamberCommand = new ArmPositionScoreHighChamberCommand(m_liftArmSubsystem, m_slideArmSubsystem);
+        this.m_armPositionScoreHighChamberCommand = new ArmPositionScoreHighChamberCommand
+                (m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem, m_intakeWheelSubsystem);
         this.m_dpadBottom = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_DOWN))
                 .whenPressed(this.m_armPositionScoreHighChamberCommand);
 
