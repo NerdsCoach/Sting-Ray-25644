@@ -42,13 +42,13 @@ public class Constants
     public static final class PivotIntakeConstants
     {
         public static final double kIntakePivotScore = 0.65;
-        public static final double kIntakePivotPickUp = 0.57;
+        public static final double kIntakePivotPickUp = 0.54;
         public static final double kIntakePivotFarSample= 0.45;
 
     }
     public static final class ClimbArmConstants
     {
-        public static final int kClimberArmUp = 11500;
+        public static final int kClimberArmUp = 11300;
         public static final int kClimbArmAscentTwo = 7625;
         public static final int kClimberArmFudgeUp = 250;
         public static final int kClimberArmFudgeDown = -250;
