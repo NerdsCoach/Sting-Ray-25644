@@ -184,7 +184,7 @@ public class AutoWiresSpecimens extends LinearOpMode
             this.m_slideArmSubsystem.slideArm(kSlideSpecimenScore);
             safeWaitSeconds(.5);
 
-            this.m_intakeWheelSubsystem.spinIntake(-0.1);
+            this.m_intakeWheelSubsystem.spinIntake(-0.4);
 
             //Move robot with preloaded specimen to submersible to place specimen
             Actions.runBlocking(
@@ -240,7 +240,7 @@ public class AutoWiresSpecimens extends LinearOpMode
             telemetry.addLine("Move robot specimen pickup ");
             telemetry.update();
 
-            this.m_intakeWheelSubsystem.spinIntake(-.5);
+            this.m_intakeWheelSubsystem.spinIntake(-0.5);
 
             Actions.runBlocking(
                     drive.actionBuilder(specimenPrePickup)
@@ -285,7 +285,7 @@ public class AutoWiresSpecimens extends LinearOpMode
             this.m_slideArmSubsystem.slideArm(kSlideSpecimenScore);
             safeWaitSeconds(.5);
 
-            this.m_intakeWheelSubsystem.spinIntake(-0.1);
+            this.m_intakeWheelSubsystem.spinIntake(-0.4);//Score
 
             //Move robot with preloaded specimen to submersible to place specimen
             Actions.runBlocking(

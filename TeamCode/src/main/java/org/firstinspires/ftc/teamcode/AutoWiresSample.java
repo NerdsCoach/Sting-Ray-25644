@@ -32,14 +32,11 @@ package org.firstinspires.ftc.teamcode;
 import static com.qualcomm.robotcore.util.ElapsedTime.Resolution.SECONDS;
 import static teamCode.Constants.LiftArmConstants.kLiftArmCloseSample;
 import static teamCode.Constants.LiftArmConstants.kLiftArmHighBasket;
-import static teamCode.Constants.LiftArmConstants.kLiftArmHighChamber;
 import static teamCode.Constants.LiftArmConstants.kLiftArmIntakeReset;
 import static teamCode.Constants.PivotIntakeConstants.kIntakePivotPickUp;
 import static teamCode.Constants.PivotIntakeConstants.kIntakePivotScore;
 import static teamCode.Constants.SlideArmConstants.kSlideArmCloseSample;
 import static teamCode.Constants.SlideArmConstants.kSlideArmHighBasket;
-import static teamCode.Constants.SlideArmConstants.kSlideArmHighChamber;
-import static teamCode.Constants.SlideArmConstants.kSlideSpecimenScore;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -130,9 +127,10 @@ public class AutoWiresSample extends LinearOpMode
         Pose2d initPose = new Pose2d(0, -6, Math.toRadians(0)); // Starting Pose
         Pose2d netZone = new Pose2d(8  ,16,Math.toRadians(-50));
         Pose2d netZoneTwo = new Pose2d(8,16,Math.toRadians(-40));
-        Pose2d yellowSampleOne = new Pose2d(21,9,Math.toRadians(-2));//(18,12,Math.toRadians(-14)
+        Pose2d yellowSampleOne = new Pose2d(21,9, Math.toRadians(-2));//(18,12,Math.toRadians(-14)
         Pose2d sampleFudgeDrive = new Pose2d(24, 9, Math.toRadians(-2));
-        Pose2d yellowSampleTwo = new Pose2d(23,19,Math.toRadians(2));
+        Pose2d yellowSampleTwo = new Pose2d(20,18,Math.toRadians(1));
+        Pose2d sampleTwoFudgeDrive = new Pose2d(26,18,Math.toRadians(1));
         Pose2d preSubmersiblePark = new Pose2d(57,11,Math.toRadians(0));
         Pose2d submersiblePark = new Pose2d(58,-16,Math.toRadians(90));
 
@@ -267,6 +265,14 @@ public class AutoWiresSample extends LinearOpMode
             this.m_slideArmSubsystem.autoSlideArm(200);
             safeWaitSeconds(.1);
 
+            Actions.runBlocking(
+                    drive.actionBuilder(yellowSampleTwo)
+                            .strafeToLinearHeading(sampleTwoFudgeDrive.position, sampleTwoFudgeDrive.heading)
+                            .build());
+            safeWaitSeconds(.75);
+            telemetry.addLine("Fudge robot to pick yellow sample one");
+            telemetry.update();
+
             this.m_intakeWheelSubsystem.spinIntake(0.0);
 
             //Add code to pick up yellow sample
@@ -301,8 +307,6 @@ public class AutoWiresSample extends LinearOpMode
             telemetry.addLine("Drop sample in bucket");
             telemetry.update();
 
-            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
-            safeWaitSeconds(.5);
             this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
 
             safeWaitSeconds(.5);//
