@@ -124,15 +124,15 @@ public class AutoWiresSample extends LinearOpMode
     {
         //Auto Left Positions - Samples
 
-        Pose2d initPose = new Pose2d(0, -6, Math.toRadians(0)); // Starting Pose
-        Pose2d netZone = new Pose2d(8  ,16,Math.toRadians(-50));
+        Pose2d initPose = new Pose2d(0,-6, Math.toRadians(0)); // Starting Pose
+        Pose2d netZone = new Pose2d(10,16,Math.toRadians(-45));//8 //-50
         Pose2d netZoneTwo = new Pose2d(8,16,Math.toRadians(-40));
         Pose2d yellowSampleOne = new Pose2d(21,9, Math.toRadians(-2));//(18,12,Math.toRadians(-14)
-        Pose2d sampleFudgeDrive = new Pose2d(24, 9, Math.toRadians(-2));
-        Pose2d yellowSampleTwo = new Pose2d(20,18,Math.toRadians(1));
-        Pose2d sampleTwoFudgeDrive = new Pose2d(26,18,Math.toRadians(1));
-        Pose2d preSubmersiblePark = new Pose2d(57,11,Math.toRadians(0));
-        Pose2d submersiblePark = new Pose2d(58,-16,Math.toRadians(90));
+        Pose2d sampleFudgeDrive = new Pose2d(25, 9, Math.toRadians(-2));
+        Pose2d yellowSampleTwo = new Pose2d(20,20,Math.toRadians(1));
+        Pose2d sampleTwoFudgeDrive = new Pose2d(29,20,Math.toRadians(1));
+        Pose2d preSubmersiblePark = new Pose2d(53,11,Math.toRadians(90));
+        Pose2d submersiblePark = new Pose2d(53,-23,Math.toRadians(90));
 
         //Auto Right Positions - Specimens
         Pose2d submersibleSpecimen = new Pose2d(28,-1,Math.toRadians(-180));//moved from above
@@ -205,15 +205,19 @@ public class AutoWiresSample extends LinearOpMode
                     drive.actionBuilder(yellowSampleOne)
                             .strafeToLinearHeading(sampleFudgeDrive.position, sampleFudgeDrive.heading)
                             .build());
-            safeWaitSeconds(.75);
+            safeWaitSeconds(.5);//
             telemetry.addLine("Fudge robot to pick yellow sample one");
             telemetry.update();
-
 
             this.m_intakeWheelSubsystem.spinIntake(0.0);
             //Add code to pick up yellow sample
             telemetry.addLine("Pick up yellow sample");
             telemetry.update();
+
+            this.m_intakeWheelSubsystem.spinIntake(-0.5);
+            safeWaitSeconds(0.2);
+            this.m_intakeWheelSubsystem.spinIntake(0.0);
+
 
             this.m_liftArmSubsystem.liftArm(kLiftArmIntakeReset);
             safeWaitSeconds(.5);
@@ -227,12 +231,12 @@ public class AutoWiresSample extends LinearOpMode
             telemetry.update();
 
             this.m_liftArmSubsystem.liftArm(kLiftArmHighBasket);
-            safeWaitSeconds(.5);
+            safeWaitSeconds(.5);//
             this.m_slideArmSubsystem.slideArm(kSlideArmHighBasket);
-            safeWaitSeconds(.75);
+            safeWaitSeconds(.5);
             this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
             //Add code to drop sample in bucket
-            safeWaitSeconds(.75);
+            safeWaitSeconds(.5);//
             this.m_intakeWheelSubsystem.spinIntake(0.5);//Score in High Basket #2
 
             safeWaitSeconds(1);
@@ -269,7 +273,7 @@ public class AutoWiresSample extends LinearOpMode
                     drive.actionBuilder(yellowSampleTwo)
                             .strafeToLinearHeading(sampleTwoFudgeDrive.position, sampleTwoFudgeDrive.heading)
                             .build());
-            safeWaitSeconds(.75);
+            safeWaitSeconds(0.5);//
             telemetry.addLine("Fudge robot to pick yellow sample one");
             telemetry.update();
 
@@ -309,10 +313,10 @@ public class AutoWiresSample extends LinearOpMode
 
             this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
 
-            safeWaitSeconds(.5);//
             this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
+            safeWaitSeconds(.65);
 
-            this.m_ascentArmSubsystem.ascentArm(0.6);
+
             safeWaitSeconds(.75);
             //Move robot to submersible parking
             Actions.runBlocking(
@@ -321,6 +325,9 @@ public class AutoWiresSample extends LinearOpMode
                             .build());
             telemetry.addLine("Move robot to preSubmersible parking");
             telemetry.update();
+
+            this.m_ascentArmSubsystem.ascentArm(0.6);
+
             Actions.runBlocking(
                     drive.actionBuilder(preSubmersiblePark)
                             .strafeToLinearHeading(submersiblePark.position, submersiblePark.heading)

@@ -155,8 +155,9 @@ public class AutoWiresSpecimens extends LinearOpMode
         Pose2d prePushColorSampleOne = new Pose2d(51,-34,Math.toRadians(-90));
         Pose2d colorSampleOne = new Pose2d(51,-40,Math.toRadians(-90));
         Pose2d observationPark = new Pose2d(5,-40,Math.toRadians(-90));
-        Pose2d scoreSpecimen = new Pose2d(20, -1, Math.toRadians(-180));
-        Pose2d pickUpSpecimen = new Pose2d(6,-50, Math.toRadians(-90));
+        Pose2d scoreSpecimen = new Pose2d(19, -1, Math.toRadians(-180));
+        Pose2d scoreSecondSpecimen = new Pose2d(19, 5, Math.toRadians(-180));
+        Pose2d pickUpSpecimen = new Pose2d(5,-50, Math.toRadians(-90));//
         Pose2d specimenFudgeDrive = new Pose2d(6, -51,Math.toRadians(-90));
 
         double waitSecondsBeforeDrop = 0;
@@ -167,6 +168,11 @@ public class AutoWiresSpecimens extends LinearOpMode
             safeWaitSeconds(.5);
 
             this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
+
+            this.m_intakeWheelSubsystem.spinIntake(-0.5);
+            safeWaitSeconds(0.2);
+            this.m_intakeWheelSubsystem.spinIntake(0.0);
+
 //            safeWaitSeconds(.5);
             //Move robot with preloaded specimen to submersible to place specimen
             Actions.runBlocking(
@@ -181,10 +187,10 @@ public class AutoWiresSpecimens extends LinearOpMode
             safeWaitSeconds(.75);
             this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
 
+            this.m_intakeWheelSubsystem.spinIntake(-0.9);
+
             this.m_slideArmSubsystem.slideArm(kSlideSpecimenScore);
             safeWaitSeconds(.5);
-
-            this.m_intakeWheelSubsystem.spinIntake(-0.4);
 
             //Move robot with preloaded specimen to submersible to place specimen
             Actions.runBlocking(
@@ -264,11 +270,20 @@ public class AutoWiresSpecimens extends LinearOpMode
             this.m_intakeWheelSubsystem.spinIntake(0.0);
 
             this.m_liftArmSubsystem.liftArm(kLiftArmIntakeReset);
+
+            this.m_intakeWheelSubsystem.spinIntake(-0.5);
+            safeWaitSeconds(.15);
+            this.m_intakeWheelSubsystem.spinIntake(0.0);
+
             safeWaitSeconds(.3);
             Actions.runBlocking(
                     drive.actionBuilder(pickUpSpecimen)
                             .strafeToLinearHeading(specimenPrePickup.position, specimenPrePickup.heading)
                             .build());
+
+            this.m_intakeWheelSubsystem.spinIntake(-0.5);
+            safeWaitSeconds(0.2);
+            this.m_intakeWheelSubsystem.spinIntake(0.0);
 
             Actions.runBlocking(
                     drive.actionBuilder(specimenPrePickup)
@@ -282,17 +297,21 @@ public class AutoWiresSpecimens extends LinearOpMode
             safeWaitSeconds(.75);
             this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
 
-            this.m_slideArmSubsystem.slideArm(kSlideSpecimenScore);
+            this.m_intakeWheelSubsystem.spinIntake(-1.);
+
+            this.m_slideArmSubsystem.slideArm(kSlideSpecimenScore);//Score
             safeWaitSeconds(.5);
 
-            this.m_intakeWheelSubsystem.spinIntake(-0.4);//Score
+
 
             //Move robot with preloaded specimen to submersible to place specimen
             Actions.runBlocking(
                     drive.actionBuilder(secondSubmersibleSpecimen)
-                            .strafeToLinearHeading(scoreSpecimen.position, scoreSpecimen.heading)
+                            .strafeToLinearHeading(scoreSecondSpecimen.position, scoreSpecimen.heading)
                             .build());
             safeWaitSeconds(.25);
+
+            this.m_intakeWheelSubsystem.spinIntake(0.0);//Score
 
             this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
             this.m_liftArmSubsystem.liftArm(kLiftArmIntakeReset);

@@ -18,10 +18,10 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import teamCode.commands.ArmFudgeFactorDownCommand;
 import teamCode.commands.ArmFudgeFactorUpCommand;
 import teamCode.commands.ArmPositionTravelCommand;
-import teamCode.commands.ClimbArmAscentTwoCommand;
-import teamCode.commands.ClimbArmUpCommand;
 import teamCode.commands.ClimbArmFudgeDownCommand;
 import teamCode.commands.ClimbArmFudgeUpCommand;
+import teamCode.commands.LiftArmClimbCommand;
+import teamCode.commands.ReleaseClimbArmCommand;
 import teamCode.commands.StingrayArmCommand;
 import teamCode.commands.DriveFieldOrientedCommand;
 import teamCode.commands.ArmPositionCloseSampleCommand;
@@ -80,8 +80,8 @@ public class RobotContainer extends CommandOpMode
     private Button m_slideFudgeInButton;
     private Button m_slideFudgeOutButton;
     private Button m_odoResetButton;
-    private Button m_climbUpButton;
-    private Button m_climbDownButton;
+    private Button m_liftArmClimbButton;
+    private Button m_releaseClimbButton;
     private Button m_climbArmFudgeUp;
     private Button m_climbArmFudgeDown;
 
@@ -124,8 +124,8 @@ public class RobotContainer extends CommandOpMode
     private ResetHomeCommand m_resetHomeCommand;
     private SlideFudgeInCommand m_slideFudgeInCommand;
     private SlideFudgeOutCommand m_slideFudgeOutCommand;
-    private ClimbArmUpCommand m_climbArmUpCommand;
-    private ClimbArmAscentTwoCommand m_climbArmAscentTwoCommand;
+    private LiftArmClimbCommand m_liftArmClimbCommand;
+    private ReleaseClimbArmCommand m_releaseCLimberArmCommand;
     private ClimbArmFudgeUpCommand m_climbArmFudgeUpCommand;
     private ClimbArmFudgeDownCommand m_climbArmFudgeDownCommand;
     private GoBildaPinpointDriver m_goBilda;
@@ -259,13 +259,13 @@ public class RobotContainer extends CommandOpMode
         this.m_a = (new GamepadButton(this.m_driver2, GamepadKeys.Button.A))
                 .whenPressed(this.m_armPositionLowBasketCommand);
 
-        this.m_climbArmUpCommand = new ClimbArmUpCommand(m_climbArmSubsystem);
-        this.m_climbUpButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.Y))
-                .whenPressed(this.m_climbArmUpCommand);
+        this.m_liftArmClimbCommand = new LiftArmClimbCommand(m_liftArmSubsystem);
+        this.m_liftArmClimbButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.A))
+                .whenPressed(this.m_liftArmClimbCommand);
 
-        this.m_climbArmAscentTwoCommand = new ClimbArmAscentTwoCommand(m_climbArmSubsystem);
-        this.m_climbDownButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.A))
-                .whenPressed(this.m_climbArmAscentTwoCommand);
+        this.m_releaseCLimberArmCommand = new ReleaseClimbArmCommand(m_liftArmSubsystem);
+        this.m_releaseClimbButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.Y))
+                .whenPressed(this.m_releaseCLimberArmCommand);
 
         this.m_climbArmFudgeUpCommand = new ClimbArmFudgeUpCommand(m_climbArmSubsystem);
         this.m_climbArmFudgeUp = (new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_UP))

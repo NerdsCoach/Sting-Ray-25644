@@ -23,6 +23,8 @@ public class Constants
         public static final int kLiftArmFudgeFactorUp = 50;
         public static final int kLiftArmFudgeFactorDown = -50;
         public static final int kLiftArmIntakeReset = 550;
+        public static final int kLiftarmReleaseClimbArm = 2400;
+        public static final int kLiftArmClimb = 0;
     }
 
     public static final class SlideArmConstants

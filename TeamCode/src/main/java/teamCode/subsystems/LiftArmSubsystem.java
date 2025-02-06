@@ -48,6 +48,13 @@ public class LiftArmSubsystem extends SubsystemBase
         this.m_liftArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
+    public void climbRelease(int release)
+    {
+        m_liftArmMotor.setTargetPosition(release);
+        this.m_liftArmMotor.setPower(0.1);
+        this.m_liftArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
     public void stop()
     {
         this.m_liftArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
