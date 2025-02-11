@@ -50,7 +50,6 @@ import java.util.Arrays;
 
 public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSimple>
 {
-
     private int deviceStatus   = 0;
     private int loopTime       = 0;
     private int xEncoderValue  = 0;
@@ -68,13 +67,13 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
     //i2c address of the device
     public static final byte DEFAULT_ADDRESS = 0x31;
 
-    public GoBildaPinpointDriver(I2cDeviceSynchSimple deviceClient, boolean deviceClientIsOwned) {
+    public GoBildaPinpointDriver(I2cDeviceSynchSimple deviceClient, boolean deviceClientIsOwned)
+    {
         super(deviceClient, deviceClientIsOwned);
 
         this.deviceClient.setI2cAddress(I2cAddr.create7bit(DEFAULT_ADDRESS));
         super.registerArmingStateCallback(false);
     }
-
 
     @Override
     public Manufacturer getManufacturer() {
@@ -86,12 +85,11 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
         ((LynxI2cDeviceSynch)(deviceClient)).setBusSpeed(LynxI2cDeviceSynch.BusSpeed.FAST_400K);
         return true;
     }
-
     @Override
-    public String getDeviceName() {
+    public String getDeviceName()
+    {
         return "goBILDA® Pinpoint Odometry Computer";
     }
-
 
     //Register map of the i2c device
     private enum Register {
@@ -116,7 +114,8 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
 
         private final int bVal;
 
-        Register(int bVal){
+        Register(int bVal)
+        {
             this.bVal = bVal;
         }
     }

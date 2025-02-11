@@ -29,17 +29,17 @@ public class Constants
 
     public static final class SlideArmConstants
     {
-        public static final int kSlideArmCloseSample = 25;
-        public static final int kSlideArmFarSample = 1690;//1970
-        public static final int kSlideArmHighBasket = 2220;
-        public static final int kSlideArmHighChamber = 550;//600
-        public static final int kSlideArmHome = 25;
-        public static final int kSlideArmLowBasket = 250;//200
-        public static final int kSlideArmLowChamber = 25;
-        public static final int kSlideFudgeIn = -100;
-        public static final int kSlideFudgeOut = 100;
-        public static final int kSlideFudgeOutMax = 2025;
-        public static final int kSlideSpecimenScore = 200;
+        public static final int kSlideArmCloseSample = 7;
+        public static final int kSlideArmFarSample = 434; //1970
+        public static final int kSlideArmHighBasket = 602;
+        public static final int kSlideArmHighChamber = 149; //600
+        public static final int kSlideArmHome = 7;
+        public static final int kSlideArmLowBasket = 68; //200
+        public static final int kSlideArmLowChamber = 7;
+        public static final int kSlideFudgeIn = -25;
+        public static final int kSlideFudgeOut = 25;
+        public static final int kSlideFudgeOutMax = 549;
+        public static final int kSlideSpecimenScore = 54;
     }
 
     public static final class PivotIntakeConstants

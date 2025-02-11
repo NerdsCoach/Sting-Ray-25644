@@ -26,6 +26,7 @@ public class IntakeWheelCommand extends CommandBase
     @Override
     public void execute()
     {
+
         if (this.m_intakeWheelSubsystem.isLoaded())
         {
             this.m_intakeWheelSubsystem.spinIntake(0.0);
@@ -33,7 +34,7 @@ public class IntakeWheelCommand extends CommandBase
         else
         {
             this.m_intakeWheelSubsystem.spinIntake(
-                this.m_rightTriggerValue.getAsDouble() * -1 - this.m_leftTriggerValue.getAsDouble() * -0.5);
+                this.m_rightTriggerValue.getAsDouble() * -1 - this.m_leftTriggerValue.getAsDouble() * -1);//changed after 7 rivers qualifier was .5
         }
 //        System.out.println(this.m_intakeWheelSubsystem.isLoaded());
    }

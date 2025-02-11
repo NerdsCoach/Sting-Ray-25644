@@ -29,12 +29,10 @@ public class ScoreSpecimenCommand extends CommandBase
     {
         this.m_liftArmSubsystem.scoreSpecimen(m_lift);
     }
-
     @Override
     public void end(boolean interrupted)
     {
     }
-
     @Override
     public boolean isFinished()
     {

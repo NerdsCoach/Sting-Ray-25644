@@ -51,8 +51,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Config
-public final class MecanumDrive {
-    public static class Params {
+public final class MecanumDrive
+{
+    public static class Params
+    {
         // IMU orientation
         // Step 2 : Update direction of IMU by updating orientation of Driver Hub below
         // TODO: fill in these values based on

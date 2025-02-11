@@ -140,6 +140,7 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
             pull any other data. Only the heading (which you can pull with getHeading() or in getPosition().
              */
             //odo.update(GoBildaPinpointDriver.readData.ONLY_UPDATE_HEADING);
+//            Pose2D initPose = new Pose2D(DistanceUnit.MM, 0,0,AngleUnit.DEGREES,0); //coach's test pose
 
 
             if (gamepad1.a){
@@ -194,5 +195,6 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
             telemetry.update();
 
         }
-    }}
+    }
+}
 

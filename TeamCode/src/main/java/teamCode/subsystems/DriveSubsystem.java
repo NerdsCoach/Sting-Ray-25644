@@ -41,8 +41,6 @@ public class DriveSubsystem extends SubsystemBase
         this.m_lastRecordedAngle = new Orientation();
         this.m_currentAngle = 0.0;
         this.m_imu = imu;
-
-
     }
 
 //    public DriveSubsystem(MecanumDrive drive, IMU m_imu, GoBildaPinpointDriver pinPoint)
