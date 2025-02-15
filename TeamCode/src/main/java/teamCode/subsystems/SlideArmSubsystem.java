@@ -20,7 +20,7 @@ public class SlideArmSubsystem extends SubsystemBase
      public void slideArm(int slide)
     {
         m_slideArmMotor.setTargetPosition(slide);
-        this.m_slideArmMotor.setPower(.75); //1
+        this.m_slideArmMotor.setPower(.75);
         this.m_slideArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
     public void slideFudgeFactor(int pull)

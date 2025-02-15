@@ -44,7 +44,7 @@ public class LiftArmSubsystem extends SubsystemBase
     public void liftSlow(int lift)
     {
         m_liftArmMotor.setTargetPosition(lift);
-        this.m_liftArmMotor.setPower(0.25);
+        this.m_liftArmMotor.setPower(0.5);
         this.m_liftArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 

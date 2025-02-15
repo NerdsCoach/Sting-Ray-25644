@@ -20,7 +20,7 @@
  *   SOFTWARE.
  */
 
-package teamCode;
+package org.firstinspires.ftc.teamcode.Libs.GoBilda;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -28,8 +28,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+//import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 import java.util.Locale;
+
+import teamCode.GoBildaPinpointDriver;
 
 /*
 This opmode shows how to use the goBILDA® Pinpoint Odometry Computer.
@@ -62,9 +65,10 @@ For support, contact tech@gobilda.com
 
 public class SensorGoBildaPinpointExample extends LinearOpMode {
 
-    GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
+    teamCode.GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
 
     double oldTime = 0;
+//    private MecanumDrive drive;
 
 
     @Override
@@ -73,7 +77,9 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
 
-        odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
+        odo = hardwareMap.get(teamCode.GoBildaPinpointDriver.class,"odo");
+        odo.recalibrateIMU();
+        telemetry.addLine("Gyro Reset");
 
         /*
         Set the odometry pod positions relative to the point that the odometry computer tracks around.
@@ -91,7 +97,7 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         If you're using another kind of odometry pod, uncomment setEncoderResolution and input the
         number of ticks per mm of your odometry pod.
          */
-        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        odo.setEncoderResolution(teamCode.GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         //odo.setEncoderResolution(13.26291192);
 
 
@@ -101,7 +107,6 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         you move the robot to the left.
          */
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-
 
         /*
         Before running the robot, recalibrate the IMU. This needs to happen when the robot is stationary
@@ -115,12 +120,11 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         odo.resetPosAndIMU();
 
         telemetry.addData("Status", "Initialized");
-        telemetry.addData("perp offset", odo.getXOffset());
-        telemetry.addData("par offset", odo.getYOffset());
+        telemetry.addData("X offset", odo.getXOffset());
+        telemetry.addData("Y offset", odo.getYOffset());
         telemetry.addData("Device Version Number:", odo.getDeviceVersion());
         telemetry.addData("Device Scalar", odo.getYawScalar());
         telemetry.update();
-
         // Wait for the game to start (driver presses START)
         waitForStart();
         resetRuntime();
@@ -140,14 +144,24 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
             pull any other data. Only the heading (which you can pull with getHeading() or in getPosition().
              */
             //odo.update(GoBildaPinpointDriver.readData.ONLY_UPDATE_HEADING);
-//            Pose2D initPose = new Pose2D(DistanceUnit.MM, 0,0,AngleUnit.DEGREES,0); //coach's test pose
+            Pose2D initPose = new Pose2D(DistanceUnit.MM, 0,0,AngleUnit.DEGREES,0); //coach's test pose
+            Pose2D netZone = new Pose2D(DistanceUnit.MM, 1000,500,AngleUnit.DEGREES,-45); //coach's test pose
 
 
-            if (gamepad1.a){
+//            Actions.runBlocking(
+//                    drive. actionBuilder(initPose)
+//                            .strafeToLinearHeading(Pose2D netZone.getX(DistanceUnit.MM), netZone.getY(DistanceUnit.MM), (AngleUnit.DEGREES)));
+//
+//
+//                    Actions.runBlocking(
+//                            drive.actionBuilder(Pose2D);
+            if (gamepad1.a)
+            {
                 odo.resetPosAndIMU(); //resets the position to 0 and recalibrates the IMU
             }
 
-            if (gamepad1.b){
+            if (gamepad1.b)
+            {
                 odo.recalibrateIMU(); //recalibrates the IMU without resetting position
             }
 
@@ -166,8 +180,9 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
             /*
             gets the current Position (x & y in mm, and heading in degrees) of the robot, and prints it.
              */
+
             Pose2D pos = odo.getPosition();
-            String data = String.format(Locale.US, "{perp: %.3f, par: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
+            String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
             telemetry.addData("Position", data);
 
             /*
