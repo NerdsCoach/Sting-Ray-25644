@@ -349,6 +349,7 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
     public void setEncoderResolution(double ticks_per_mm){
         writeByteArray(Register.MM_PER_TICK,(floatToByteArray((float) ticks_per_mm,ByteOrder.LITTLE_ENDIAN)));
     }
+    //so we can commit
 
     /**
      * Tuning this value should be unnecessary.<br>
