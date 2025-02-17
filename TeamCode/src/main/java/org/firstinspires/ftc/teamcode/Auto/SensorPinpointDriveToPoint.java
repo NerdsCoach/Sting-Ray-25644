@@ -226,8 +226,6 @@ public class SensorPinpointDriveToPoint extends LinearOpMode
                     {
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
                         this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
-//so we can commit
-
                     }
                     this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
             }
