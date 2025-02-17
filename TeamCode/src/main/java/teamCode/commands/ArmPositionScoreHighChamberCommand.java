@@ -1,6 +1,7 @@
 package teamCode.commands;
 
 import static teamCode.Constants.PivotIntakeConstants.kIntakePivotScore;
+import static teamCode.Constants.PivotIntakeConstants.kIntakePivotSpecimen;
 import static teamCode.Constants.SlideArmConstants.kSlideSpecimenScore;
 
 import com.arcrobotics.ftclib.command.CommandBase;
@@ -40,7 +41,7 @@ public class ArmPositionScoreHighChamberCommand extends CommandBase
     @Override
     public void execute()
     {
-            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
+            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotSpecimen);
             this.m_slideArmSubsystem.slideArm(Constants.SlideArmConstants.kSlideSpecimenScore);
             this.m_intakeWheelSubsystem.spinIntake(-0.2);
     }

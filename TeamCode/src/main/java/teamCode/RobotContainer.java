@@ -66,7 +66,6 @@ public class RobotContainer extends CommandOpMode
 
     private Button m_leftBumper;
     private Button m_rightBumper;
-
     private Button m_a;
     private Button m_b;
     private Button m_x;
@@ -147,8 +146,8 @@ public class RobotContainer extends CommandOpMode
         this.m_drive = new MecanumDrive
                 (
                         new Motor(hardwareMap, "leftFront", Motor.GoBILDA.RPM_312),
-                        new Motor(hardwareMap, "rightFront_perp", Motor.GoBILDA.RPM_312),
-                        new Motor(hardwareMap, "leftBack_par", Motor.GoBILDA.RPM_312),
+                        new Motor(hardwareMap, "rightFront", Motor.GoBILDA.RPM_312),
+                        new Motor(hardwareMap, "leftBack", Motor.GoBILDA.RPM_312),
                         new Motor(hardwareMap, "rightBack", Motor.GoBILDA.RPM_312)
                 );
 
@@ -259,21 +258,21 @@ public class RobotContainer extends CommandOpMode
         this.m_a = (new GamepadButton(this.m_driver2, GamepadKeys.Button.A))
                 .whenPressed(this.m_armPositionLowBasketCommand);
 
-        this.m_liftArmClimbCommand = new LiftArmClimbCommand(m_liftArmSubsystem);
-        this.m_liftArmClimbButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.A))
-                .whenPressed(this.m_liftArmClimbCommand);
+//        this.m_liftArmClimbCommand = new LiftArmClimbCommand(m_liftArmSubsystem);
+//        this.m_liftArmClimbButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.A))
+//                .whenPressed(this.m_liftArmClimbCommand);
 
         this.m_releaseCLimberArmCommand = new ReleaseClimbArmCommand(m_liftArmSubsystem);
         this.m_releaseClimbButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.Y))
                 .whenPressed(this.m_releaseCLimberArmCommand);
 
-        this.m_climbArmFudgeUpCommand = new ClimbArmFudgeUpCommand(m_climbArmSubsystem);
-        this.m_climbArmFudgeUp = (new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_UP))
-                .whileHeld(this.m_climbArmFudgeUpCommand);
-
-        this.m_climbArmFudgeDownCommand = new ClimbArmFudgeDownCommand(m_climbArmSubsystem);
-        this.m_climbArmFudgeDown = (new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_DOWN))
-                .whileHeld(this.m_climbArmFudgeDownCommand);
+//        this.m_climbArmFudgeUpCommand = new ClimbArmFudgeUpCommand(m_climbArmSubsystem);
+//        this.m_climbArmFudgeUp = (new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_UP))
+//                .whileHeld(this.m_climbArmFudgeUpCommand);
+//
+//        this.m_climbArmFudgeDownCommand = new ClimbArmFudgeDownCommand(m_climbArmSubsystem);
+//        this.m_climbArmFudgeDown = (new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_DOWN))
+//                .whileHeld(this.m_climbArmFudgeDownCommand);
 
         this.m_armPositionScoreHighChamberCommand = new ArmPositionScoreHighChamberCommand
                 (m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem, m_intakeWheelSubsystem);

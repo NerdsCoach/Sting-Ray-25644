@@ -29,13 +29,14 @@ public class Constants
 
     public static final class SlideArmConstants
     {
-        public static final int kSlideArmCloseSample = 7;
-        public static final int kSlideArmFarSample = 434; //1970
-        public static final int kSlideArmHighBasket = 602;
+        public static final int kSlideArmCloseSample = 12;
+        public static final int kSlideArmFarSample = 434;//1970
+        public static final int kSlideArmMiddleSample = 200;
+        public static final int kSlideArmHighBasket = 580;
         public static final int kSlideArmHighChamber = 149; //600
-        public static final int kSlideArmHome = 7;
+        public static final int kSlideArmHome = 12;
         public static final int kSlideArmLowBasket = 68; //200
-        public static final int kSlideArmLowChamber = 7;
+        public static final int kSlideArmLowChamber = 12;
         public static final int kSlideFudgeIn = -25;
         public static final int kSlideFudgeOut = 25;
         public static final int kSlideFudgeOutMax = 549;
@@ -44,7 +45,8 @@ public class Constants
 
     public static final class PivotIntakeConstants
     {
-        public static final double kIntakePivotScore = 0.65;
+        public static final double kIntakePivotScore = 0.6;
+        public static final double kIntakePivotSpecimen = 0.65;
         public static final double kIntakePivotPickUp = 0.54;
         public static final double kIntakePivotFarSample= 0.45;
     }
