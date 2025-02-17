@@ -276,7 +276,6 @@ public class PinPointAutoSamples extends LinearOpMode
                         stateMachine = StateMachine.DRIVE_TO_SAMPLE_3;
                     }
                     break;
-//so we can commit
 
 
                 case DRIVE_TO_SAMPLE_3:
