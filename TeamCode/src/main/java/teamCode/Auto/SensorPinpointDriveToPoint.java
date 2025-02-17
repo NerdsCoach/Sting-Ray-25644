@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Auto;
+package teamCode.Auto;
 
 import static com.qualcomm.robotcore.util.ElapsedTime.Resolution.SECONDS;
 import static teamCode.Constants.LiftArmConstants.kLiftArmCloseSample;

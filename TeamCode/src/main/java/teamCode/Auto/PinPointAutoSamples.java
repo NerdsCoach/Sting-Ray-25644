@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Auto;
+package teamCode.Auto;
 
 import static teamCode.Constants.LiftArmConstants.kLiftArmCloseSample;
 import static teamCode.Constants.LiftArmConstants.kLiftArmHighBasket;
