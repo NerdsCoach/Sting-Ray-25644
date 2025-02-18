@@ -191,6 +191,89 @@ public class DriveToPoint
         return false;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+    public boolean intakeHold(Pose2D currentPosition, Pose2D targetPosition, double power, double holdTime)
+    {
+        boolean atTarget;
+
+        if (selectedDriveType == DriveType.TANK)
+        {
+            double xPWR;
+            double hPWR;
+            double headingTowardsTarget = calculateTargetHeading(currentPosition,targetPosition);
+            double lengthToTarget = Math.hypot((targetPosition.getX(MM) - currentPosition.getX(MM)),(targetPosition.getY(MM) - currentPosition.getY(MM)));
+            Pose2D temp = new Pose2D(MM,targetPosition.getX(MM),targetPosition.getY(MM),RADIANS,headingTowardsTarget);
+
+            if (headingTowardsTarget > (Math.PI/2) || headingTowardsTarget < -(Math.PI/2))
+            {
+                //headingTowardsTarget -= Math.PI;
+                headingTowardsTarget = targetPosition.getHeading(RADIANS);
+                lengthToTarget = -lengthToTarget;
+            }
+
+            xPWR = xTankPID.calculateAxisPID(lengthToTarget,pGain,dGain,accel, PIDTimer.seconds());
+            hPWR = calculatePID(currentPosition, temp, Direction.h);
+
+//            if (inBounds(currentPosition,temp) == InBounds.IN_X_Y){
+//                xPWR = 0;
+//                hPWR = calculatePID(currentPosition,targetPosition,Direction.h);
+
+//            if(inBounds(currentPosition,temp) == InBounds.IN_HEADING) {
+//                xPWR = xTankPID.calculateAxisPID(lengthToTarget,pGain,dGain,accel,currentTime.time());
+//                hPWR = calculatePID(currentPosition, temp, Direction.h);
+//
+//            } else {
+//                xPWR = 0;
+//                hPWR = calculatePID(currentPosition, temp, Direction.h);
+//            }
+            calculateTankOutput(xPWR * power, hPWR * power);
+
+
+            //Mecanum Drive Code:
+        }
+        else
+        {
+            double xPWR = calculatePID(currentPosition, targetPosition, Direction.x);
+            double yPWR = calculatePID(currentPosition, targetPosition, Direction.y);
+            double hOutput = calculatePID(currentPosition, targetPosition, Direction.h);
+
+            double heading = currentPosition.getHeading(AngleUnit.RADIANS);
+            double cosine = Math.cos(heading);
+            double sine = Math.sin(heading);
+
+            double xOutput = (xPWR * cosine) + (yPWR * sine);
+            double yOutput = (xPWR * sine) - (yPWR * cosine);
+
+            calculateMecanumOutput(xOutput * power, yOutput * power, hOutput * power);
+        }
+
+        if(inBounds(currentPosition,targetPosition) == InBounds.IN_BOUNDS)
+        {
+            atTarget = true;
+        }
+        else
+        {
+            holdTimer.reset();
+            atTarget = false;
+        }
+
+        if(atTarget && holdTimer.time() > holdTime)
+        {
+            return true;
+        }
+        return false;
+    }
+
     private void calculateMecanumOutput(double forward, double strafe, double yaw)
     {
         double leftFront = forward - -strafe - yaw;
