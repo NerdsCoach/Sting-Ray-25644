@@ -350,7 +350,7 @@ public class PinPointAutoSamples extends LinearOpMode
                     {
                         this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
-                        telemetry.addLine("Ready to drive 4");
+                        telemetry.addLine("Ready to drive to Sample 4");
                         stateMachine = StateMachine.DRIVE_TO_SAMPLE_4;
                     }
                     break;
@@ -420,11 +420,10 @@ public class PinPointAutoSamples extends LinearOpMode
 
                         if (this.m_slideArmSubsystem.atTarget(kSlideArmCloseSample));
                         {
-                            telemetry.addLine("Drive FOUR should be happening");
                             this.m_liftArmSubsystem.liftSlow(kLiftArmCloseSample);
                             this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
                         }
-                        telemetry.addLine("Ready to park in teh park");
+                        telemetry.addLine("Ready to park");
                         stateMachine = StateMachine.PRE_PARK;
                     }
                     break;
