@@ -40,6 +40,11 @@ public class StingrayArmCommand extends CommandBase
 
     }
 
+    public void autoAscent()
+    {
+        this.m_ascentArmSubsystem.ascentArm(m_scorePos);
+    }
+
     @Override
     public void end(boolean interrupted)
     {
