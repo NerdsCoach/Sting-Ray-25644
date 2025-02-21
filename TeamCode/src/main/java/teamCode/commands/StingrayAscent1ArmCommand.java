@@ -4,7 +4,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import teamCode.subsystems.StingRayArmSubsystem;
 
-public class StingrayArmCommand extends CommandBase
+public class StingrayAscent1ArmCommand extends CommandBase
 {
     private static final double m_homePos = 0.0;
     private static final double m_scorePos = 0.6;
@@ -13,7 +13,7 @@ public class StingrayArmCommand extends CommandBase
     private static final int  m_home = 1;
     private static final int  m_score = 0;
 
-    public StingrayArmCommand(StingRayArmSubsystem ascentSubsystem)
+    public StingrayAscent1ArmCommand(StingRayArmSubsystem ascentSubsystem)
     {
         this.m_ascentArmSubsystem = ascentSubsystem;
         m_position = m_score;

@@ -18,11 +18,9 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import teamCode.commands.ArmFudgeFactorDownCommand;
 import teamCode.commands.ArmFudgeFactorUpCommand;
 import teamCode.commands.ArmPositionTravelCommand;
-import teamCode.commands.ClimbArmFudgeDownCommand;
-import teamCode.commands.ClimbArmFudgeUpCommand;
-import teamCode.commands.LiftArmClimbCommand;
-import teamCode.commands.ReleaseClimbArmCommand;
-import teamCode.commands.StingrayArmCommand;
+import teamCode.commands.ClimbArmCommand;
+import teamCode.commands.ClimbArmReleaseCommand;
+import teamCode.commands.StingrayAscent1ArmCommand;
 import teamCode.commands.DriveFieldOrientedCommand;
 import teamCode.commands.ArmPositionCloseSampleCommand;
 import teamCode.commands.ArmPositionFarSampleCommand;
@@ -118,15 +116,13 @@ public class RobotContainer extends CommandOpMode
     private ArmPositionTravelCommand m_armPositionTravelCommand;
     private IntakePivotCommand m_intakePivotCommand;
     private IntakeWheelCommand m_intakeWheelCommand;
-    private StingrayArmCommand m_ascentArmCommand;
+    private StingrayAscent1ArmCommand m_ascentArmCommand;
     private ResetGyroCommand m_resetGyroCommand;
     private ResetHomeCommand m_resetHomeCommand;
     private SlideFudgeInCommand m_slideFudgeInCommand;
     private SlideFudgeOutCommand m_slideFudgeOutCommand;
-    private LiftArmClimbCommand m_liftArmClimbCommand;
-    private ReleaseClimbArmCommand m_releaseCLimberArmCommand;
-    private ClimbArmFudgeUpCommand m_climbArmFudgeUpCommand;
-    private ClimbArmFudgeDownCommand m_climbArmFudgeDownCommand;
+    private ClimbArmCommand m_liftArmClimbCommand;
+    private ClimbArmReleaseCommand m_releaseCLimberArmCommand;
     private GoBildaPinpointDriver m_goBilda;
     private PinPointOdometryCommand m_pinPointOdometryCommand;
 
@@ -258,11 +254,11 @@ public class RobotContainer extends CommandOpMode
         this.m_a = (new GamepadButton(this.m_driver2, GamepadKeys.Button.A))
                 .whenPressed(this.m_armPositionLowBasketCommand);
 
-//        this.m_liftArmClimbCommand = new LiftArmClimbCommand(m_liftArmSubsystem);
+//        this.m_liftArmClimbCommand = new ClimbArmCommand(m_liftArmSubsystem);
 //        this.m_liftArmClimbButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.A))
 //                .whenPressed(this.m_liftArmClimbCommand);
 
-        this.m_releaseCLimberArmCommand = new ReleaseClimbArmCommand(m_liftArmSubsystem);
+        this.m_releaseCLimberArmCommand = new ClimbArmReleaseCommand(m_liftArmSubsystem);
         this.m_releaseClimbButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.Y))
                 .whenPressed(this.m_releaseCLimberArmCommand);
 
@@ -283,7 +279,7 @@ public class RobotContainer extends CommandOpMode
         this.m_rightBumper = (new GamepadButton(this.m_driver2, GamepadKeys.Button.RIGHT_BUMPER))
                 .whenPressed(this.m_intakePivotCommand);
 
-        this.m_ascentArmCommand = new StingrayArmCommand(this.m_ascentArmSubsystem);
+        this.m_ascentArmCommand = new StingrayAscent1ArmCommand(this.m_ascentArmSubsystem);
         this.m_leftBumper = (new GamepadButton(this.m_driver1, GamepadKeys.Button.LEFT_BUMPER))
                 .whenPressed(this.m_ascentArmCommand);
 

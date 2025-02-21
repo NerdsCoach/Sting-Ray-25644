@@ -2,21 +2,18 @@ package teamCode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
+import teamCode.Constants;
 import teamCode.subsystems.LiftArmSubsystem;
 
-public class ScoreSpecimenCommand extends CommandBase
+public class ClimbArmReleaseCommand extends CommandBase
 {
     private LiftArmSubsystem m_liftArmSubsystem;
 
-    public int m_lift;
-
-    public ScoreSpecimenCommand(LiftArmSubsystem liftArmSubsystem)
+    public ClimbArmReleaseCommand(LiftArmSubsystem liftArmSubsystem)
     {
         this.m_liftArmSubsystem = liftArmSubsystem;
 
         addRequirements(m_liftArmSubsystem);
-
-        this.m_lift = 200;
     }
 
     @Override
@@ -27,12 +24,14 @@ public class ScoreSpecimenCommand extends CommandBase
     @Override
     public void execute()
     {
-        this.m_liftArmSubsystem.scoreSpecimen(m_lift);
+            this.m_liftArmSubsystem.climbRelease(Constants.LiftArmConstants.kLiftarmReleaseClimbArm);
     }
+
     @Override
     public void end(boolean interrupted)
     {
     }
+
     @Override
     public boolean isFinished()
     {

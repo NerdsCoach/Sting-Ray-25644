@@ -3,15 +3,13 @@ package teamCode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import teamCode.Constants;
-import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
-import teamCode.subsystems.SlideArmSubsystem;
 
-public class ReleaseClimbArmCommand extends CommandBase
+public class ClimbArmCommand extends CommandBase
 {
     private LiftArmSubsystem m_liftArmSubsystem;
 
-    public ReleaseClimbArmCommand(LiftArmSubsystem liftArmSubsystem)
+    public ClimbArmCommand(LiftArmSubsystem liftArmSubsystem)
     {
         this.m_liftArmSubsystem = liftArmSubsystem;
 
@@ -26,7 +24,7 @@ public class ReleaseClimbArmCommand extends CommandBase
     @Override
     public void execute()
     {
-            this.m_liftArmSubsystem.climbRelease(Constants.LiftArmConstants.kLiftarmReleaseClimbArm);
+            this.m_liftArmSubsystem.liftArm(Constants.LiftArmConstants.kLiftArmClimb);
     }
 
     @Override

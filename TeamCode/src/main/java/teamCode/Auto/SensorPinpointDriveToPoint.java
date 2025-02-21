@@ -1,6 +1,5 @@
 package teamCode.Auto;
 
-import static com.qualcomm.robotcore.util.ElapsedTime.Resolution.SECONDS;
 import static teamCode.Constants.LiftArmConstants.kLiftArmCloseSample;
 import static teamCode.Constants.LiftArmConstants.kLiftArmHighBasket;
 import static teamCode.Constants.LiftArmConstants.kLiftArmIntakeReset;
@@ -10,15 +9,11 @@ import static teamCode.Constants.SlideArmConstants.kSlideArmCloseSample;
 import static teamCode.Constants.SlideArmConstants.kSlideArmHighBasket;
 
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -35,9 +30,8 @@ import teamCode.commands.ArmPositionHighBasketCommand;
 import teamCode.commands.ArmPositionHighChamberCommand;
 import teamCode.commands.ArmPositionTravelCommand;
 import teamCode.commands.IntakePivotCommand;
-import teamCode.commands.ScoreSpecimenCommand;
 import teamCode.commands.SlideFudgeInCommand;
-import teamCode.commands.StingrayArmCommand;
+import teamCode.commands.StingrayAscent1ArmCommand;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.IntakeWheelSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
@@ -69,9 +63,8 @@ public class SensorPinpointDriveToPoint extends LinearOpMode
     private ArmPositionCloseSampleCommand m_armPositionCloseSampleCommand;
     private ArmIntakeResetCommand m_armIntakeResetCommand;
     private IntakePivotCommand m_intakePivotCommand;
-    private StingrayArmCommand m_ascentArmCommand;
+    private StingrayAscent1ArmCommand m_ascentArmCommand;
     private SlideFudgeInCommand m_slideFudgeInCommand;
-    private ScoreSpecimenCommand m_scoreSpecimenCommand;
     private TouchSensor m_touch;
 
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
@@ -90,9 +83,9 @@ public class SensorPinpointDriveToPoint extends LinearOpMode
 /*
     static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,2000,20,AngleUnit.DEGREES,0);
     static final Pose2D PrePickUpSample2 = new Pose2D(DistanceUnit.MM, 2600, -20, AngleUnit.DEGREES, -90);
-    static final Pose2D PickUpSample2 = new Pose2D(DistanceUnit.MM,2600,-2600, AngleUnit.DEGREES,-90);
-    static final Pose2D PrePickUpSample3 = new Pose2D(DistanceUnit.MM, 100, -2600, AngleUnit.DEGREES, 90);
-    static final Pose2D PickUpSample3 = new Pose2D(DistanceUnit.MM, 100, 0, AngleUnit.DEGREES, 0);
+    static final Pose2D PreSampleDrive = new Pose2D(DistanceUnit.MM,2600,-2600, AngleUnit.DEGREES,-90);
+    static final Pose2D Strafe2Sample = new Pose2D(DistanceUnit.MM, 100, -2600, AngleUnit.DEGREES, 90);
+    static final Pose2D BackUpToSample = new Pose2D(DistanceUnit.MM, 100, 0, AngleUnit.DEGREES, 0);
 */
     static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,0,0,AngleUnit.DEGREES,0);
     static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM, 200, 530, AngleUnit.DEGREES, -45);
@@ -159,10 +152,8 @@ public class SensorPinpointDriveToPoint extends LinearOpMode
         this.m_armPositionHighBasketCommand = new ArmPositionHighBasketCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
         this.m_armPositionHighChamberCommand = new ArmPositionHighChamberCommand(this.m_liftArmSubsystem,this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
         this.m_intakePivotCommand = new IntakePivotCommand(this.m_intakePivotSubsystem);
-        this.m_ascentArmCommand = new StingrayArmCommand(this.m_ascentArmSubsystem);
+        this.m_ascentArmCommand = new StingrayAscent1ArmCommand(this.m_ascentArmSubsystem);
         //this.m_armFudgeFactorUpCommand = new ArmFudgeFactorUpCommand(this.m_liftArmSubsystem);
-        this.m_scoreSpecimenCommand = new ScoreSpecimenCommand(this.m_liftArmSubsystem);
-
 
         // Wait for the game to start (driver presses START)
         waitForStart();
@@ -233,7 +224,7 @@ public class SensorPinpointDriveToPoint extends LinearOpMode
                     break;
 //
 //                case SCORE_SAMPLE_2:
-//                    if(nav.driveTo(odo.getPosition(), PickUpSample2, 0.5, 0))
+//                    if(nav.driveTo(odo.getPosition(), PreSampleDrive, 0.5, 0))
 //                    {
 //                        telemetry.addLine("at position #3");
 //                        stateMachine = StateMachine.DRIVE_TO_SAMPLE_3;
@@ -242,7 +233,7 @@ public class SensorPinpointDriveToPoint extends LinearOpMode
 //                    this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
 //                    break;
 //                case DRIVE_TO_SAMPLE_3:
-//                    if(nav.driveTo(odo.getPosition(),PrePickUpSample3,0.2,0))
+//                    if(nav.driveTo(odo.getPosition(),Strafe2Sample,0.2,0))
 //                    {
 //                        telemetry.addLine("at position #4");
 //                        stateMachine = StateMachine.PICKUP_SAMPLE_3;
@@ -252,7 +243,7 @@ public class SensorPinpointDriveToPoint extends LinearOpMode
 //                    break;
 //
 //                case PICKUP_SAMPLE_3:
-//                    if(nav.driveTo(odo.getPosition(),PickUpSample3,0.5,1))
+//                    if(nav.driveTo(odo.getPosition(),BackUpToSample,0.5,1))
 //                    {
 //                        telemetry.addLine("There!");
 //                        stateMachine = StateMachine.PARKED;

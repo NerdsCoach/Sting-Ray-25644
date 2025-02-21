@@ -3,12 +3,12 @@ package teamCode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 import teamCode.subsystems.IntakeWheelSubsystem;
 
-public class SpinIntakeAutoCommand extends CommandBase
+public class IntakeSpinAutoCommand extends CommandBase
 {
     private final IntakeWheelSubsystem m_intakeWheelSubsystem;
     private int m_spin;
 
-    public SpinIntakeAutoCommand(IntakeWheelSubsystem wheel, int spin)
+    public IntakeSpinAutoCommand(IntakeWheelSubsystem wheel, int spin)
     {
         this.m_intakeWheelSubsystem = wheel;
         this.m_spin = spin;

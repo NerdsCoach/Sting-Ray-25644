@@ -1,43 +1,10 @@
 package teamCode.Auto;
 
-import static teamCode.Constants.LiftArmConstants.kLiftArmCloseSample;
-import static teamCode.Constants.LiftArmConstants.kLiftArmHighBasket;
-import static teamCode.Constants.LiftArmConstants.kLiftArmIntakeReset;
-import static teamCode.Constants.PivotIntakeConstants.kIntakePivotPickUp;
-import static teamCode.Constants.PivotIntakeConstants.kIntakePivotScore;
-import static teamCode.Constants.SlideArmConstants.kSlideArmCloseSample;
-import static teamCode.Constants.SlideArmConstants.kSlideArmHighBasket;
-
-import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Libs.GoBilda.DriveToPoint;
 import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
-
-import java.util.Locale;
-
-import teamCode.autoSubsystems.AutoDriveSubsystem;
-import teamCode.commands.ArmIntakeResetCommand;
-import teamCode.commands.ArmPositionCloseSampleCommand;
-import teamCode.commands.ArmPositionHighBasketCommand;
-import teamCode.commands.ArmPositionHighChamberCommand;
-import teamCode.commands.ArmPositionTravelCommand;
-import teamCode.commands.IntakePivotCommand;
-import teamCode.commands.ScoreSpecimenCommand;
-import teamCode.commands.SlideFudgeInCommand;
-import teamCode.commands.StingrayArmCommand;
-import teamCode.subsystems.IntakePivotSubsystem;
-import teamCode.subsystems.IntakeWheelSubsystem;
-import teamCode.subsystems.LiftArmSubsystem;
-import teamCode.subsystems.SlideArmSubsystem;
-import teamCode.subsystems.StingRayArmSubsystem;
 
 @Autonomous(name="Gyro ReCalibrate", group="Pinpoint")
 //@Disabled
