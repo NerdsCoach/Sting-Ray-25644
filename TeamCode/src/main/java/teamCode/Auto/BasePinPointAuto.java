@@ -16,9 +16,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Libs.GoBilda.DriveToPoint;
 import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
 
@@ -94,15 +93,15 @@ public class BasePinPointAuto extends LinearOpMode
         PARKED,
     }
 
-    static final Pose2D NET_ZONE = new Pose2D(DistanceUnit.MM, 250, 470, AngleUnit.DEGREES, -45);
-    static final Pose2D PrePickUpSample2 = new Pose2D(DistanceUnit.MM, 400, 420, AngleUnit.DEGREES, 0);
-    static final Pose2D PickUpSample2 = new Pose2D(DistanceUnit.MM, 640, 420, AngleUnit.DEGREES, 0);
-    static final Pose2D PrePickUpSample3 = new Pose2D(DistanceUnit.MM, 400, 675, AngleUnit.DEGREES, 0);
-    static final Pose2D PickUpSample3 = new Pose2D(DistanceUnit.MM, 680, 675, AngleUnit.DEGREES, 0);
-    static final Pose2D PrePickUpSample4 = new Pose2D(DistanceUnit.MM, 560, 640, AngleUnit.DEGREES, 44);
-    static final Pose2D PickUpSample4 = new Pose2D(DistanceUnit.MM, 820, 690, AngleUnit.DEGREES, 44);
-    static final Pose2D PrePark = new Pose2D(DistanceUnit.MM, 1165, 390, AngleUnit.DEGREES, 90);
-    static final Pose2D ParkAscent1 = new Pose2D(DistanceUnit.MM, 1270, -220, AngleUnit.DEGREES, 90);
+    static final Pose2DUnNormalized NET_ZONE = new Pose2DUnNormalized(DistanceUnit.MM, 250, 470, UnnormalizedAngleUnit.DEGREES, -45);
+    static final Pose2DUnNormalized PrePickUpSample2 = new Pose2DUnNormalized(DistanceUnit.MM, 400, 420, UnnormalizedAngleUnit.DEGREES, 0);
+    static final Pose2DUnNormalized PickUpSample2 = new Pose2DUnNormalized(DistanceUnit.MM, 640, 420, UnnormalizedAngleUnit.DEGREES, 0);
+    static final Pose2DUnNormalized PrePickUpSample3 = new Pose2DUnNormalized(DistanceUnit.MM, 400, 675, UnnormalizedAngleUnit.DEGREES, 0);
+    static final Pose2DUnNormalized PickUpSample3 = new Pose2DUnNormalized(DistanceUnit.MM, 680, 675, UnnormalizedAngleUnit.DEGREES, 0);
+    static final Pose2DUnNormalized PrePickUpSample4 = new Pose2DUnNormalized(DistanceUnit.MM, 560, 640, UnnormalizedAngleUnit.DEGREES, 44);
+    static final Pose2DUnNormalized PickUpSample4 = new Pose2DUnNormalized(DistanceUnit.MM, 820, 690, UnnormalizedAngleUnit.DEGREES, 44);
+    static final Pose2DUnNormalized PrePark = new Pose2DUnNormalized(DistanceUnit.MM, 1165, 390, UnnormalizedAngleUnit.DEGREES, 90);
+    static final Pose2DUnNormalized ParkAscent1 = new Pose2DUnNormalized(DistanceUnit.MM, 1270, -220, UnnormalizedAngleUnit.DEGREES, 90);
 
 
     @Override
@@ -133,7 +132,7 @@ public class BasePinPointAuto extends LinearOpMode
         odo.resetPosAndIMU();
 
         //nav.setXYCoefficients(0.02,0.002,0.0,DistanceUnit.MM,12);
-        //nav.setYawCoefficients(1,0,0.0, AngleUnit.DEGREES,2);
+        //nav.setYawCoefficients(1,0,0.0, UnnormalizedAngleUnit.DEGREES,2);
         nav.setDriveType(DriveToPoint.DriveType.MECANUM);
 
         StateMachine stateMachine;
@@ -188,7 +187,9 @@ public class BasePinPointAuto extends LinearOpMode
                     the robot has reached the target, and has been there for (holdTime) seconds.
                     Once driveTo returns true, it prints a telemetry line and moves the state machine forward.
                      */
-                    if (nav.driveTo(odo.getPosition(), NET_ZONE, 0.5, 0))
+                    if (nav.driveTo(odo.getPosition(),
+                            new Pose2DUnNormalized(DistanceUnit.MM, 250, 470, UnnormalizedAngleUnit.DEGREES, -45),
+                            0.5, 0))
                     {
                         telemetry.addLine("Score Sample 1");
                     }
@@ -200,7 +201,7 @@ public class BasePinPointAuto extends LinearOpMode
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
                         telemetry.addLine("Slide arm and Pivot Intake!");
                     }
-                    if(this.m_slideArmSubsystem.atTarget(kSlideArmHighBasket))
+                    if (this.m_slideArmSubsystem.atTarget(kSlideArmHighBasket))
                     {
                         this.m_intakeWheelSubsystem.spinIntake(0.5);//Score in High Basket #1
                         telemetry.addLine("Score!");
@@ -454,8 +455,8 @@ public class BasePinPointAuto extends LinearOpMode
 
             telemetry.addData("current state:",stateMachine);
 
-            Pose2D pos = odo.getPosition();
-            String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
+            Pose2DUnNormalized pos = odo.getPosition();
+            String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(UnnormalizedAngleUnit.DEGREES));
             telemetry.addData("Position", data);
 
             telemetry.update();

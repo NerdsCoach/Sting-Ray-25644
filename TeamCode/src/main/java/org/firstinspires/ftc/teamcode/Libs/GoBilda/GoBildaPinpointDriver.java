@@ -34,11 +34,13 @@ import com.qualcomm.robotcore.util.TypeConversion;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
+
+import teamCode.Auto.Pose2DUnNormalized;
 
 
 @I2cDeviceType
@@ -385,10 +387,10 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
      * relative to that new, more accurate position.
      * @param pos a Pose2D describing the robot's new position.
      */
-    public Pose2D setPosition(Pose2D pos){
+    public Pose2DUnNormalized setPosition(Pose2DUnNormalized pos){
         writeByteArray(Register.X_POSITION,(floatToByteArray((float) pos.getX(DistanceUnit.MM), ByteOrder.LITTLE_ENDIAN)));
         writeByteArray(Register.Y_POSITION,(floatToByteArray((float) pos.getY(DistanceUnit.MM),ByteOrder.LITTLE_ENDIAN)));
-        writeByteArray(Register.H_ORIENTATION,(floatToByteArray((float) pos.getHeading(AngleUnit.RADIANS),ByteOrder.LITTLE_ENDIAN)));
+        writeByteArray(Register.H_ORIENTATION,(floatToByteArray((float) pos.getHeading(UnnormalizedAngleUnit.RADIANS),ByteOrder.LITTLE_ENDIAN)));
         return pos;
     }
 
@@ -493,11 +495,11 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
     /**
      * @return a Pose2D containing the estimated position of the robot
      */
-    public Pose2D getPosition(){
-        return new Pose2D(DistanceUnit.MM,
+    public Pose2DUnNormalized getPosition(){
+        return new Pose2DUnNormalized(DistanceUnit.MM,
                 xPosition,
                 yPosition,
-                AngleUnit.RADIANS,
+                UnnormalizedAngleUnit.RADIANS,
                 hOrientation);
     }
 
@@ -506,11 +508,11 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
     /**
      * @return a Pose2D containing the estimated velocity of the robot, velocity is unit per second
      */
-    public Pose2D getVelocity(){
-        return new Pose2D(DistanceUnit.MM,
+    public Pose2DUnNormalized getVelocity(){
+        return new Pose2DUnNormalized(DistanceUnit.MM,
                 xVelocity,
                 yVelocity,
-                AngleUnit.RADIANS,
+                UnnormalizedAngleUnit.RADIANS,
                 hVelocity);
     }
 

@@ -15,9 +15,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 import org.firstinspires.ftc.teamcode.Libs.GoBilda.DriveToPoint;
 import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
 
@@ -81,17 +80,17 @@ public class SensorPinpointDriveToPoint extends LinearOpMode
         DRIVE_TO_TARGET_5
     }
 /*
-    static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,2000,20,AngleUnit.DEGREES,0);
-    static final Pose2D PrePickUpSample2 = new Pose2D(DistanceUnit.MM, 2600, -20, AngleUnit.DEGREES, -90);
-    static final Pose2D PreSampleDrive = new Pose2D(DistanceUnit.MM,2600,-2600, AngleUnit.DEGREES,-90);
-    static final Pose2D Strafe2Sample = new Pose2D(DistanceUnit.MM, 100, -2600, AngleUnit.DEGREES, 90);
-    static final Pose2D BackUpToSample = new Pose2D(DistanceUnit.MM, 100, 0, AngleUnit.DEGREES, 0);
+    static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,2000,20,UnnormalizedAngleUnit.DEGREES,0);
+    static final Pose2D PrePickUpSample2 = new Pose2D(DistanceUnit.MM, 2600, -20, UnnormalizedAngleUnit.DEGREES, -90);
+    static final Pose2D PreSampleDrive = new Pose2D(DistanceUnit.MM,2600,-2600, UnnormalizedAngleUnit.DEGREES,-90);
+    static final Pose2D Strafe2Sample = new Pose2D(DistanceUnit.MM, 100, -2600, UnnormalizedAngleUnit.DEGREES, 90);
+    static final Pose2D BackUpToSample = new Pose2D(DistanceUnit.MM, 100, 0, UnnormalizedAngleUnit.DEGREES, 0);
 */
-    static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,0,0,AngleUnit.DEGREES,0);
-    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM, 200, 530, AngleUnit.DEGREES, -45);
-    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,200,530, AngleUnit.DEGREES,-45);
-    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, 200, 530, AngleUnit.DEGREES, -45);
-    static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, 200, 530, AngleUnit.DEGREES, -45);
+    static final Pose2DUnNormalized TARGET_1 = new Pose2DUnNormalized(DistanceUnit.MM,0,0,UnnormalizedAngleUnit.DEGREES,0);
+    static final Pose2DUnNormalized TARGET_2 = new Pose2DUnNormalized(DistanceUnit.MM, 200, 530, UnnormalizedAngleUnit.DEGREES, -45);
+    static final Pose2DUnNormalized TARGET_3 = new Pose2DUnNormalized(DistanceUnit.MM,200,530, UnnormalizedAngleUnit.DEGREES,-45);
+    static final Pose2DUnNormalized TARGET_4 = new Pose2DUnNormalized(DistanceUnit.MM, 200, 530, UnnormalizedAngleUnit.DEGREES, -45);
+    static final Pose2DUnNormalized TARGET_5 = new Pose2DUnNormalized(DistanceUnit.MM, 200, 530, UnnormalizedAngleUnit.DEGREES, -45);
 
 
     @Override
@@ -122,7 +121,7 @@ public class SensorPinpointDriveToPoint extends LinearOpMode
         odo.resetPosAndIMU();
 
         //nav.setXYCoefficients(0.02,0.002,0.0,DistanceUnit.MM,12);
-        //nav.setYawCoefficients(1,0,0.0, AngleUnit.DEGREES,2);
+        //nav.setYawCoefficients(1,0,0.0, UnnormalizedAngleUnit.DEGREES,2);
         nav.setDriveType(DriveToPoint.DriveType.MECANUM);
 
         StateMachine stateMachine;
@@ -260,8 +259,8 @@ public class SensorPinpointDriveToPoint extends LinearOpMode
 
             telemetry.addData("current state:",stateMachine);
 
-            Pose2D pos = odo.getPosition();
-            String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
+            Pose2DUnNormalized pos = odo.getPosition();
+            String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(UnnormalizedAngleUnit.DEGREES));
             telemetry.addData("Position", data);
 
             telemetry.update();

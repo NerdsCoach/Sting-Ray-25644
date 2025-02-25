@@ -27,11 +27,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 //import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 import java.util.Locale;
 
+import teamCode.Auto.Pose2DUnNormalized;
 import teamCode.GoBildaPinpointDriver;
 
 /*
@@ -144,8 +145,8 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
             pull any other data. Only the heading (which you can pull with getHeading() or in getPosition().
              */
             //odo.update(GoBildaPinpointDriver.readData.ONLY_UPDATE_HEADING);
-            Pose2D initPose = new Pose2D(DistanceUnit.MM, 0,0,AngleUnit.DEGREES,0); //coach's test pose
-            Pose2D netZone = new Pose2D(DistanceUnit.MM, 1000,500,AngleUnit.DEGREES,-45); //coach's test pose
+            Pose2DUnNormalized initPose = new Pose2DUnNormalized(DistanceUnit.MM, 0,0, UnnormalizedAngleUnit.DEGREES,0); //coach's test pose
+            Pose2DUnNormalized netZone = new Pose2DUnNormalized(DistanceUnit.MM, 1000,500,UnnormalizedAngleUnit.DEGREES,-45); //coach's test pose
 
 
 //            Actions.runBlocking(
@@ -181,15 +182,15 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
             gets the current Position (x & y in mm, and heading in degrees) of the robot, and prints it.
              */
 
-            Pose2D pos = odo.getPosition();
-            String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
+            Pose2DUnNormalized pos = odo.getPosition();
+            String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(UnnormalizedAngleUnit.DEGREES));
             telemetry.addData("Position", data);
 
             /*
             gets the current Velocity (x & y in mm/sec and heading in degrees/sec) and prints it.
              */
-            Pose2D vel = odo.getVelocity();
-            String velocity = String.format(Locale.US,"{XVel: %.3f, YVel: %.3f, HVel: %.3f}", vel.getX(DistanceUnit.MM), vel.getY(DistanceUnit.MM), vel.getHeading(AngleUnit.DEGREES));
+            Pose2DUnNormalized vel = odo.getVelocity();
+            String velocity = String.format(Locale.US,"{XVel: %.3f, YVel: %.3f, HVel: %.3f}", vel.getX(DistanceUnit.MM), vel.getY(DistanceUnit.MM), vel.getHeading(UnnormalizedAngleUnit.DEGREES));
             telemetry.addData("Velocity", velocity);
 
 

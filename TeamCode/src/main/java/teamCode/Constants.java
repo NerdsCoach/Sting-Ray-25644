@@ -41,7 +41,7 @@ public class Constants
         public static final int kSlideFudgeOut = 25;
         public static final int kSlideFudgeOutMax = 549;
         public static final int kSlideSpecimenScore = 54;
-        public static final int kSlideAutoScore = 30;
+        public static final int kSlideAutoScore = 15;
     }
 
     public static final class PivotIntakeConstants

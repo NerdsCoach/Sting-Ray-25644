@@ -1,12 +1,6 @@
 package teamCode.Auto;
 
-import static teamCode.Constants.LiftArmConstants.kLiftArmHighChamber;
 import static teamCode.Constants.LiftArmConstants.kLiftArmIntakeReset;
-import static teamCode.Constants.PivotIntakeConstants.kIntakePivotPickUp;
-import static teamCode.Constants.PivotIntakeConstants.kIntakePivotScore;
-import static teamCode.Constants.SlideArmConstants.kSlideArmCloseSample;
-import static teamCode.Constants.SlideArmConstants.kSlideArmHighChamber;
-import static teamCode.Constants.SlideArmConstants.kSlideAutoScore;
 
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -39,12 +33,12 @@ import teamCode.subsystems.LiftArmSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.StingRayArmSubsystem;
 
-@Autonomous(name="PinPointAutoSpecimen", group="Pinpoint")
+@Autonomous(name="TestPinPointAuto", group="Pinpoint")
 //@Disabled
 
-public class PinPointAutoSpecimen extends LinearOpMode
+public class TestPinPointAuto extends LinearOpMode
 {
-    //Initializing Motors & Servos
+
     private DcMotor leftFront;
     private DcMotor rightFront;
     private DcMotor leftBack;
@@ -69,24 +63,8 @@ public class PinPointAutoSpecimen extends LinearOpMode
     private TouchSensor m_touch;
     private final ElapsedTime holdTimer = new ElapsedTime();
 
-    public int ySpecScore = 20;
-    public int yDriveToSample = -700;
-    public int ySampleCollect = -850;
-    public int samples = 1;
-
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
     DriveToPoint nav = new DriveToPoint(this); //OpMode member for the point-to-point navigation class
-
-    // Positions and Measurements
-    public Pose2DUnNormalized Submersible = new Pose2DUnNormalized(DistanceUnit.MM, 610, ySpecScore, UnnormalizedAngleUnit.DEGREES,  -180);
-    public Pose2DUnNormalized ScoreSpecimen = new Pose2DUnNormalized(DistanceUnit.MM, 450, ySpecScore, UnnormalizedAngleUnit.DEGREES, -180);
-    public Pose2DUnNormalized PreSampleDrive = new Pose2DUnNormalized(DistanceUnit.MM, 450, yDriveToSample, UnnormalizedAngleUnit.DEGREES, -270);
-    public Pose2DUnNormalized StrafeToSample = new Pose2DUnNormalized(DistanceUnit.MM, 1200, yDriveToSample, UnnormalizedAngleUnit.DEGREES, -270);
-    public Pose2DUnNormalized BackUpToSample = new Pose2DUnNormalized(DistanceUnit.MM, 1280, ySampleCollect, UnnormalizedAngleUnit.DEGREES, -270);
-    public Pose2DUnNormalized ObservationZone = new Pose2DUnNormalized(DistanceUnit.MM, 190, ySampleCollect, UnnormalizedAngleUnit.DEGREES, -270);
-    final Pose2DUnNormalized PickUpSample4 = new Pose2DUnNormalized(DistanceUnit.MM, 820, 690, UnnormalizedAngleUnit.DEGREES, 44);
-    final Pose2DUnNormalized PrePark = new Pose2DUnNormalized(DistanceUnit.MM, 1165, 390, UnnormalizedAngleUnit.DEGREES, 90);
-    final Pose2DUnNormalized ParkAscent1 = new Pose2DUnNormalized(DistanceUnit.MM, 1270, -220, UnnormalizedAngleUnit.DEGREES, 90);
 
     enum StateMachine
     {
@@ -98,18 +76,34 @@ public class PinPointAutoSpecimen extends LinearOpMode
         SCORE_SAMPLE_2,
         TURN_OFF_INTAKE_2,
         DRIVE_TO_SAMPLE_3,
-        SCORE_SPECIMEN,
-        DRIVE_TO_SAMPLE,
-        PRESCORE_SPECIMEN,
-        STRAFE_TO_SAMPLE,
-        BACK_UP_TO_SAMPLE,
-        OBSERVATION_ZONE, COUNTER, COLLECT_SPECIMEN,
-        VARIABLE
+        PICKUP_SAMPLE_3,
+        SCORE_SAMPLE_3,
+        TURN_OFF_INTAKE_3,
+        DRIVE_TO_SAMPLE_4,
+        PICKUP_SAMPLE_4,
+        SCORE_SAMPLE_4,
+        TURN_OFF_INTAKE_4,
+        PRE_PARK,
+        PARK_ASCENT_1,
+        PARKED,
     }
+
+    static final Pose2DUnNormalized NET_ZONE = new Pose2DUnNormalized(DistanceUnit.MM, 200, 200, UnnormalizedAngleUnit.DEGREES, -45);
+    static final Pose2DUnNormalized PrePickUpSample2 = new Pose2DUnNormalized(DistanceUnit.MM, 0, 0, UnnormalizedAngleUnit.DEGREES, 0);
+    static final Pose2DUnNormalized PickUpSample2 = new Pose2DUnNormalized(DistanceUnit.MM, 200, 200, UnnormalizedAngleUnit.DEGREES, 45);
+    static final Pose2DUnNormalized PrePickUpSample3 = new Pose2DUnNormalized(DistanceUnit.MM, 0,0 , UnnormalizedAngleUnit.DEGREES, 180);
+    static final Pose2DUnNormalized PickUpSample3 = new Pose2DUnNormalized(DistanceUnit.MM, 200, 200, UnnormalizedAngleUnit.DEGREES, -180);
+
+    static final Pose2DUnNormalized PrePickUpSample4 = new Pose2DUnNormalized(DistanceUnit.MM, 560, 640, UnnormalizedAngleUnit.DEGREES, 44);
+    static final Pose2DUnNormalized PickUpSample4 = new Pose2DUnNormalized(DistanceUnit.MM, 820, 690, UnnormalizedAngleUnit.DEGREES, 44);
+    static final Pose2DUnNormalized PrePark = new Pose2DUnNormalized(DistanceUnit.MM, 1165, 390, UnnormalizedAngleUnit.DEGREES, 90);
+    static final Pose2DUnNormalized ParkAscent1 = new Pose2DUnNormalized(DistanceUnit.MM, 1270, -220, UnnormalizedAngleUnit.DEGREES, 90);
+
 
     @Override
     public void runOpMode()
     {
+
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
 
@@ -146,8 +140,6 @@ public class PinPointAutoSpecimen extends LinearOpMode
         telemetry.addData("Y offset", odo.getYOffset());
         telemetry.addData("Device Version Number:", odo.getDeviceVersion());
         telemetry.addData("Device Scalar", odo.getYawScalar());
-        telemetry.addData("y1 = ", (yDriveToSample));
-        telemetry.addData("y2 = ", (ySampleCollect));
         telemetry.update();
 
         this.m_liftArmMotor = hardwareMap.get(DcMotor.class, "liftArmMotor");
@@ -176,13 +168,14 @@ public class PinPointAutoSpecimen extends LinearOpMode
         {
             odo.update();
 
-            switch (stateMachine) {
+            switch (stateMachine)
+            {
                 case WAITING_FOR_START:
                     this.m_liftArmSubsystem.liftArm(kLiftArmIntakeReset);
                     //the first step in the autonomous
                     stateMachine = StateMachine.SCORE_PRELOAD;
-                    System.out.println("Stuff");
                     break;
+
 
                 case SCORE_PRELOAD:
                     /*
@@ -190,127 +183,72 @@ public class PinPointAutoSpecimen extends LinearOpMode
                     the robot has reached the target, and has been there for (holdTime) seconds.
                     Once driveTo returns true, it prints a telemetry line and moves the state machine forward.
                      */
-                    nav.driveTo(odo.getPosition(), Submersible, 0.7, 1.0);
-                    this.m_liftArmSubsystem.liftArm(kLiftArmHighChamber);
-                    telemetry.addLine("Lift Arm!");
-                    if (this.m_liftArmSubsystem.atTarget(kLiftArmHighChamber))
+                    if (nav.driveTo(odo.getPosition(), NET_ZONE, 0.5, 0))
                     {
-                        this.m_slideArmSubsystem.slideArm(kSlideArmHighChamber);
-                        this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
-                        telemetry.addLine("Slide arm and Pivot Intake!");
-                    }
-                    if (this.m_slideArmSubsystem.atTarget(kSlideArmHighChamber))
-                    {
-                        this.m_intakeWheelSubsystem.spinIntake(-0.1);//Score on High Chamber #1
-                        telemetry.addLine("Ready to Score!");
-                        stateMachine = StateMachine.PRESCORE_SPECIMEN;
-                    }
-                    break;
-
-                case PRESCORE_SPECIMEN:
-                    this.m_slideArmSubsystem.slideArm(kSlideAutoScore);
-                    if (nav.driveTo(odo.getPosition(), Submersible, 0.6, .1))
-                    {
-                        telemetry.addLine("Line 212");
-                        stateMachine = StateMachine.SCORE_SPECIMEN;
-                    }
-                    break;
-
-                case SCORE_SPECIMEN:
-                    telemetry.addLine("Line 218");
-                    if (nav.driveTo(odo.getPosition(), ScoreSpecimen, 0.7, 0))
-                        {
-                            this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
-                            telemetry.addLine("SCORE!!!");
-                            ySpecScore =ySpecScore + 40;
-                            stateMachine = StateMachine.DRIVE_TO_SAMPLE;
-
-                        }
-                    break;
-
-
-                case DRIVE_TO_SAMPLE:  //drive to the Sample
-                     this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
-                     telemetry.addLine("Slide Down");
-                     if (this.m_slideArmSubsystem.atTarget(kSlideArmCloseSample));
-                     {
-                        this.m_liftArmSubsystem.liftSlow(kLiftArmIntakeReset);
-                        this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
-                        this.m_intakeWheelSubsystem.spinIntake(0.0);//Turn off intake
-                    }
-                    if (nav.driveTo(odo.getPosition(), PreSampleDrive, 0.7, 0))
-                    {
-                        stateMachine = StateMachine.STRAFE_TO_SAMPLE;
-                    }
-                    break;
-
-                case STRAFE_TO_SAMPLE:
-                    if (nav.driveTo(odo.getPosition(), StrafeToSample, 0.7, 0))
-                    {
-                        stateMachine = StateMachine.BACK_UP_TO_SAMPLE;
-                    }
-                    break;
-
-                case BACK_UP_TO_SAMPLE:
-                    if (nav.driveTo(odo.getPosition(), BackUpToSample, 0.7, 0))
-                    {
-                        stateMachine = StateMachine.OBSERVATION_ZONE;
-                    }
-                    break;
-
-                case OBSERVATION_ZONE:
-                    telemetry.addLine("Can you hear me now?");
-
-                    if (nav.driveTo(odo.getPosition(), ObservationZone, 0.4, 0))
-                    {
-                        samples = samples + 1;
-                        telemetry.addLine("Nah");
-//                        Pose2DUnNormalized PreSampleDrive = new Pose2DUnNormalized(DistanceUnit.MM, 450, yDriveToSample - 254, UnnormalizedAngleUnit.DEGREES, -270);
-                        ySampleCollect = ySampleCollect - 254;
-                        yDriveToSample = yDriveToSample - 254;
-                        stateMachine = StateMachine.COUNTER;
-                    }
-                    break;
-
-                case COUNTER:
-                    if (samples < 3)
-                    {
-                        telemetry.addLine("Yes I can!");
-
-                        telemetry.update();
-                        stateMachine = StateMachine.DRIVE_TO_SAMPLE;
-                    }
-                    else
-                    {
-                        stateMachine = StateMachine.COLLECT_SPECIMEN;
+                        telemetry.addLine("Score Sample 1");
+                        stateMachine = StateMachine.DRIVE_TO_SAMPLE_2;
                     }
                     break;
 
 
 
+                case DRIVE_TO_SAMPLE_2:  //drive to the Sample 2
+                    if (nav.driveTo(odo.getPosition(), PrePickUpSample2, 0.4, 0))
+                    {
+                        telemetry.addLine("Ready to pick up Sample 2!");
+                        stateMachine = StateMachine.PICKUP_SAMPLE_2;
+                    }
+                break;
 
 
-//                case TURN_OFF_INTAKE_2:
-//                    holdTimer.reset();
-//                    if(nav.driveTo(odo.getPosition(), Submersiable, 0.4,2.0))
-//                    {
-//                        this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
-//                        this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
-//
-//                        telemetry.addLine("Ready to drive 3");
-//                        stateMachine = StateMachine.DRIVE_TO_SAMPLE_3;
-//                    }
-//                    break;
-////
-//                case PARK_ASCENT_1:
-//                    if(nav.driveTo(odo.getPosition(), ParkAscent1,0.5,0.0))
-//                    {
-//                        telemetry.addLine("Parked!");
-//                        stateMachine = StateMachine.PARKED;
-//                    }
-//                    break;}
+                case PICKUP_SAMPLE_2:
+                    telemetry.addLine("Yes!");
+                    if(nav.driveTo(odo.getPosition(), PickUpSample2, 0.3, 0))
+                    {
+                        stateMachine = StateMachine.TURN_OFF_INTAKE_2;
+                    }
+                    break;
 
-            }
+
+                case TURN_OFF_INTAKE_2:
+                    if(nav.driveTo(odo.getPosition(), NET_ZONE, 0.4,0))
+                    {
+                        telemetry.addLine("Ready to drive 3");
+                        stateMachine = StateMachine.DRIVE_TO_SAMPLE_3;
+                    }
+                    break;
+
+
+                case DRIVE_TO_SAMPLE_3:  //drive to the Sample 2
+                    if (nav.driveTo(odo.getPosition(), PrePickUpSample3, 0.4, .5))
+                {
+                    telemetry.addLine("Ready to pick up Sample 3!");
+                    stateMachine = StateMachine.PICKUP_SAMPLE_3;
+                }
+                break;
+
+
+                case PICKUP_SAMPLE_3:
+
+                    if(nav.driveTo(odo.getPosition(), PickUpSample3, 0.3, 0))
+                    {
+                        stateMachine = StateMachine.SCORE_SAMPLE_3;
+                    }
+                    break;
+
+
+                case SCORE_SAMPLE_3:
+                    if (nav.driveTo(odo.getPosition(), NET_ZONE, 0.4, 0))
+                    {
+                        telemetry.addLine("Score Sample 3");
+                        stateMachine = StateMachine.TURN_OFF_INTAKE_3;
+                    }
+                    break;
+
+
+                }
+
+
             //nav calculates the power to set to each motor in a mecanum or tank drive. Use nav.getMotorPower to find that value.
             leftFront.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.LEFT_FRONT));
             rightFront.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.RIGHT_FRONT));
@@ -318,8 +256,7 @@ public class PinPointAutoSpecimen extends LinearOpMode
             rightBack.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.RIGHT_BACK));
 
             telemetry.addData("current state:",stateMachine);
-            telemetry.addData("y1 = ", (yDriveToSample));
-            telemetry.addData("y2 = ", (ySampleCollect));
+
             Pose2DUnNormalized pos = odo.getPosition();
             String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(UnnormalizedAngleUnit.DEGREES));
             telemetry.addData("Position", data);

@@ -8,11 +8,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
+
+import teamCode.Auto.Pose2DUnNormalized;
 
 
 public class DriveToPoint
 {
+//    public Pose2DUnNormalized m_pose2D = new Pose2DUnNormalized(null, 0.0, 0.0, null, 0.0);
 
     public enum DriveType
     {
@@ -91,7 +94,7 @@ public class DriveToPoint
         xyTolerance = unit.toMm(tolerance);
     }
 
-    public void setYawCoefficients(double p, double d, double acceleration, AngleUnit unit, double tolerance)
+    public void setYawCoefficients(double p, double d, double acceleration, UnnormalizedAngleUnit unit, double tolerance)
     {
         yawPGain = p;
         yawDGain = d;
@@ -119,7 +122,7 @@ public class DriveToPoint
         }
     }
 
-    public boolean driveTo(Pose2D currentPosition, Pose2D targetPosition, double power, double holdTime)
+    public boolean driveTo(Pose2DUnNormalized currentPosition, Pose2DUnNormalized targetPosition, double power, double holdTime)
     {
         boolean atTarget;
 
@@ -129,12 +132,12 @@ public class DriveToPoint
             double hPWR;
             double headingTowardsTarget = calculateTargetHeading(currentPosition,targetPosition);
             double lengthToTarget = Math.hypot((targetPosition.getX(MM) - currentPosition.getX(MM)),(targetPosition.getY(MM) - currentPosition.getY(MM)));
-            Pose2D temp = new Pose2D(MM,targetPosition.getX(MM),targetPosition.getY(MM),RADIANS,headingTowardsTarget);
+            Pose2DUnNormalized temp = new Pose2DUnNormalized(MM,targetPosition.getX(MM),targetPosition.getY(MM),UnnormalizedAngleUnit.RADIANS,headingTowardsTarget);
 
             if (headingTowardsTarget > (Math.PI/2) || headingTowardsTarget < -(Math.PI/2))
             {
                 //headingTowardsTarget -= Math.PI;
-                headingTowardsTarget = targetPosition.getHeading(RADIANS);
+                headingTowardsTarget = targetPosition.getHeading(UnnormalizedAngleUnit.RADIANS);
                 lengthToTarget = -lengthToTarget;
             }
 
@@ -164,7 +167,7 @@ public class DriveToPoint
             double yPWR = calculatePID(currentPosition, targetPosition, Direction.y);
             double hOutput = calculatePID(currentPosition, targetPosition, Direction.h);
 
-            double heading = currentPosition.getHeading(AngleUnit.RADIANS);
+            double heading = currentPosition.getHeading(UnnormalizedAngleUnit.RADIANS);
             double cosine = Math.cos(heading);
             double sine = Math.sin(heading);
 
@@ -194,15 +197,7 @@ public class DriveToPoint
 
 
 
-
-
-
-
-
-
-
-
-    public boolean intakeHold(Pose2D currentPosition, Pose2D targetPosition, double power, double holdTime)
+    public boolean intakeHold(Pose2DUnNormalized currentPosition, Pose2DUnNormalized targetPosition, double power, double holdTime)
     {
         boolean atTarget;
 
@@ -212,12 +207,12 @@ public class DriveToPoint
             double hPWR;
             double headingTowardsTarget = calculateTargetHeading(currentPosition,targetPosition);
             double lengthToTarget = Math.hypot((targetPosition.getX(MM) - currentPosition.getX(MM)),(targetPosition.getY(MM) - currentPosition.getY(MM)));
-            Pose2D temp = new Pose2D(MM,targetPosition.getX(MM),targetPosition.getY(MM),RADIANS,headingTowardsTarget);
+            Pose2DUnNormalized temp = new Pose2DUnNormalized(MM,targetPosition.getX(MM),targetPosition.getY(MM),UnnormalizedAngleUnit.RADIANS,headingTowardsTarget);
 
             if (headingTowardsTarget > (Math.PI/2) || headingTowardsTarget < -(Math.PI/2))
             {
                 //headingTowardsTarget -= Math.PI;
-                headingTowardsTarget = targetPosition.getHeading(RADIANS);
+                headingTowardsTarget = targetPosition.getHeading(UnnormalizedAngleUnit.RADIANS);
                 lengthToTarget = -lengthToTarget;
             }
 
@@ -247,7 +242,7 @@ public class DriveToPoint
             double yPWR = calculatePID(currentPosition, targetPosition, Direction.y);
             double hOutput = calculatePID(currentPosition, targetPosition, Direction.h);
 
-            double heading = currentPosition.getHeading(AngleUnit.RADIANS);
+            double heading = currentPosition.getHeading(UnnormalizedAngleUnit.RADIANS);
             double cosine = Math.cos(heading);
             double sine = Math.sin(heading);
 
@@ -319,7 +314,7 @@ public class DriveToPoint
     }
 
 
-    private double calculatePID(Pose2D currentPosition, Pose2D targetPosition, Direction direction)
+    private double calculatePID(Pose2DUnNormalized currentPosition, Pose2DUnNormalized targetPosition, Direction direction)
     {
         if(direction == Direction.x)
         {
@@ -333,18 +328,18 @@ public class DriveToPoint
         }
         if(direction == Direction.h)
         {
-            double hError = targetPosition.getHeading(AngleUnit.RADIANS) - currentPosition.getHeading(AngleUnit.RADIANS);
+            double hError = targetPosition.getHeading(UnnormalizedAngleUnit.RADIANS) - currentPosition.getHeading(UnnormalizedAngleUnit.RADIANS);
             return hPID.calculateAxisPID(hError, yawPGain, yawDGain, yawAccel, PIDTimer.seconds());
         }
         return 0;
     }
 
-    private InBounds inBounds (Pose2D currPose, Pose2D trgtPose)
+    private InBounds inBounds (Pose2DUnNormalized currPose, Pose2DUnNormalized trgtPose)
     {
         boolean xInBounds = currPose.getX(MM) > (trgtPose.getX(MM) - xyTolerance) && currPose.getX(MM) < (trgtPose.getX(MM) + xyTolerance);
         boolean yInBounds = currPose.getY(MM) > (trgtPose.getY(MM) - xyTolerance) && currPose.getY(MM) < (trgtPose.getY(MM) + xyTolerance);
-        boolean hInBounds = currPose.getHeading(RADIANS) > (trgtPose.getHeading(RADIANS) - yawTolerance) &&
-                currPose.getHeading(RADIANS) < (trgtPose.getHeading(RADIANS) + yawTolerance);
+        boolean hInBounds = currPose.getHeading(UnnormalizedAngleUnit.RADIANS) > (trgtPose.getHeading(UnnormalizedAngleUnit.RADIANS) - yawTolerance) &&
+                currPose.getHeading(UnnormalizedAngleUnit.RADIANS) < (trgtPose.getHeading(UnnormalizedAngleUnit.RADIANS) + yawTolerance);
 
         if (xInBounds && yInBounds && hInBounds)
         {
@@ -362,7 +357,7 @@ public class DriveToPoint
             return InBounds.NOT_IN_BOUNDS;
     }
 
-    public double calculateTargetHeading(Pose2D currPose, Pose2D trgtPose)
+    public double calculateTargetHeading(Pose2DUnNormalized currPose, Pose2DUnNormalized trgtPose)
     {
         double xDelta = trgtPose.getX(MM) - currPose.getX(MM);
         double yDelta = trgtPose.getY(MM) - currPose.getY(MM);
@@ -373,7 +368,7 @@ public class DriveToPoint
         }
         else
         {
-            return currPose.getHeading(RADIANS);
+            return currPose.getHeading(UnnormalizedAngleUnit.RADIANS);
         }
 
     }
