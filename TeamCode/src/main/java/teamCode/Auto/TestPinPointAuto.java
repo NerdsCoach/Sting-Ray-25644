@@ -18,7 +18,6 @@ import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
 
 import java.util.Locale;
 
-import teamCode.autoSubsystems.AutoDriveSubsystem;
 import teamCode.commands.ArmIntakeResetCommand;
 import teamCode.commands.ArmPositionCloseSampleCommand;
 import teamCode.commands.ArmPositionHighBasketCommand;
@@ -48,7 +47,6 @@ public class TestPinPointAuto extends LinearOpMode
     private CRServo m_intakeWheelServo;
     private IntakePivotSubsystem m_intakePivotSubsystem;
     private StingRayArmSubsystem m_ascentArmSubsystem;
-    private AutoDriveSubsystem m_autoDriveSubsystem;
     private LiftArmSubsystem m_liftArmSubsystem;
     private SlideArmSubsystem m_slideArmSubsystem;
     private IntakeWheelSubsystem m_intakeWheelSubsystem;

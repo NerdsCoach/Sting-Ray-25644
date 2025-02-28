@@ -16,6 +16,7 @@ public class IntakePivotSubsystem extends SubsystemBase
     // Pivots position of the intake.
     public void pivotIntake(double pos)
     {
+
         this.m_intakePivotServo.setPosition(pos);
     }
 }

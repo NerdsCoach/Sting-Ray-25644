@@ -5,6 +5,7 @@ import static teamCode.Constants.LiftArmConstants.kLiftArmHighChamber;
 import static teamCode.Constants.LiftArmConstants.kLiftArmIntakeReset;
 import static teamCode.Constants.PivotIntakeConstants.kIntakePivotPickUp;
 import static teamCode.Constants.PivotIntakeConstants.kIntakePivotScore;
+import static teamCode.Constants.PivotIntakeConstants.kIntakePivotSpecimen;
 import static teamCode.Constants.SlideArmConstants.kSlideArmCloseSample;
 import static teamCode.Constants.SlideArmConstants.kSlideArmHighChamber;
 import static teamCode.Constants.SlideArmConstants.kSlideAutoScore;
@@ -25,7 +26,6 @@ import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
 
 import java.util.Locale;
 
-import teamCode.autoSubsystems.AutoDriveSubsystem;
 import teamCode.commands.ArmIntakeResetCommand;
 import teamCode.commands.ArmPositionCloseSampleCommand;
 import teamCode.commands.ArmPositionHighBasketCommand;
@@ -55,7 +55,6 @@ public class PinPointAutoSpecimen extends LinearOpMode
     private CRServo m_intakeWheelServo;
     private IntakePivotSubsystem m_intakePivotSubsystem;
     private StingRayArmSubsystem m_ascentArmSubsystem;
-    private AutoDriveSubsystem m_autoDriveSubsystem;
     private LiftArmSubsystem m_liftArmSubsystem;
     private SlideArmSubsystem m_slideArmSubsystem;
     private IntakeWheelSubsystem m_intakeWheelSubsystem;
@@ -74,6 +73,7 @@ public class PinPointAutoSpecimen extends LinearOpMode
     public int yDriveToSample = -700;
     public int ySampleCollect = -900;
     public int samples = 1;
+    public int specimen = 0;
 
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
     DriveToPoint nav = new DriveToPoint(this); //OpMode member for the point-to-point navigation class
@@ -81,31 +81,26 @@ public class PinPointAutoSpecimen extends LinearOpMode
     // Positions and Measurements
     public Pose2DUnNormalized Submersible = new Pose2DUnNormalized(DistanceUnit.MM, 630, ySpecScore, UnnormalizedAngleUnit.DEGREES,  -180);
     public Pose2DUnNormalized ScoreSpecimen = new Pose2DUnNormalized(DistanceUnit.MM, 450, ySpecScore, UnnormalizedAngleUnit.DEGREES, -180);
-    public Pose2DUnNormalized PreSampleDrive = new Pose2DUnNormalized(DistanceUnit.MM, 450, yDriveToSample, UnnormalizedAngleUnit.DEGREES, -90);
-    public Pose2DUnNormalized StrafeToSample = new Pose2DUnNormalized(DistanceUnit.MM, 1200, yDriveToSample, UnnormalizedAngleUnit.DEGREES, -90);
-    public Pose2DUnNormalized BackUpToSample = new Pose2DUnNormalized(DistanceUnit.MM, 1200, ySampleCollect, UnnormalizedAngleUnit.DEGREES, -90);
-    public Pose2DUnNormalized ObservationZone = new Pose2DUnNormalized(DistanceUnit.MM, 70, ySampleCollect, UnnormalizedAngleUnit.DEGREES, -90);
+    public Pose2DUnNormalized PreSampleDrive = new Pose2DUnNormalized(DistanceUnit.MM, 450, -700, UnnormalizedAngleUnit.DEGREES, -90);
+    public Pose2DUnNormalized StrafeToSample = new Pose2DUnNormalized(DistanceUnit.MM, 1200, -700, UnnormalizedAngleUnit.DEGREES, -90);
+    public Pose2DUnNormalized ForwardToSample = new Pose2DUnNormalized(DistanceUnit.MM, 1200, -900, UnnormalizedAngleUnit.DEGREES, -90);
+    public Pose2DUnNormalized ObservationZone = new Pose2DUnNormalized(DistanceUnit.MM, 70, -900, UnnormalizedAngleUnit.DEGREES, -90);
     final Pose2DUnNormalized PickUpSpecimen = new Pose2DUnNormalized(DistanceUnit.MM, 70, -1150, UnnormalizedAngleUnit.DEGREES, -90);
-    final Pose2DUnNormalized PrePark = new Pose2DUnNormalized(DistanceUnit.MM, 1165, 390, UnnormalizedAngleUnit.DEGREES, 90);
-    final Pose2DUnNormalized ParkAscent1 = new Pose2DUnNormalized(DistanceUnit.MM, 1270, -220, UnnormalizedAngleUnit.DEGREES, 90);
+    final Pose2DUnNormalized PreSubmersible = new Pose2DUnNormalized(DistanceUnit.MM, 300, 0, UnnormalizedAngleUnit.DEGREES, -180);
+    final Pose2DUnNormalized CollectSpecimen = new Pose2DUnNormalized(DistanceUnit.MM, 70, -1220, UnnormalizedAngleUnit.DEGREES, -90);
 
     enum StateMachine
     {
         WAITING_FOR_START,
-        SCORE_PRELOAD,
-        TURN_OFF_INTAKE_1,
-        DRIVE_TO_SAMPLE_2,
-        PICKUP_SAMPLE_2,
-        SCORE_SAMPLE_2,
-        TURN_OFF_INTAKE_2,
-        DRIVE_TO_SAMPLE_3,
         SCORE_SPECIMEN,
         DRIVE_TO_SAMPLE,
         PRESCORE_SPECIMEN,
         STRAFE_TO_SAMPLE,
-        BACK_UP_TO_SAMPLE,
-        OBSERVATION_ZONE, COUNTER, COLLECT_SPECIMEN,
-        PICK_UP_SPECIMEN, FORWARD_TO_SAMPLE, VARIABLE
+        OBSERVATION_ZONE,
+        PICK_UP_SPECIMEN,
+        FORWARD_TO_SAMPLE,
+        COUNTER_SCORE,
+        DRIVE_TO_SUBMERSIBLE, PRE_SUBMERSIBLE, PARK_OBSERVATION_ZONE, PARKED, PRE_PICK_UP_SPECIMEN,
     }
 
     @Override
@@ -182,11 +177,10 @@ public class PinPointAutoSpecimen extends LinearOpMode
                 case WAITING_FOR_START:
                     this.m_liftArmSubsystem.liftArm(kLiftArmIntakeReset);
                     //the first step in the autonomous
-                    stateMachine = StateMachine.SCORE_PRELOAD;
-                    System.out.println("Stuff");
+                    stateMachine = StateMachine.DRIVE_TO_SUBMERSIBLE;
                     break;
 
-                case SCORE_PRELOAD:
+                case DRIVE_TO_SUBMERSIBLE:
                     /*
                     drive the robot to the first target, the nav.driveTo function will return true once
                     the robot has reached the target, and has been there for (holdTime) seconds.
@@ -194,18 +188,16 @@ public class PinPointAutoSpecimen extends LinearOpMode
                      */
                     nav.driveTo(odo.getPosition(),
                             new Pose2DUnNormalized(DistanceUnit.MM, 630, ySpecScore, UnnormalizedAngleUnit.DEGREES, -180),
-                            0.7, .5);
+                            0.6, .1);
                     this.m_liftArmSubsystem.liftArm(kLiftArmHighChamber);
-                    telemetry.addLine("Lift Arm!");
                     if (this.m_liftArmSubsystem.atTarget(kLiftArmHighChamber))
                     {
                         this.m_slideArmSubsystem.slideArm(kSlideArmHighChamber);
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
-                        telemetry.addLine("Slide arm and Pivot Intake!");
                     }
                     if (this.m_slideArmSubsystem.atTarget(kSlideArmHighChamber))
                     {
-                        this.m_intakeWheelSubsystem.spinIntake(-0.1);//Score on High Chamber #1
+                        this.m_intakeWheelSubsystem.spinIntake(-0.4);//Score on High Chamber #1
                         telemetry.addLine("Ready to Score!");
                         stateMachine = StateMachine.PRESCORE_SPECIMEN;
                     }
@@ -215,13 +207,11 @@ public class PinPointAutoSpecimen extends LinearOpMode
                     this.m_slideArmSubsystem.slideArm(kSlideAutoScore);
                     if (nav.driveTo(odo.getPosition(), odo.getPosition(), 0.6, .75))
                     {
-                        telemetry.addLine("Line 212");
                         stateMachine = StateMachine.SCORE_SPECIMEN;
                     }
                     break;
 
                 case SCORE_SPECIMEN:
-                    telemetry.addLine("Line 218");
                     if (nav.driveTo(odo.getPosition(),
                             new Pose2DUnNormalized(DistanceUnit.MM, 450, ySpecScore, UnnormalizedAngleUnit.DEGREES, -180),
                             0.7, 0))
@@ -229,96 +219,118 @@ public class PinPointAutoSpecimen extends LinearOpMode
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
                         telemetry.addLine("SCORE!!!");
                         ySpecScore = ySpecScore + 40;
-                        stateMachine = StateMachine.DRIVE_TO_SAMPLE;
+                        specimen = specimen + 1;
+                        stateMachine = StateMachine.COUNTER_SCORE;
                     }
                     break;
 
+                case COUNTER_SCORE:
+                    if (specimen == 1)
+                    {
+                        stateMachine = StateMachine.DRIVE_TO_SAMPLE;
+                    }
+                    else if (specimen ==2 )
+                    {
+                            stateMachine = StateMachine.OBSERVATION_ZONE;
+                    }
+                    else if (specimen ==3)
+                    {
+                        this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
+                        this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
+                        stateMachine = StateMachine.PARK_OBSERVATION_ZONE;
+                    }
+                    break;
 
                 case DRIVE_TO_SAMPLE:  //drive to the Sample
                     this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
-                    telemetry.addLine("Slide Down");
                     if (this.m_slideArmSubsystem.atTarget(kSlideArmCloseSample)) ;
                     {
                         this.m_liftArmSubsystem.liftSlow(kLiftArmIntakeReset);
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
-                        this.m_intakeWheelSubsystem.spinIntake(0.0);//Turn off intake
+                        this.m_intakeWheelSubsystem.spinIntake(1.0);//Score on High Chamber #1
+
                     }
-                    if (nav.driveTo(odo.getPosition(),
-                        new Pose2DUnNormalized(DistanceUnit.MM, 450, yDriveToSample, UnnormalizedAngleUnit.DEGREES, -90),
-                        0.7, 0))
+                    if (nav.driveTo(odo.getPosition(), PreSampleDrive,0.7, 0))
                     {
+                        this.m_intakeWheelSubsystem.spinIntake(0.0);//Turn off intake
                         stateMachine = StateMachine.STRAFE_TO_SAMPLE;
                     }
                     break;
 
                 case STRAFE_TO_SAMPLE:
-                    if (nav.driveTo(odo.getPosition(),
-                            new Pose2DUnNormalized(DistanceUnit.MM, 1200, yDriveToSample, UnnormalizedAngleUnit.DEGREES, -90),
-                            0.7, 0))
+                    if (nav.driveTo(odo.getPosition(),StrafeToSample,0.7, 0))
                     {
                         stateMachine = StateMachine.FORWARD_TO_SAMPLE;
                     }
                     break;
 
                 case FORWARD_TO_SAMPLE:
-                    if (nav.driveTo(odo.getPosition(),
-                            new Pose2DUnNormalized(DistanceUnit.MM, 1200, ySampleCollect, UnnormalizedAngleUnit.DEGREES, -90),
-                            0.7, 0))
+                    if (nav.driveTo(odo.getPosition(), ForwardToSample,0.7, 0))
                     {
                         stateMachine = StateMachine.OBSERVATION_ZONE;
                     }
                     break;
 
                 case OBSERVATION_ZONE:
-                    telemetry.addLine("Can you hear me now?");
-
-                    if (nav.driveTo(odo.getPosition(),
-                            new Pose2DUnNormalized(DistanceUnit.MM, 70, ySampleCollect, UnnormalizedAngleUnit.DEGREES, -90),
-                            0.4, 0))
-                    {
-                        samples = samples + 1;
-                        telemetry.addLine("Nah");
-//                        Pose2DUnNormalized PreSampleDrive = new Pose2DUnNormalized(DistanceUnit.MM, 450, yDriveToSample - 254, UnnormalizedAngleUnit.DEGREES, -270);
-                        ySampleCollect = ySampleCollect - 275;
-                        yDriveToSample = yDriveToSample - 254;
-                        stateMachine = StateMachine.COUNTER;
-
-                    }
-                    break;
-
-                case COUNTER:
-                    if (samples < 3)
-                    {
-                        stateMachine = StateMachine.DRIVE_TO_SAMPLE;
-                    }
-                    else
-                    {
-                        stateMachine = StateMachine.COLLECT_SPECIMEN;
-                    }
-                    break;
-
-
-                case COLLECT_SPECIMEN:
                     this.m_intakeWheelSubsystem.spinIntake(-0.5);//Start intake
-                    this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
-                    this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
                     this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
-                    if (this.m_liftArmSubsystem.atTarget(kLiftArmCloseSample))
+                    this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
+                    if (nav.driveTo(odo.getPosition(),ObservationZone, 0.4, 0))
+                    {
+                        this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
+                        samples = samples + 1;
+//                        ySampleCollect = ySampleCollect - 275;
+//                        yDriveToSample = yDriveToSample - 254;
+                        stateMachine = StateMachine.PRE_PICK_UP_SPECIMEN;
+                    }
+                    break;
+
+//                case COUNTER:
+//                    if (samples < 2)
+//                    {
+//                        stateMachine = StateMachine.DRIVE_TO_SAMPLE;
+//                    }
+//                    else
+//                    {
+//                        stateMachine = StateMachine.COLLECT_SPECIMEN;
+//                    }
+//                    break;
+
+                case PRE_PICK_UP_SPECIMEN:
+                    if (nav.driveTo(odo.getPosition(), CollectSpecimen, 0.3, 0.5))
                     {
                         stateMachine = StateMachine.PICK_UP_SPECIMEN;
                     }
                     break;
 
                 case PICK_UP_SPECIMEN:
-                    this.m_slideArmSubsystem.slideArm(75);
-                    if (nav.driveTo(odo.getPosition(), odo.getPosition(), 0.5, 2.0))
+//                    this.m_slideArmSubsystem.slideArm(75);
+                    if (nav.driveTo(odo.getPosition(), odo.getPosition(), 0.5, 0.5))
                     {
                         this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
-//                        stateMachine = StateMachine.SCORE_SPECIMEN;
+                        this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
+                        this.m_liftArmSubsystem.liftArm(kLiftArmIntakeReset);
+                        stateMachine = StateMachine.PRE_SUBMERSIBLE;
+                    }
+                    break;
+
+                case PRE_SUBMERSIBLE:
+                    if (nav.driveTo(odo.getPosition(), PreSubmersible, 0.5, 0))
+                    {
+                        this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
+                        this.m_liftArmSubsystem.liftArm(kLiftArmHighChamber);
+                        stateMachine = StateMachine.DRIVE_TO_SUBMERSIBLE;
+                    }
+                    break;
+
+                case PARK_OBSERVATION_ZONE:
+                    if (nav.driveTo(odo.getPosition(),ObservationZone, 0.4, 0))
+                    {
+                        this.m_intakeWheelSubsystem.spinIntake(0.0);//Turn off intake
+                        stateMachine = StateMachine.PARKED;
                     }
                     break;
             }
-
         //nav calculates the power to set to each motor in a mecanum or tank drive. Use nav.getMotorPower to find that value.
         leftFront.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.LEFT_FRONT));
         rightFront.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.RIGHT_FRONT));
@@ -326,8 +338,8 @@ public class PinPointAutoSpecimen extends LinearOpMode
         rightBack.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.RIGHT_BACK));
 
         telemetry.addData("current state:", stateMachine);
-        telemetry.addData("y1 = ", (yDriveToSample));
-        telemetry.addData("y2 = ", (ySampleCollect));
+        telemetry.addData("Spec Scored = ", (specimen));
+//        telemetry.addData("y2 = ", (ySampleCollect));
         Pose2DUnNormalized pos = odo.getPosition();
         String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(UnnormalizedAngleUnit.DEGREES));
         telemetry.addData("Position", data);
