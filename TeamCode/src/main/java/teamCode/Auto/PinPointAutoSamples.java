@@ -85,9 +85,9 @@ public class PinPointAutoSamples extends LinearOpMode
     static final Pose2DUnNormalized PrePickUpSample3 = new Pose2DUnNormalized(DistanceUnit.MM, 400, 675, UnnormalizedAngleUnit.DEGREES, 0);
     static final Pose2DUnNormalized PickUpSample3 = new Pose2DUnNormalized(DistanceUnit.MM, 680, 675, UnnormalizedAngleUnit.DEGREES, 0);
     static final Pose2DUnNormalized PrePickUpSample4 = new Pose2DUnNormalized(DistanceUnit.MM, 600, 570, UnnormalizedAngleUnit.DEGREES, 52);
-    static final Pose2DUnNormalized PickUpSample4 = new Pose2DUnNormalized(DistanceUnit.MM, 685, 690, UnnormalizedAngleUnit.DEGREES, 50);
-    static final Pose2DUnNormalized PickUpSample4Turn = new Pose2DUnNormalized(DistanceUnit.MM, 760, 690, UnnormalizedAngleUnit.DEGREES, 35);
-    static final Pose2DUnNormalized PickUpSample4Drive = new Pose2DUnNormalized(DistanceUnit.MM, 850, 690, UnnormalizedAngleUnit.DEGREES, 35);
+    static final Pose2DUnNormalized PickUpSample4 = new Pose2DUnNormalized(DistanceUnit.MM, 670, 675, UnnormalizedAngleUnit.DEGREES, 50);
+    static final Pose2DUnNormalized PickUpSample4Turn = new Pose2DUnNormalized(DistanceUnit.MM, 760, 690, UnnormalizedAngleUnit.DEGREES, 40);
+    static final Pose2DUnNormalized PickUpSample4Drive = new Pose2DUnNormalized(DistanceUnit.MM, 850, 690, UnnormalizedAngleUnit.DEGREES, 45);
     static final Pose2DUnNormalized PrePark = new Pose2DUnNormalized(DistanceUnit.MM, 1165, 390, UnnormalizedAngleUnit.DEGREES, 90);
     static final Pose2DUnNormalized ParkAscent1 = new Pose2DUnNormalized(DistanceUnit.MM, 1270, -220, UnnormalizedAngleUnit.DEGREES, 90);
 
@@ -183,7 +183,7 @@ public class PinPointAutoSamples extends LinearOpMode
                     }
                     if(this.m_slideArmSubsystem.atTarget(kSlideArmHighBasket))
                     {
-                        this.m_intakeWheelSubsystem.spinIntake(0.5);//Score in High Basket #1
+                        this.m_intakeWheelSubsystem.spinIntake(1.0);//Score in High Basket #1
                         telemetry.addLine("Score!");
                         stateMachine = StateMachine.TURN_OFF_INTAKE_1;
                     }
@@ -192,7 +192,7 @@ public class PinPointAutoSamples extends LinearOpMode
 
                 case TURN_OFF_INTAKE_1:
                     holdTimer.reset();
-                    if(nav.driveTo(odo.getPosition(), odo.getPosition(), 0.4,2.0))
+                    if(nav.driveTo(odo.getPosition(), odo.getPosition(), 0.4,1.75))
                     {
                         this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
@@ -205,7 +205,7 @@ public class PinPointAutoSamples extends LinearOpMode
                      this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
                      if (this.m_slideArmSubsystem.atTarget(kSlideArmCloseSample));
                      {
-                        this.m_liftArmSubsystem.liftSlow(kLiftArmCloseSample);
+                        this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
                         this.m_intakeWheelSubsystem.spinIntake(-1.0);//Turn On intake
                     }
@@ -240,7 +240,7 @@ public class PinPointAutoSamples extends LinearOpMode
                     }
                     if(this.m_slideArmSubsystem.atTarget(kSlideArmHighBasket))
                     {
-                        this.m_intakeWheelSubsystem.spinIntake(0.5);//Score in High Basket #1
+                        this.m_intakeWheelSubsystem.spinIntake(1.0);//Score in High Basket #1
                         telemetry.addLine("Score!");
                         stateMachine = StateMachine.TURN_OFF_INTAKE_2;
                     }
@@ -249,7 +249,7 @@ public class PinPointAutoSamples extends LinearOpMode
 
                 case TURN_OFF_INTAKE_2:
                     holdTimer.reset();
-                    if(nav.driveTo(odo.getPosition(), odo.getPosition(), 0.45,2.0))
+                    if(nav.driveTo(odo.getPosition(), odo.getPosition(), 0.45,1.75))
                     {
                         this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
@@ -265,7 +265,7 @@ public class PinPointAutoSamples extends LinearOpMode
                     if (this.m_slideArmSubsystem.atTarget(kSlideArmCloseSample));
                 {
                     telemetry.addLine("Drive three should be happening");
-                    this.m_liftArmSubsystem.liftSlow(kLiftArmCloseSample);
+                    this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
                     this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
                     this.m_intakeWheelSubsystem.spinIntake(-1.0);//Turn On intake
                 }
@@ -300,7 +300,7 @@ public class PinPointAutoSamples extends LinearOpMode
                     }
                     if(this.m_slideArmSubsystem.atTarget(kSlideArmHighBasket))
                     {
-                        this.m_intakeWheelSubsystem.spinIntake(0.5);
+                        this.m_intakeWheelSubsystem.spinIntake(1.0);
                         telemetry.addLine("Score!");
                         stateMachine = StateMachine.TURN_OFF_INTAKE_3;
                     }
@@ -309,7 +309,7 @@ public class PinPointAutoSamples extends LinearOpMode
 
                 case TURN_OFF_INTAKE_3:
                     holdTimer.reset();
-                    if(nav.driveTo(odo.getPosition(), odo.getPosition(), 0.4,2.0))
+                    if(nav.driveTo(odo.getPosition(), odo.getPosition(), 0.4,1.75))
                     {
                         this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
@@ -325,11 +325,11 @@ public class PinPointAutoSamples extends LinearOpMode
                     if (this.m_slideArmSubsystem.atTarget(kSlideArmCloseSample));
                 {
                     telemetry.addLine("Drive FOUR should be happening");
-                    this.m_liftArmSubsystem.liftSlow(kLiftArmCloseSample);
+                    this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
                     this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
                     this.m_intakeWheelSubsystem.spinIntake(-1.0);//Turn On intake
                 }
-                if (nav.driveTo(odo.getPosition(), PrePickUpSample4, 0.45, .5))
+                if (nav.driveTo(odo.getPosition(), PrePickUpSample4, 0.5, 0))
                 {
                     telemetry.addLine("Ready to pick up Sample 4!");
                     stateMachine = StateMachine.PICKUP_SAMPLE_4;
@@ -337,15 +337,15 @@ public class PinPointAutoSamples extends LinearOpMode
                 break;
 
                 case PICKUP_SAMPLE_4:
-                    if(nav.driveTo(odo.getPosition(), PickUpSample4, 0.5, .5))
+                    if(nav.driveTo(odo.getPosition(), PickUpSample4, 0.5, 0))
                     {
                         stateMachine = StateMachine.PICKUP_SAMPLE_4_TURN;
                     }
                     break;
 
                 case PICKUP_SAMPLE_4_TURN:
-                    telemetry.addLine("363!");
-                    if(nav.driveTo(odo.getPosition(), PickUpSample4Turn, 0.4, .25))
+                    telemetry.addLine("347!");
+                    if(nav.driveTo(odo.getPosition(), PickUpSample4Turn, 0.5, 0))
                     {
                         stateMachine = StateMachine.PICKUP_SAMPLE_4_DRIVE;
                     }
@@ -353,7 +353,7 @@ public class PinPointAutoSamples extends LinearOpMode
 
 //
                 case PICKUP_SAMPLE_4_DRIVE:
-                    if(nav.driveTo(odo.getPosition(), PickUpSample4Drive, 0.4, 1.0))
+                    if(nav.driveTo(odo.getPosition(), PickUpSample4Drive, 0.6, .5))
                     {
                         telemetry.addLine("Picked up Sample 4!");
                         this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
@@ -377,7 +377,7 @@ public class PinPointAutoSamples extends LinearOpMode
                     }
                     if(this.m_slideArmSubsystem.atTarget(kSlideArmHighBasket))
                     {
-                        this.m_intakeWheelSubsystem.spinIntake(0.5);
+                        this.m_intakeWheelSubsystem.spinIntake(1.0);
                         telemetry.addLine("Score!");
                         stateMachine = StateMachine.TURN_OFF_INTAKE_4;
                     }
@@ -386,7 +386,7 @@ public class PinPointAutoSamples extends LinearOpMode
 
                 case TURN_OFF_INTAKE_4:
                     holdTimer.reset();
-                    if(nav.driveTo(odo.getPosition(), odo.getPosition(), 0.45,2.0))
+                    if(nav.driveTo(odo.getPosition(), odo.getPosition(), 0.45,1.75))
                     {
                         this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
@@ -394,7 +394,7 @@ public class PinPointAutoSamples extends LinearOpMode
 
                         if (this.m_slideArmSubsystem.atTarget(kSlideArmCloseSample));
                         {
-                            this.m_liftArmSubsystem.liftSlow(kLiftArmCloseSample);
+                            this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
                             this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
                         }
                         telemetry.addLine("Ready to park");
@@ -407,7 +407,7 @@ public class PinPointAutoSamples extends LinearOpMode
                     if(nav.driveTo(odo.getPosition(), PrePark,0.5,0.0))
                     {
                         this.m_ascentArmCommand.autoAscent();
-                        this.m_ascentArmSubsystem.ascentArm(0.78);
+                        this.m_ascentArmSubsystem.ascentArm(0.7);
                         telemetry.addLine("Almost There!");
                         stateMachine = StateMachine.PARK_ASCENT_1;
                     }

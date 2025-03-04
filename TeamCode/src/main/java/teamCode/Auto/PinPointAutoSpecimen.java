@@ -9,6 +9,7 @@ import static teamCode.Constants.PivotIntakeConstants.kIntakePivotSpecimen;
 import static teamCode.Constants.SlideArmConstants.kSlideArmCloseSample;
 import static teamCode.Constants.SlideArmConstants.kSlideArmHighChamber;
 import static teamCode.Constants.SlideArmConstants.kSlideAutoScore;
+import static teamCode.Constants.SlideArmConstants.kSlideSpecimenScore;
 
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -89,7 +90,7 @@ public class PinPointAutoSpecimen extends LinearOpMode
     final Pose2DUnNormalized PreSubmersible = new Pose2DUnNormalized(DistanceUnit.MM, 300, 0, UnnormalizedAngleUnit.DEGREES, -180);
     final Pose2DUnNormalized CollectSpecimen = new Pose2DUnNormalized(DistanceUnit.MM, 70, -1220, UnnormalizedAngleUnit.DEGREES, -90);
 
-    enum StateMachine
+    public enum StateMachine
     {
         WAITING_FOR_START,
         SCORE_SPECIMEN,
@@ -180,7 +181,7 @@ public class PinPointAutoSpecimen extends LinearOpMode
                     stateMachine = StateMachine.DRIVE_TO_SUBMERSIBLE;
                     break;
 
-                case DRIVE_TO_SUBMERSIBLE:
+                case DRIVE_TO_SUBMERSIBLE: /*Drive to Submersible, moving arm, slide, pivot intake, turn on intake*/
                     /*
                     drive the robot to the first target, the nav.driveTo function will return true once
                     the robot has reached the target, and has been there for (holdTime) seconds.
@@ -193,17 +194,17 @@ public class PinPointAutoSpecimen extends LinearOpMode
                     if (this.m_liftArmSubsystem.atTarget(kLiftArmHighChamber))
                     {
                         this.m_slideArmSubsystem.slideArm(kSlideArmHighChamber);
-                        this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
+                        this.m_intakePivotSubsystem.pivotIntake(kIntakePivotSpecimen);
                     }
                     if (this.m_slideArmSubsystem.atTarget(kSlideArmHighChamber))
                     {
-                        this.m_intakeWheelSubsystem.spinIntake(-0.4);//Score on High Chamber #1
+                        this.m_intakeWheelSubsystem.spinIntake(-0.75);//Score on High Chamber #1
                         telemetry.addLine("Ready to Score!");
                         stateMachine = StateMachine.PRESCORE_SPECIMEN;
                     }
                     break;
 
-                case PRESCORE_SPECIMEN:
+                case PRESCORE_SPECIMEN: /*Slide Arm Drops*/
                     this.m_slideArmSubsystem.slideArm(kSlideAutoScore);
                     if (nav.driveTo(odo.getPosition(), odo.getPosition(), 0.6, .75))
                     {
@@ -211,14 +212,14 @@ public class PinPointAutoSpecimen extends LinearOpMode
                     }
                     break;
 
-                case SCORE_SPECIMEN:
+                case SCORE_SPECIMEN: /*Drive Away*/
                     if (nav.driveTo(odo.getPosition(),
                             new Pose2DUnNormalized(DistanceUnit.MM, 450, ySpecScore, UnnormalizedAngleUnit.DEGREES, -180),
                             0.7, 0))
                     {
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
                         telemetry.addLine("SCORE!!!");
-                        ySpecScore = ySpecScore + 40;
+                        ySpecScore = ySpecScore + 70;
                         specimen = specimen + 1;
                         stateMachine = StateMachine.COUNTER_SCORE;
                     }

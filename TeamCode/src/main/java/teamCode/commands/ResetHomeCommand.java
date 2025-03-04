@@ -5,7 +5,8 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import teamCode.subsystems.LiftArmSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 
-public class ResetHomeCommand extends CommandBase
+public class
+ResetHomeCommand extends CommandBase
 {
     public LiftArmSubsystem m_liftArmSubsystem;
     public SlideArmSubsystem m_slideArmSubsystem;

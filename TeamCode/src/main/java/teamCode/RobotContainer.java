@@ -20,6 +20,7 @@ import teamCode.commands.ArmFudgeFactorUpCommand;
 import teamCode.commands.ArmPositionTravelCommand;
 import teamCode.commands.ClimbArmCommand;
 import teamCode.commands.ClimbArmReleaseCommand;
+import teamCode.commands.ScoreSpecimenCommand;
 import teamCode.commands.StingrayAscent1ArmCommand;
 import teamCode.commands.DriveFieldOrientedCommand;
 import teamCode.commands.ArmPositionCloseSampleCommand;
@@ -36,6 +37,7 @@ import teamCode.commands.ResetHomeCommand;
 
 import teamCode.commands.SlideFudgeInCommand;
 import teamCode.commands.SlideFudgeOutCommand;
+import teamCode.commands.TestPose2DTeleOp;
 import teamCode.subsystems.ClimbArmSubsystem;
 import teamCode.subsystems.DriveSubsystem;
 import teamCode.subsystems.PinPointOdometrySubsystem;
@@ -81,12 +83,18 @@ public class RobotContainer extends CommandOpMode
     private Button m_releaseClimbButton;
     private Button m_climbArmFudgeUp;
     private Button m_climbArmFudgeDown;
+    private Button m_autoScoreButton;
 
     /* Motors */
     private DcMotor m_slideArmMotor;
     private DcMotor m_liftArmMotor;
     private DcMotor m_climbArmMotor;
     private CRServo m_intakeWheelServo;
+
+    public DcMotor leftFront;
+    public DcMotor rightFront;
+    public DcMotor leftBack;
+    public DcMotor rightBack;
 
     /* Sensors */
     private TouchSensor m_touch;
@@ -123,8 +131,9 @@ public class RobotContainer extends CommandOpMode
     private SlideFudgeOutCommand m_slideFudgeOutCommand;
     private ClimbArmCommand m_liftArmClimbCommand;
     private ClimbArmReleaseCommand m_releaseCLimberArmCommand;
-    private GoBildaPinpointDriver m_goBilda;
+    private GoBildaPinpointDriver m_odo;
     private PinPointOdometryCommand m_pinPointOdometryCommand;
+    private TestPose2DTeleOp m_TestPose2DTeleOp;
 
     private com.qualcomm.robotcore.hardware.TouchSensor m_touchSensor;
     private boolean touchSensorIsPressed = false;
@@ -132,12 +141,21 @@ public class RobotContainer extends CommandOpMode
     /* PID */
     private PIDController m_pIDController;
 
-
     @Override
     public void initialize()
     {
+        this.m_odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
+        this.m_odo.setOffsets(68, -178);//these are tuned for Sting-Ray 3110-0002-0001 Product Insight #1
+        this.m_odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        this.m_odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+
+        m_odo.resetPosAndIMU();
 
         /* Drivetrain */
+        this.leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+        this.rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+        this.leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+        this.rightBack = hardwareMap.get(DcMotor.class, "rightBack");
 
         this.m_drive = new MecanumDrive
                 (
@@ -148,8 +166,8 @@ public class RobotContainer extends CommandOpMode
                 );
 
 
-        /* IMU */
 
+        /* IMU */
         this.m_imu = hardwareMap.get(IMU.class, "m_imu");
         this.m_imuParameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
@@ -179,6 +197,7 @@ public class RobotContainer extends CommandOpMode
         this.m_pIDController.setPID(0.0, 0.0, 0.0);
 
 
+
         /* Subsystems */
 
         this.m_driveSubsystem = new DriveSubsystem(this.m_drive, this.m_imu/*, this.m_goBilda*/);
@@ -189,7 +208,8 @@ public class RobotContainer extends CommandOpMode
         this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo, this.m_touchSensor);
         this.m_ascentArmSubsystem = new StingRayArmSubsystem(hardwareMap, "ascentArmServo");
         this.m_gyroSubsystem = new GyroSubsystem(this.m_imu);
-//        this.m_pinPointOdometrySubsystem = new PinPointOdometrySubsystem(m_goBilda);
+        this.m_pinPointOdometrySubsystem = new PinPointOdometrySubsystem(this.m_odo);
+
 
         register(this.m_driveSubsystem);
         register(this.m_intakeWheelSubsystem);
@@ -204,9 +224,20 @@ public class RobotContainer extends CommandOpMode
 
         this.m_driveSubsystem.setDefaultCommand(this.m_driveFieldOrientedCommand);
 
+
+
+
+//        this.m_TestPose2DTeleOp = new TestPose2DTeleOp(this.m_driveSubsystem, this.m_pinPointOdometrySubsystem,this.leftFront, this.rightFront, this.leftBack, this.rightBack);
+//        this.m_autoScoreButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.A))
+//                .whenPressed(this.m_TestPose2DTeleOp);
+
+
+
         this.m_intakeWheelCommand = new IntakeWheelCommand(this.m_intakeWheelSubsystem, () -> this.m_driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER),
                 () -> this.m_driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER));
         this.m_intakeWheelSubsystem.setDefaultCommand(this.m_intakeWheelCommand);
+
+
 
         /* Event Commands */
 

@@ -12,17 +12,17 @@
 //public class AutoDriveCommand extends CommandBase
 //{
 //    public AutoDriveSubsystem m_autoDriveSubsystem;
-//    public int m_fL;
-//    public int m_fR;
-//    public int m_bL;
-//    public int m_bR;
+//    public int leftFront;
+//    public int rightFront;
+//    public int leftBack;
+//    public int rightBack;
 //    public AutoDriveCommand(AutoDriveSubsystem autoDriveSubsystem, int fL, int fR, int bL, int bR)
 //    {
 //        this.m_autoDriveSubsystem = autoDriveSubsystem;
-//        this.m_fL = fL;
-//        this.m_fR = fR;
-//        this.m_bL = bL;
-//        this.m_bR = bR;
+//        this.leftFront = fL;
+//        this.rightFront = fR;
+//        this.leftBack = bL;
+//        this.rightBack = bR;
 //        addRequirements(this.m_autoDriveSubsystem);
 //    }
 //
@@ -34,7 +34,7 @@
 //    @Override
 //    public void execute()
 //    {
-//        this.m_autoDriveSubsystem.driveRobot(this.m_fL, this.m_fR, this.m_bL, this.m_bR);
+//        this.m_autoDriveSubsystem.driveRobot(this.leftFront, this.rightFront, this.leftBack, this.rightBack);
 //    }
 //
 //    @Override
@@ -47,7 +47,7 @@
 //    public boolean isFinished()
 //    {
 //        return Logic.OpModeType.opMode.equals("Sting-Ray Auto")
-//                && this.m_autoDriveSubsystem.atTarget(this.m_fL);
+//                && this.m_autoDriveSubsystem.atTarget(this.leftFront);
 //    }
 //
 //}

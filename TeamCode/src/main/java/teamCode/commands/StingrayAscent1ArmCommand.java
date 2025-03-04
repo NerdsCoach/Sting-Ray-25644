@@ -7,7 +7,7 @@ import teamCode.subsystems.StingRayArmSubsystem;
 public class StingrayAscent1ArmCommand extends CommandBase
 {
     private static final double m_homePos = 0.0;
-    private static final double m_scorePos = 0.6;
+    private static final double m_scorePos = 0.7;
     private final StingRayArmSubsystem m_ascentArmSubsystem;
     private int m_position;
     private static final int  m_home = 1;

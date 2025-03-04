@@ -22,15 +22,25 @@ public class PinPointOdometrySubsystem extends SubsystemBase
     public PinPointOdometrySubsystem(GoBildaPinpointDriver odo)
     {
         this.m_odo = odo;
-        this.m_odo.setOffsets(68,-178);
-        this.m_odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        this.m_odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-        this.m_odo.setPosition(new Pose2DUnNormalized(DistanceUnit.MM, 0,0, UnnormalizedAngleUnit.DEGREES, 0.0));
+//        this.m_odo.setOffsets(68,-178);
+//        this.m_odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+//        this.m_odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+//        this.m_odo.setPosition(new Pose2DUnNormalized(DistanceUnit.MM, 0,0, UnnormalizedAngleUnit.DEGREES, 0.0));
     }
 
     public void resetOdo()
     {
         this.m_odo.resetPosAndIMU();
+    }
+
+    public Pose2DUnNormalized getPosition()
+    {
+        return this.m_odo.getPosition();
+    }
+
+    public void updateOdo()
+    {
+        this.m_odo.update();
     }
 
     public double[] getDeltaPosition(double target)
