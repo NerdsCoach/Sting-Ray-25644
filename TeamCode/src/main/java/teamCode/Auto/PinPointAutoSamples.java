@@ -7,6 +7,7 @@ import static teamCode.Constants.PivotIntakeConstants.kIntakePivotPickUp;
 import static teamCode.Constants.PivotIntakeConstants.kIntakePivotScore;
 import static teamCode.Constants.SlideArmConstants.kSlideArmCloseSample;
 import static teamCode.Constants.SlideArmConstants.kSlideArmHighBasket;
+import static teamCode.Constants.SlideArmConstants.kSlideArmHome;
 
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -81,7 +82,7 @@ public class PinPointAutoSamples extends LinearOpMode
 
     static final Pose2DUnNormalized NET_ZONE = new Pose2DUnNormalized(DistanceUnit.MM, 250, 470, UnnormalizedAngleUnit.DEGREES, -45);
     static final Pose2DUnNormalized PrePickUpSample2 = new Pose2DUnNormalized(DistanceUnit.MM, 400, 420, UnnormalizedAngleUnit.DEGREES, 0);
-    static final Pose2DUnNormalized PickUpSample2 = new Pose2DUnNormalized(DistanceUnit.MM, 640, 420, UnnormalizedAngleUnit.DEGREES, 0);
+    static final Pose2DUnNormalized PickUpSample2 = new Pose2DUnNormalized(DistanceUnit.MM, 643, 420, UnnormalizedAngleUnit.DEGREES, 0);
     static final Pose2DUnNormalized PrePickUpSample3 = new Pose2DUnNormalized(DistanceUnit.MM, 400, 675, UnnormalizedAngleUnit.DEGREES, 0);
     static final Pose2DUnNormalized PickUpSample3 = new Pose2DUnNormalized(DistanceUnit.MM, 680, 675, UnnormalizedAngleUnit.DEGREES, 0);
     static final Pose2DUnNormalized PrePickUpSample4 = new Pose2DUnNormalized(DistanceUnit.MM, 600, 570, UnnormalizedAngleUnit.DEGREES, 52);
@@ -148,6 +149,7 @@ public class PinPointAutoSamples extends LinearOpMode
         this.m_ascentArmCommand = new StingrayAscent1ArmCommand(this.m_ascentArmSubsystem);
 
 
+        this.m_slideArmSubsystem.slideArm(kSlideArmHome);
 
         waitForStart();
         resetRuntime();

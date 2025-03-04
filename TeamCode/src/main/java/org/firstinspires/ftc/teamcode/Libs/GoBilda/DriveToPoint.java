@@ -46,11 +46,11 @@ public class DriveToPoint
         IN_BOUNDS
     }
 
-    private static double xyTolerance = 15;
+    private static double xyTolerance = 15; //was  12
     private static double yawTolerance = 0.0349066;
 
-    private static double pGain = 0.008;
-    private static double dGain = 0.00001;
+    private static double pGain = 0.009;//0.008
+    private static double dGain = 0.00001;//0.00001
     private static double accel = 10.0;
 
     private static double yawPGain = 5.0;
@@ -321,11 +321,14 @@ public class DriveToPoint
         {
             double xError = targetPosition.getX(MM) - currentPosition.getX(MM);
             return xPID.calculateAxisPID(xError, pGain, dGain, accel,PIDTimer.seconds());
+//            p.0.008, d.00001, accel 10
         }
         if(direction == Direction.y)
         {
             double yError = targetPosition.getY(MM) - currentPosition.getY(MM);
             return yPID.calculateAxisPID(yError, pGain, dGain, accel, PIDTimer.seconds());
+            //            p.0.008, d.00001, accel 10
+
         }
         if(direction == Direction.h)
         {

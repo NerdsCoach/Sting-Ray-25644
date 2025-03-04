@@ -8,6 +8,7 @@ import static teamCode.Constants.PivotIntakeConstants.kIntakePivotScore;
 import static teamCode.Constants.PivotIntakeConstants.kIntakePivotSpecimen;
 import static teamCode.Constants.SlideArmConstants.kSlideArmCloseSample;
 import static teamCode.Constants.SlideArmConstants.kSlideArmHighChamber;
+import static teamCode.Constants.SlideArmConstants.kSlideArmHome;
 import static teamCode.Constants.SlideArmConstants.kSlideAutoScore;
 import static teamCode.Constants.SlideArmConstants.kSlideSpecimenScore;
 
@@ -166,6 +167,7 @@ public class PinPointAutoSpecimen extends LinearOpMode
         this.m_ascentArmCommand = new StingrayAscent1ArmCommand(this.m_ascentArmSubsystem);
         //this.m_armFudgeFactorUpCommand = new ArmFudgeFactorUpCommand(this.m_liftArmSubsystem);
 
+        this.m_slideArmSubsystem.slideArm(kSlideArmHome);
         waitForStart();
         resetRuntime();
 

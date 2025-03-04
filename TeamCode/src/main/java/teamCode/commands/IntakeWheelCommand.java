@@ -26,8 +26,7 @@ public class IntakeWheelCommand extends CommandBase
     @Override
     public void execute()
     {
-
-        if (this.m_intakeWheelSubsystem.isLoaded())
+        if (this.m_intakeWheelSubsystem.isLoaded() && this.m_rightTriggerValue.getAsDouble() > 0.1)
         {
             this.m_intakeWheelSubsystem.spinIntake(0.0);
         }

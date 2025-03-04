@@ -17,14 +17,13 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import teamCode.commands.ArmFudgeFactorDownCommand;
 import teamCode.commands.ArmFudgeFactorUpCommand;
+import teamCode.commands.ArmPositionSubmersiblePickUpCommand;
+import teamCode.commands.ArmPositionSubmersibleSlidePickUpCommand;
 import teamCode.commands.ArmPositionTravelCommand;
-import teamCode.commands.ClimbArmCommand;
 import teamCode.commands.ClimbArmReleaseCommand;
-import teamCode.commands.ScoreSpecimenCommand;
 import teamCode.commands.StingrayAscent1ArmCommand;
 import teamCode.commands.DriveFieldOrientedCommand;
 import teamCode.commands.ArmPositionCloseSampleCommand;
-import teamCode.commands.ArmPositionFarSampleCommand;
 import teamCode.commands.ArmPositionHighBasketCommand;
 import teamCode.commands.ArmPositionHighChamberCommand;
 import teamCode.commands.ArmPositionLowBasketCommand;
@@ -38,7 +37,6 @@ import teamCode.commands.ResetHomeCommand;
 import teamCode.commands.SlideFudgeInCommand;
 import teamCode.commands.SlideFudgeOutCommand;
 import teamCode.commands.TestPose2DTeleOp;
-import teamCode.subsystems.ClimbArmSubsystem;
 import teamCode.subsystems.DriveSubsystem;
 import teamCode.subsystems.PinPointOdometrySubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
@@ -107,7 +105,6 @@ public class RobotContainer extends CommandOpMode
     private IntakeWheelSubsystem m_intakeWheelSubsystem;
     private StingRayArmSubsystem m_ascentArmSubsystem;
     private GyroSubsystem m_gyroSubsystem;
-    private ClimbArmSubsystem m_climbArmSubsystem;
     private PinPointOdometrySubsystem m_pinPointOdometrySubsystem;
 
 
@@ -116,7 +113,8 @@ public class RobotContainer extends CommandOpMode
     private ArmFudgeFactorUpCommand m_armFudgeFactorUpCommand;
     private ArmFudgeFactorDownCommand m_armFudgeFactorDownCommand;
     private ArmPositionCloseSampleCommand m_armPositionCloseSampleCommand;
-    private ArmPositionFarSampleCommand m_armPositionFarSampleCommand;
+    private ArmPositionSubmersibleSlidePickUpCommand m_armPositionSubmersibleSlidePickUpCommand;
+    private ArmPositionSubmersiblePickUpCommand m_armPositionSubmersiblePickUpCommand;
     private ArmPositionHighBasketCommand m_armPositionHighBasketCommand;
     private ArmPositionHighChamberCommand m_armPositionHighChamberCommand;
     private ArmPositionLowBasketCommand m_armPositionLowBasketCommand;
@@ -129,7 +127,6 @@ public class RobotContainer extends CommandOpMode
     private ResetHomeCommand m_resetHomeCommand;
     private SlideFudgeInCommand m_slideFudgeInCommand;
     private SlideFudgeOutCommand m_slideFudgeOutCommand;
-    private ClimbArmCommand m_liftArmClimbCommand;
     private ClimbArmReleaseCommand m_releaseCLimberArmCommand;
     private GoBildaPinpointDriver m_odo;
     private PinPointOdometryCommand m_pinPointOdometryCommand;
@@ -203,7 +200,6 @@ public class RobotContainer extends CommandOpMode
         this.m_driveSubsystem = new DriveSubsystem(this.m_drive, this.m_imu/*, this.m_goBilda*/);
         this.m_slideArmSubsystem = new SlideArmSubsystem(this.m_slideArmMotor);
         this.m_liftArmSubsystem = new LiftArmSubsystem(this.m_liftArmMotor)/*() -> this.m_pIDController.calculate(this.m_liftArmMotor.getCurrentPosition()))*/;
-        this.m_climbArmSubsystem = new ClimbArmSubsystem(this.m_climbArmMotor);
         this.m_intakePivotSubsystem = new IntakePivotSubsystem(hardwareMap, "intakePivotServo");
         this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo, this.m_touchSensor);
         this.m_ascentArmSubsystem = new StingRayArmSubsystem(hardwareMap, "ascentArmServo");
@@ -261,13 +257,21 @@ public class RobotContainer extends CommandOpMode
         this.m_dpadLeft = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_LEFT))
                 .whenPressed(this.m_armFudgeFactorDownCommand);
 
+
+
         this.m_armPositionCloseSampleCommand = new ArmPositionCloseSampleCommand(m_liftArmSubsystem, m_slideArmSubsystem, this.m_intakePivotSubsystem);
         this.m_x = (new GamepadButton(this.m_driver2, GamepadKeys.Button.X))
                 .whenPressed(this.m_armPositionCloseSampleCommand);
 
-        this.m_armPositionFarSampleCommand = new ArmPositionFarSampleCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
+        this.m_armPositionSubmersiblePickUpCommand = new ArmPositionSubmersiblePickUpCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
+        this.m_a = (new GamepadButton(this.m_driver2, GamepadKeys.Button.A))
+                .whenPressed(this.m_armPositionSubmersiblePickUpCommand);
+
+        this.m_armPositionSubmersibleSlidePickUpCommand = new ArmPositionSubmersibleSlidePickUpCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
         this.m_b = (new GamepadButton(this.m_driver2, GamepadKeys.Button.B))
-                .whenPressed(this.m_armPositionFarSampleCommand);
+                .whileHeld(this.m_armPositionSubmersibleSlidePickUpCommand);
+
+
 
         this.m_armPositionHighBasketCommand = new ArmPositionHighBasketCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
         this.m_y = (new GamepadButton(this.m_driver2, GamepadKeys.Button.Y))
@@ -277,34 +281,21 @@ public class RobotContainer extends CommandOpMode
         this.m_dpadTop = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_UP))
                 .whenPressed(this.m_armPositionHighChamberCommand);
 
-        this.m_armPositionTravelCommand = new ArmPositionTravelCommand(m_liftArmSubsystem, m_slideArmSubsystem, this.m_intakePivotSubsystem);
-        this.m_leftBumper = (new GamepadButton(this.m_driver2, GamepadKeys.Button.LEFT_BUMPER))
-                .whenPressed(this.m_armPositionTravelCommand);
-
-        this.m_armPositionLowBasketCommand = new ArmPositionLowBasketCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
-        this.m_a = (new GamepadButton(this.m_driver2, GamepadKeys.Button.A))
-                .whenPressed(this.m_armPositionLowBasketCommand);
-
-//        this.m_liftArmClimbCommand = new ClimbArmCommand(m_liftArmSubsystem);
-//        this.m_liftArmClimbButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.A))
-//                .whenPressed(this.m_liftArmClimbCommand);
-
-        this.m_releaseCLimberArmCommand = new ClimbArmReleaseCommand(m_liftArmSubsystem);
-        this.m_releaseClimbButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.Y))
-                .whenPressed(this.m_releaseCLimberArmCommand);
-
-//        this.m_climbArmFudgeUpCommand = new ClimbArmFudgeUpCommand(m_climbArmSubsystem);
-//        this.m_climbArmFudgeUp = (new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_UP))
-//                .whileHeld(this.m_climbArmFudgeUpCommand);
-//
-//        this.m_climbArmFudgeDownCommand = new ClimbArmFudgeDownCommand(m_climbArmSubsystem);
-//        this.m_climbArmFudgeDown = (new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_DOWN))
-//                .whileHeld(this.m_climbArmFudgeDownCommand);
-
         this.m_armPositionScoreHighChamberCommand = new ArmPositionScoreHighChamberCommand
                 (m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem, m_intakeWheelSubsystem);
         this.m_dpadBottom = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_DOWN))
                 .whenPressed(this.m_armPositionScoreHighChamberCommand);
+
+        this.m_armPositionTravelCommand = new ArmPositionTravelCommand(m_liftArmSubsystem, m_slideArmSubsystem, this.m_intakePivotSubsystem);
+        this.m_leftBumper = (new GamepadButton(this.m_driver2, GamepadKeys.Button.LEFT_BUMPER))
+                .whenPressed(this.m_armPositionTravelCommand);
+
+
+
+
+        this.m_releaseCLimberArmCommand = new ClimbArmReleaseCommand(m_liftArmSubsystem);
+        this.m_releaseClimbButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.Y))
+                .whenPressed(this.m_releaseCLimberArmCommand);
 
         this.m_intakePivotCommand = new IntakePivotCommand(this.m_intakePivotSubsystem);
         this.m_rightBumper = (new GamepadButton(this.m_driver2, GamepadKeys.Button.RIGHT_BUMPER))

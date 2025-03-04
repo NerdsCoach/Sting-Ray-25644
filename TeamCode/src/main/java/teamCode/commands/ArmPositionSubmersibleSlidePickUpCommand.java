@@ -1,20 +1,22 @@
 package teamCode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import teamCode.Constants;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
 
-public class ArmPositionFarSampleCommand extends CommandBase
+public class ArmPositionSubmersibleSlidePickUpCommand extends CommandBase
 {
     private LiftArmSubsystem m_liftArmSubsystem;
     private SlideArmSubsystem m_slideArmSubsystem;
     private IntakePivotSubsystem m_intakePivotSubsytem;
 
-    public ArmPositionFarSampleCommand(LiftArmSubsystem liftArmSubsystem,
-                                       SlideArmSubsystem slideArmSubsystem, IntakePivotSubsystem intakePivotSubsystem)
+
+    public ArmPositionSubmersibleSlidePickUpCommand(LiftArmSubsystem liftArmSubsystem,
+                                                    SlideArmSubsystem slideArmSubsystem, IntakePivotSubsystem intakePivotSubsystem)
     {
         this.m_liftArmSubsystem = liftArmSubsystem;
         this.m_slideArmSubsystem = slideArmSubsystem;
@@ -31,11 +33,10 @@ public class ArmPositionFarSampleCommand extends CommandBase
     @Override
     public void execute()
     {
-        this.m_liftArmSubsystem.liftArm(Constants.LiftArmConstants.kLiftArmFarSample);
-        if (m_liftArmSubsystem.atTarget(Constants.LiftArmConstants.kLiftArmFarSample))
+        if (!m_slideArmSubsystem.atTarget(434));
         {
-            this.m_slideArmSubsystem.slideArm(Constants.SlideArmConstants.kSlideArmFarSample);
-            this.m_intakePivotSubsytem.pivotIntake(Constants.PivotIntakeConstants.kIntakePivotFarSample);
+            this.m_liftArmSubsystem.fudgeFactor(12);
+            this.m_slideArmSubsystem.slideFudgeFactor(Constants.SlideArmConstants.kSlideFudgeOut);
         }
     }
 
