@@ -1,12 +1,7 @@
 package teamCode.commands;
 
-import static com.qualcomm.robotcore.util.ElapsedTime.Resolution.SECONDS;
-
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
 import teamCode.Constants;
-import teamCode.Logic;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
@@ -34,12 +29,7 @@ public class ArmPositionHighChamberCommand extends CommandBase {
     public void execute()
     {
         this.m_liftArmSubsystem.liftArm(Constants.LiftArmConstants.kLiftArmHighChamber);
-
-//        if (m_liftArmSubsystem.atTarget(Constants.LiftArmConstants.kLiftArmHighChamber))
-//        {
         this.m_slideArmSubsystem.slideArm(Constants.SlideArmConstants.kSlideArmHighChamber);
-//        this.m_intakePivotSubsystem.pivotIntake(Constants.PivotIntakeConstants.kIntakePivotScore);
-//        }
     }
 
     @Override

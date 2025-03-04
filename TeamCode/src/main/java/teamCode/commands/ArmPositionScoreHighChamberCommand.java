@@ -1,11 +1,7 @@
 package teamCode.commands;
 
-import static teamCode.Constants.PivotIntakeConstants.kIntakePivotScore;
 import static teamCode.Constants.PivotIntakeConstants.kIntakePivotSpecimen;
-import static teamCode.Constants.SlideArmConstants.kSlideSpecimenScore;
-
 import com.arcrobotics.ftclib.command.CommandBase;
-
 import teamCode.Constants;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.IntakeWheelSubsystem;

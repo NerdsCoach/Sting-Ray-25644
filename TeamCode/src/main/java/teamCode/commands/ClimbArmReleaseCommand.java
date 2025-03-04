@@ -1,7 +1,6 @@
 package teamCode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-
 import teamCode.Constants;
 import teamCode.subsystems.LiftArmSubsystem;
 
@@ -24,7 +23,7 @@ public class ClimbArmReleaseCommand extends CommandBase
     @Override
     public void execute()
     {
-            this.m_liftArmSubsystem.climbRelease(Constants.LiftArmConstants.kLiftarmReleaseClimbArm);
+            this.m_liftArmSubsystem.climbRelease(Constants.LiftArmConstants.kLiftArmReleaseClimbArm);
     }
 
     @Override

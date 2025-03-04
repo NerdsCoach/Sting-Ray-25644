@@ -22,7 +22,7 @@ public class ResetGyroCommand extends CommandBase
     @Override
     public void execute()
     {
-        m_gyroSubsystem.resetGyro(); //Move to execute.
+        m_gyroSubsystem.resetGyro();
     }
 
     @Override

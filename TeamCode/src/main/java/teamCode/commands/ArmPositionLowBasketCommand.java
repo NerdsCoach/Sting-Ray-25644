@@ -1,8 +1,6 @@
 package teamCode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
-
 import teamCode.Constants;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;

@@ -1,10 +1,7 @@
 package teamCode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.command.WaitCommand;
-
 import teamCode.Constants;
-import teamCode.Logic;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;

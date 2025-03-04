@@ -23,14 +23,15 @@ public class Constants
         public static final int kLiftArmFudgeFactorUp = 50;
         public static final int kLiftArmFudgeFactorDown = -50;
         public static final int kLiftArmIntakeReset = 550;
-        public static final int kLiftarmReleaseClimbArm = 2400;
-        public static final int kLiftArmClimb = 0;
+        public static final int kLiftArmReleaseClimbArm = 2400;
+        public static final int kLiftArmSubSlide = 12;
+        public static final int kLiftArmSubClose = 325;
     }
 
     public static final class SlideArmConstants
     {
         public static final int kSlideArmCloseSample = 12;
-        public static final int kSlideArmFarSample = 434;//1970
+        public static final int kSlideArmMaxHorizontalEx = 434;//1970
         public static final int kSlideArmMiddleSample = 200;
         public static final int kSlideArmHighBasket = 580;
         public static final int kSlideArmHighChamber = 149; //600
@@ -42,6 +43,7 @@ public class Constants
         public static final int kSlideFudgeOutMax = 549;
         public static final int kSlideSpecimenScore = 54;
         public static final int kSlideAutoScore = 15;
+        public static final int kSLideArmSubClose = 120;
     }
 
     public static final class PivotIntakeConstants

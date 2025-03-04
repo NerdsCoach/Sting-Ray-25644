@@ -1,9 +1,7 @@
 package teamCode.commands;
 
 import static teamCode.Constants.SlideArmConstants.kSlideFudgeOutMax;
-
 import com.arcrobotics.ftclib.command.CommandBase;
-
 import teamCode.Constants;
 import teamCode.subsystems.SlideArmSubsystem;
 

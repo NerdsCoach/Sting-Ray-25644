@@ -1,8 +1,6 @@
 package teamCode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.qualcomm.robotcore.hardware.DcMotor;
-
 import teamCode.Constants;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
@@ -33,9 +31,9 @@ public class ArmPositionSubmersibleSlidePickUpCommand extends CommandBase
     @Override
     public void execute()
     {
-        if (!m_slideArmSubsystem.atTarget(434));
+        if (!m_slideArmSubsystem.atTarget(Constants.SlideArmConstants.kSlideArmMaxHorizontalEx));
         {
-            this.m_liftArmSubsystem.fudgeFactor(12);
+            this.m_liftArmSubsystem.fudgeFactor(Constants.LiftArmConstants.kLiftArmSubSlide);
             this.m_slideArmSubsystem.slideFudgeFactor(Constants.SlideArmConstants.kSlideFudgeOut);
         }
     }

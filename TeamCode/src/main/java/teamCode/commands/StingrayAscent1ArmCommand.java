@@ -1,7 +1,6 @@
 package teamCode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-
 import teamCode.subsystems.StingRayArmSubsystem;
 
 public class StingrayAscent1ArmCommand extends CommandBase
