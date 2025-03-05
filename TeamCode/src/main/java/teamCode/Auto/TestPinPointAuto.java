@@ -32,7 +32,7 @@ import teamCode.subsystems.LiftArmSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.StingRayArmSubsystem;
 
-@Autonomous(name="TestPinPointAuto", group="Pinpoint")
+//@Autonomous(name="TestPinPointAuto", group="Pinpoint")
 //@Disabled
 
 public class TestPinPointAuto extends LinearOpMode

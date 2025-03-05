@@ -86,7 +86,6 @@ public class RobotContainer extends CommandOpMode
     /* Motors */
     private DcMotor m_slideArmMotor;
     private DcMotor m_liftArmMotor;
-    private DcMotor m_climbArmMotor;
     private CRServo m_intakeWheelServo;
 
     public DcMotor leftFront;
@@ -184,7 +183,6 @@ public class RobotContainer extends CommandOpMode
 
         this.m_slideArmMotor = hardwareMap.get(DcMotor.class, "slideArmMotor");
         this.m_liftArmMotor = hardwareMap.get(DcMotor.class, "liftArmMotor");
-        this.m_climbArmMotor = hardwareMap.get(DcMotor.class, "climbArmMotor");
         this.m_intakeWheelServo = new CRServo(hardwareMap, "intakeWheelServo");
 
         /* Sensors */

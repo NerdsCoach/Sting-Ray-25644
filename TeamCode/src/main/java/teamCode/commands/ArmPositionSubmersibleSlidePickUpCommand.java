@@ -1,6 +1,11 @@
 package teamCode.commands;
 
+import static teamCode.Constants.SlideArmConstants.kSlideArmMaxHorizontalEx;
+import static teamCode.Constants.SlideArmConstants.kSlideFudgeOutMax;
+
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 import teamCode.Constants;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
@@ -11,6 +16,8 @@ public class ArmPositionSubmersibleSlidePickUpCommand extends CommandBase
     private LiftArmSubsystem m_liftArmSubsystem;
     private SlideArmSubsystem m_slideArmSubsystem;
     private IntakePivotSubsystem m_intakePivotSubsytem;
+    private DcMotor m_slideArmMotor;
+    private DcMotor m_liftArmMotor;
 
 
     public ArmPositionSubmersibleSlidePickUpCommand(LiftArmSubsystem liftArmSubsystem,
@@ -31,10 +38,12 @@ public class ArmPositionSubmersibleSlidePickUpCommand extends CommandBase
     @Override
     public void execute()
     {
-        if (!m_slideArmSubsystem.atTarget(Constants.SlideArmConstants.kSlideArmMaxHorizontalEx));
+        if (!m_slideArmSubsystem.subAtTarget(kSlideArmMaxHorizontalEx))
         {
-            this.m_liftArmSubsystem.fudgeFactor(Constants.LiftArmConstants.kLiftArmSubSlide);
-            this.m_slideArmSubsystem.slideFudgeFactor(Constants.SlideArmConstants.kSlideFudgeOut);
+//            this.m_liftArmSubsystem.fudgeFactor(2);
+//            this.m_slideArmSubsystem.slideFudgeFactor(4);
+            this.m_liftArmSubsystem.fudgeFactor(16);//6
+            this.m_slideArmSubsystem.slideFudgeFactor(30);//15
         }
     }
 

@@ -28,7 +28,6 @@ public class SlideFudgeOutCommand extends CommandBase
         {
             this.m_slideArmSubsystem.slideFudgeFactor(Constants.SlideArmConstants.kSlideFudgeOut);
         }
-
     }
 
     @Override
