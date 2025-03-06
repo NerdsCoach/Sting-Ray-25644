@@ -284,7 +284,7 @@ public class RobotContainer extends CommandOpMode
         this.m_dpadBottom = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_DOWN))
                 .whenPressed(this.m_armPositionScoreHighChamberCommand);
 
-        this.m_armPositionTravelCommand = new ArmPositionTravelCommand(m_liftArmSubsystem, m_slideArmSubsystem, this.m_intakePivotSubsystem);
+        this.m_armPositionTravelCommand = new ArmPositionTravelCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
         this.m_leftBumper = (new GamepadButton(this.m_driver2, GamepadKeys.Button.LEFT_BUMPER))
                 .whenPressed(this.m_armPositionTravelCommand);
 

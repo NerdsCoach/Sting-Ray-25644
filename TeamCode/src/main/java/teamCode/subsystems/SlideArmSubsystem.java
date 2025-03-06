@@ -37,7 +37,7 @@ public class SlideArmSubsystem extends SubsystemBase
 
     public boolean subAtTarget(double target)
     {
-        return this.m_slideArmMotor.getCurrentPosition() >= target+10;
+        return this.m_slideArmMotor.getCurrentPosition() <= target;
     }
 
     public void autoSlideArm(int slide)

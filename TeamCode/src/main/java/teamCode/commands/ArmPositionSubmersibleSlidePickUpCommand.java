@@ -29,7 +29,7 @@ public class ArmPositionSubmersibleSlidePickUpCommand extends CommandBase
 
         addRequirements(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsytem);
     }
-//
+
     @Override
     public void initialize()
     {
@@ -38,10 +38,8 @@ public class ArmPositionSubmersibleSlidePickUpCommand extends CommandBase
     @Override
     public void execute()
     {
-        if (!m_slideArmSubsystem.subAtTarget(kSlideArmMaxHorizontalEx))
+        if (m_slideArmSubsystem.subAtTarget(kSlideArmMaxHorizontalEx))
         {
-//            this.m_liftArmSubsystem.fudgeFactor(2);
-//            this.m_slideArmSubsystem.slideFudgeFactor(4);
             this.m_liftArmSubsystem.fudgeFactor(16);//6
             this.m_slideArmSubsystem.slideFudgeFactor(30);//15
         }
