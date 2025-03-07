@@ -17,8 +17,8 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import teamCode.commands.ArmFudgeFactorDownCommand;
 import teamCode.commands.ArmFudgeFactorUpCommand;
-import teamCode.commands.ArmPositionSubmersiblePickUpCommand;
-import teamCode.commands.ArmPositionSubmersibleSlidePickUpCommand;
+import teamCode.commands.ArmPositionFarSampleCommand;
+import teamCode.commands.ArmPositionMidSampleCommand;
 import teamCode.commands.ArmPositionTravelCommand;
 import teamCode.commands.ClimbArmReleaseCommand;
 import teamCode.commands.StingrayAscent1ArmCommand;
@@ -112,8 +112,8 @@ public class RobotContainer extends CommandOpMode
     private ArmFudgeFactorUpCommand m_armFudgeFactorUpCommand;
     private ArmFudgeFactorDownCommand m_armFudgeFactorDownCommand;
     private ArmPositionCloseSampleCommand m_armPositionCloseSampleCommand;
-    private ArmPositionSubmersibleSlidePickUpCommand m_armPositionSubmersibleSlidePickUpCommand;
-    private ArmPositionSubmersiblePickUpCommand m_armPositionSubmersiblePickUpCommand;
+    private ArmPositionFarSampleCommand m_armPositionFarSampleCommand;
+    private ArmPositionMidSampleCommand m_armPositionSubmersiblePickUpCommand;
     private ArmPositionHighBasketCommand m_armPositionHighBasketCommand;
     private ArmPositionHighChamberCommand m_armPositionHighChamberCommand;
     private ArmPositionLowBasketCommand m_armPositionLowBasketCommand;
@@ -261,15 +261,13 @@ public class RobotContainer extends CommandOpMode
         this.m_x = (new GamepadButton(this.m_driver2, GamepadKeys.Button.X))
                 .whenPressed(this.m_armPositionCloseSampleCommand);
 
-        this.m_armPositionSubmersiblePickUpCommand = new ArmPositionSubmersiblePickUpCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
+        this.m_armPositionSubmersiblePickUpCommand = new ArmPositionMidSampleCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
         this.m_a = (new GamepadButton(this.m_driver2, GamepadKeys.Button.A))
                 .whenPressed(this.m_armPositionSubmersiblePickUpCommand);
 
-        this.m_armPositionSubmersibleSlidePickUpCommand = new ArmPositionSubmersibleSlidePickUpCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
+        this.m_armPositionFarSampleCommand = new ArmPositionFarSampleCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
         this.m_b = (new GamepadButton(this.m_driver2, GamepadKeys.Button.B))
-                .whileHeld(this.m_armPositionSubmersibleSlidePickUpCommand);
-
-
+                .whenPressed(this.m_armPositionFarSampleCommand);
 
         this.m_armPositionHighBasketCommand = new ArmPositionHighBasketCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
         this.m_y = (new GamepadButton(this.m_driver2, GamepadKeys.Button.Y))

@@ -232,7 +232,7 @@ public class PinPointAutoSamples extends LinearOpMode
                 case SCORE_SAMPLE_2:
                     if (nav.driveTo(odo.getPosition(), NET_ZONE, 0.45, 0))
                     {
-                        telemetry.addLine("Score Sample 1");
+                        telemetry.addLine("Score Sample 2 ");
                     }
                     this.m_liftArmSubsystem.liftArm(kLiftArmHighBasket);
                     if (this.m_liftArmSubsystem.atTarget(kLiftArmHighBasket))
@@ -251,7 +251,7 @@ public class PinPointAutoSamples extends LinearOpMode
 
                 case TURN_OFF_INTAKE_2:
                     holdTimer.reset();
-                    if(nav.driveTo(odo.getPosition(), odo.getPosition(), 0.45,1.75))
+                    if(nav.driveTo(odo.getPosition(), odo.getPosition(), 0.45,2.5))
                     {
                         this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
@@ -311,7 +311,7 @@ public class PinPointAutoSamples extends LinearOpMode
 
                 case TURN_OFF_INTAKE_3:
                     holdTimer.reset();
-                    if(nav.driveTo(odo.getPosition(), odo.getPosition(), 0.4,1.75))
+                    if(nav.driveTo(odo.getPosition(), odo.getPosition(), 0.4,2))
                     {
                         this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
@@ -353,7 +353,6 @@ public class PinPointAutoSamples extends LinearOpMode
                     }
                     break;
 
-//
                 case PICKUP_SAMPLE_4_DRIVE:
                     if(nav.driveTo(odo.getPosition(), PickUpSample4Drive, 0.6, .5))
                     {
@@ -388,7 +387,7 @@ public class PinPointAutoSamples extends LinearOpMode
 
                 case TURN_OFF_INTAKE_4:
                     holdTimer.reset();
-                    if(nav.driveTo(odo.getPosition(), odo.getPosition(), 0.45,1.75))
+                    if(nav.driveTo(odo.getPosition(), odo.getPosition(), 0.45,2))
                     {
                         this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);

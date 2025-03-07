@@ -29,14 +29,12 @@ public class Constants
 
     public static final class SlideArmConstants
     {
-        public static final int kSlideArmCloseSample = 32;
-        public static final int kSlideArmMaxHorizontalEx = 1150;//434
-        public static final int kSlideArmMiddleSample = 200;
+        public static final int kSlideArmCloseSample = 40;
+        public static final int kSlideArmFarSample = 1150;//434
         public static final int kSlideArmHighBasket = 1533;
         public static final int kSlideArmHighChamber = 394; //600
-        public static final int kSlideArmHome = 32;
+        public static final int kSlideArmHome = 40;
         public static final int kSlideArmLowBasket = 180; //200
-        public static final int kSlideArmLowChamber = 12;
         public static final int kSlideFudgeIn = -66;
         public static final int kSlideFudgeOut = 66;
         public static final int kSlideFudgeOutMax = 1451;

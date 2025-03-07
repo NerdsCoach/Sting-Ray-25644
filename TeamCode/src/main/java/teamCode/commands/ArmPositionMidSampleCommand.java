@@ -6,14 +6,14 @@ import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 
-public class ArmPositionSubmersiblePickUpCommand extends CommandBase
+public class ArmPositionMidSampleCommand extends CommandBase
 {
     private LiftArmSubsystem m_liftArmSubsystem;
     private SlideArmSubsystem m_slideArmSubsystem;
     private IntakePivotSubsystem m_intakePivotSubsytem;
 
-    public ArmPositionSubmersiblePickUpCommand(LiftArmSubsystem liftArmSubsystem,
-                                               SlideArmSubsystem slideArmSubsystem, IntakePivotSubsystem intakePivotSubsystem)
+    public ArmPositionMidSampleCommand(LiftArmSubsystem liftArmSubsystem,
+                                       SlideArmSubsystem slideArmSubsystem, IntakePivotSubsystem intakePivotSubsystem)
     {
         this.m_liftArmSubsystem = liftArmSubsystem;
         this.m_slideArmSubsystem = slideArmSubsystem;
