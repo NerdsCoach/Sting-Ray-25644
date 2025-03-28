@@ -22,6 +22,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 import org.firstinspires.ftc.teamcode.Libs.GoBilda.DriveToPoint;
 import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
@@ -74,6 +75,7 @@ public class PinPointAutoSpecimen extends LinearOpMode
     public int ySpecScore = 20;
     public int yDriveToSample = -700;
     public int ySampleCollect = -900;
+    
     public int samples = 1;
     public int specimen = 0;
 
@@ -86,10 +88,11 @@ public class PinPointAutoSpecimen extends LinearOpMode
     public Pose2DUnNormalized PreSampleDrive = new Pose2DUnNormalized(DistanceUnit.MM, 450, -700, UnnormalizedAngleUnit.DEGREES, -90);
     public Pose2DUnNormalized StrafeToSample = new Pose2DUnNormalized(DistanceUnit.MM, 1200, -700, UnnormalizedAngleUnit.DEGREES, -90);
     public Pose2DUnNormalized ForwardToSample = new Pose2DUnNormalized(DistanceUnit.MM, 1200, -900, UnnormalizedAngleUnit.DEGREES, -90);
-    public Pose2DUnNormalized ObservationZone = new Pose2DUnNormalized(DistanceUnit.MM, 70, -900, UnnormalizedAngleUnit.DEGREES, -90);
+    public Pose2DUnNormalized ObservationZone = new Pose2DUnNormalized(DistanceUnit.MM, 75, -900, UnnormalizedAngleUnit.DEGREES, -90);
     final Pose2DUnNormalized PickUpSpecimen = new Pose2DUnNormalized(DistanceUnit.MM, 70, -1150, UnnormalizedAngleUnit.DEGREES, -90);
     final Pose2DUnNormalized PreSubmersible = new Pose2DUnNormalized(DistanceUnit.MM, 300, 0, UnnormalizedAngleUnit.DEGREES, -180);
     final Pose2DUnNormalized CollectSpecimen = new Pose2DUnNormalized(DistanceUnit.MM, 70, -1220, UnnormalizedAngleUnit.DEGREES, -90);
+
 
     public enum StateMachine
     {
@@ -192,6 +195,7 @@ public class PinPointAutoSpecimen extends LinearOpMode
                     nav.driveTo(odo.getPosition(),
                             new Pose2DUnNormalized(DistanceUnit.MM, 630, ySpecScore, UnnormalizedAngleUnit.DEGREES, -180),
                             0.6, .1);
+
                     this.m_liftArmSubsystem.liftArm(kLiftArmHighChamber);
                     if (this.m_liftArmSubsystem.atTarget(kLiftArmHighChamber))
                     {
@@ -218,6 +222,7 @@ public class PinPointAutoSpecimen extends LinearOpMode
                     if (nav.driveTo(odo.getPosition(),
                             new Pose2DUnNormalized(DistanceUnit.MM, 450, ySpecScore, UnnormalizedAngleUnit.DEGREES, -180),
                             0.7, 0))
+
                     {
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
                         telemetry.addLine("SCORE!!!");
@@ -344,8 +349,10 @@ public class PinPointAutoSpecimen extends LinearOpMode
         telemetry.addData("Spec Scored = ", (specimen));
 //        telemetry.addData("y2 = ", (ySampleCollect));
         Pose2DUnNormalized pos = odo.getPosition();
+
         String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(UnnormalizedAngleUnit.DEGREES));
-        telemetry.addData("Position", data);
+
+            telemetry.addData("Position", data);
 
         telemetry.update();
         }

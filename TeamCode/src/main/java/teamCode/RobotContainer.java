@@ -36,7 +36,7 @@ import teamCode.commands.ResetHomeCommand;
 
 import teamCode.commands.SlideFudgeInCommand;
 import teamCode.commands.SlideFudgeOutCommand;
-import teamCode.commands.TestPose2DTeleOp;
+//import teamCode.commands.TestPose2DTeleOp;
 import teamCode.subsystems.DriveSubsystem;
 import teamCode.subsystems.PinPointOdometrySubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
@@ -129,7 +129,7 @@ public class RobotContainer extends CommandOpMode
     private ClimbArmReleaseCommand m_releaseCLimberArmCommand;
     private GoBildaPinpointDriver m_odo;
     private PinPointOdometryCommand m_pinPointOdometryCommand;
-    private TestPose2DTeleOp m_TestPose2DTeleOp;
+//    private TestPose2DTeleOp m_TestPose2DTeleOp;
 
     private com.qualcomm.robotcore.hardware.TouchSensor m_touchSensor;
     private boolean touchSensorIsPressed = false;
@@ -285,7 +285,6 @@ public class RobotContainer extends CommandOpMode
         this.m_armPositionTravelCommand = new ArmPositionTravelCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
         this.m_leftBumper = (new GamepadButton(this.m_driver2, GamepadKeys.Button.LEFT_BUMPER))
                 .whenPressed(this.m_armPositionTravelCommand);
-
 
 
 

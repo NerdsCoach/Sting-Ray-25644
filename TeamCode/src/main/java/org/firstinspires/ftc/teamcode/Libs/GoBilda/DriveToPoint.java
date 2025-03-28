@@ -49,9 +49,9 @@ public class DriveToPoint
     private static double xyTolerance = 15; //was  12
     private static double yawTolerance = 0.0349066;
 
-    private static double pGain = 0.009;//0.008
-    private static double dGain = 0.00001;//0.00001
-    private static double accel = 10.0;
+    private static double pGain = 0.009;//0.008 //latest num = 0.02
+    private static double dGain = 0.00001;//0.00002
+    private static double accel = 10.0 ;//28.0
 
     private static double yawPGain = 5.0;
     private static double yawDGain = 0.0;
@@ -95,7 +95,7 @@ public class DriveToPoint
         xyTolerance = unit.toMm(tolerance);
     }
 
-    public void setYawCoefficients(double p, double d, double acceleration, UnnormalizedAngleUnit unit, double tolerance)
+    public void setYawCoefficients(double p, double d, double acceleration,AngleUnit unit, double tolerance)
     {
         yawPGain = p;
         yawDGain = d;

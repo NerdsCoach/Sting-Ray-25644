@@ -32,7 +32,7 @@ import teamCode.subsystems.LiftArmSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.StingRayArmSubsystem;
 
-//@Autonomous(name="TestPinPointAuto", group="Pinpoint")
+@Autonomous(name="TestPinPointAuto", group="Pinpoint")
 //@Disabled
 
 public class TestPinPointAuto extends LinearOpMode
@@ -85,6 +85,17 @@ public class TestPinPointAuto extends LinearOpMode
         PARK_ASCENT_1,
         PARKED,
     }
+
+//    static final Pose2DUnNormalized NET_ZONE = new Pose2DUnNormalized(DistanceUnit.MM, 200, 200, UnnormalizedAngleUnit.DEGREES, -45);
+//    static final Pose2DUnNormalized PrePickUpSample2 = new Pose2DUnNormalized(DistanceUnit.MM, 0, 0, UnnormalizedAngleUnit.DEGREES, 0);
+//    static final Pose2DUnNormalized PickUpSample2 = new Pose2DUnNormalized(DistanceUnit.MM, 200, 200, UnnormalizedAngleUnit.DEGREES, 45);
+//    static final Pose2DUnNormalized PrePickUpSample3 = new Pose2DUnNormalized(DistanceUnit.MM, 0,0 , UnnormalizedAngleUnit.DEGREES, 180);
+//    static final Pose2DUnNormalized PickUpSample3 = new Pose2DUnNormalized(DistanceUnit.MM, 200, 200, UnnormalizedAngleUnit.DEGREES, -180);
+//
+//    static final Pose2DUnNormalized PrePickUpSample4 = new Pose2DUnNormalized(DistanceUnit.MM, 560, 640, UnnormalizedAngleUnit.DEGREES, 44);
+//    static final Pose2DUnNormalized PickUpSample4 = new Pose2DUnNormalized(DistanceUnit.MM, 820, 690, UnnormalizedAngleUnit.DEGREES, 44);
+//    static final Pose2DUnNormalized PrePark = new Pose2DUnNormalized(DistanceUnit.MM, 1165, 390, UnnormalizedAngleUnit.DEGREES, 90);
+//    static final Pose2DUnNormalized ParkAscent1 = new Pose2DUnNormalized(DistanceUnit.MM, 1270, -220, UnnormalizedAngleUnit.DEGREES, 90);
 
     static final Pose2DUnNormalized NET_ZONE = new Pose2DUnNormalized(DistanceUnit.MM, 200, 200, UnnormalizedAngleUnit.DEGREES, -45);
     static final Pose2DUnNormalized PrePickUpSample2 = new Pose2DUnNormalized(DistanceUnit.MM, 0, 0, UnnormalizedAngleUnit.DEGREES, 0);

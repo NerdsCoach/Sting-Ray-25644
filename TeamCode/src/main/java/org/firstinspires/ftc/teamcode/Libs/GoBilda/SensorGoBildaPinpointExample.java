@@ -25,15 +25,17 @@ package org.firstinspires.ftc.teamcode.Libs.GoBilda;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
+
 //import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 import java.util.Locale;
 
 import teamCode.Auto.Pose2DUnNormalized;
+
 import teamCode.GoBildaPinpointDriver;
+
 
 /*
 This opmode shows how to use the goBILDA® Pinpoint Odometry Computer.
@@ -67,7 +69,7 @@ For support, contact tech@gobilda.com
 public class SensorGoBildaPinpointExample extends LinearOpMode {
 
     teamCode.GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
-
+//    org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver odo;
     double oldTime = 0;
 //    private MecanumDrive drive;
 
@@ -79,8 +81,10 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         // to the names assigned during the robot configuration step on the DS or RC devices.
 
         odo = hardwareMap.get(teamCode.GoBildaPinpointDriver.class,"odo");
+//        odo = hardwareMap.get((org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver.class, "odo");
         odo.recalibrateIMU();
         telemetry.addLine("Gyro Reset");
+
 
         /*
         Set the odometry pod positions relative to the point that the odometry computer tracks around.
@@ -99,6 +103,8 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         number of ticks per mm of your odometry pod.
          */
         odo.setEncoderResolution(teamCode.GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+//        odo.setEncoderResolution((org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+
         //odo.setEncoderResolution(13.26291192);
 
 
@@ -107,7 +113,9 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         increase when you move the robot forward. And the par (strafe) pod should increase when
         you move the robot to the left.
          */
+
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+
 
         /*
         Before running the robot, recalibrate the IMU. This needs to happen when the robot is stationary

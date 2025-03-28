@@ -1,5 +1,5 @@
 package teamCode.subsystems;
-
+//change 3 spots
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -57,8 +57,8 @@ public class DriveSubsystem extends SubsystemBase
     {
         m_drive.driveFieldCentric
                 (
-                        leftX * leftX * leftX * -1,
-                        leftY * leftY * leftY * -1,
+                        leftX * leftX * leftX * -1.0,//-1 //-0.7 for slow
+                        leftY * leftY * leftY * -1.0,//-1
                         getJoystickAngle(rightX, rightY),
                         this.m_imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES)
                 );
@@ -95,7 +95,7 @@ public class DriveSubsystem extends SubsystemBase
 
         if (Math.abs(error) > 6)
         {
-            double motorPower = 0.5;
+            double motorPower = 0.5;//.5 for normal//0.4 is best for slow
             error = error - getAngle();
 //            this.m_robot.driveWithMotorPowers(motorPower, -motorPower, motorPower, -motorPower);
 //            this.m_drive.driveWithMotorPowers(motorPower, -motorPower, motorPower, -motorPower);
