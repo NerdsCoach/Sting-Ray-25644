@@ -219,10 +219,10 @@ public class PinPointAutoSpecimen extends LinearOpMode
                     break;
 
                 case SCORE_SPECIMEN: /*Drive Away*/
+                    resetRuntime();
                     if (nav.driveTo(odo.getPosition(),
                             new Pose2DUnNormalized(DistanceUnit.MM, 450, ySpecScore, UnnormalizedAngleUnit.DEGREES, -180),
-                            0.7, 0))
-
+                            0.7, 0) || getRuntime() > 3)
                     {
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
                         telemetry.addLine("SCORE!!!");
