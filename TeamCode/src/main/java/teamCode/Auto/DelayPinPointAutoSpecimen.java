@@ -40,10 +40,10 @@ import teamCode.subsystems.LiftArmSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.StingRayArmSubsystem;
 
-@Autonomous(name="PinPointAutoSpecimen", group="Pinpoint")
+@Autonomous(name="DelayPinPointAutoSpecimen", group="Pinpoint")
 //@Disabled
 
-public class PinPointAutoSpecimen extends LinearOpMode
+public class DelayPinPointAutoSpecimen extends LinearOpMode
 {
     //Initializing Motors & Servos
     private DcMotor leftFront;
@@ -72,7 +72,7 @@ public class PinPointAutoSpecimen extends LinearOpMode
     public int ySpecScore = 20;
     public int yDriveToSample = -700;
     public int ySampleCollect = -900;
-    
+
     public int samples = 1;
     public int specimen = 0;
 

@@ -1,0 +1,33 @@
+package teamCode.commands;
+
+import com.arcrobotics.ftclib.command.CommandBase;
+import java.util.function.DoubleSupplier;
+import teamCode.subsystems.TimerSubsystem;
+
+
+public class TimerCommand extends CommandBase
+{
+    private TimerSubsystem m_timerSubsystem;
+    public DoubleSupplier m_timer;
+
+
+    public TimerCommand(TimerSubsystem timerSubsystem, DoubleSupplier timer)
+    {
+        this.m_timerSubsystem = timerSubsystem;
+        addRequirements(m_timerSubsystem);
+        this.m_timer = timer;
+    }
+    @Override
+    public void initialize()
+    {
+    }
+
+    @Override
+    public void execute()
+    {
+        this.m_timerSubsystem.inEndGame(m_timer.getAsDouble());
+//        if(m_timer.getAsDouble() > 5 && m_timer.getAsDouble() <7 ){gamepad1.rumble(2000);}
+    }
+
+
+}

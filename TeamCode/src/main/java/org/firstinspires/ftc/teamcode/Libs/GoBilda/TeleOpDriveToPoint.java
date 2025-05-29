@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.Libs.GoBilda;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.MM;
 
+import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -64,6 +66,7 @@ public class TeleOpDriveToPoint
     private final ElapsedTime PIDTimer = new ElapsedTime();
 
 //    private LinearOpMode myOpMode; //todo: consider if this is required
+    private CommandOpMode myOpeMode;
 
     private final PIDLoop xPID = new PIDLoop();
     private final PIDLoop yPID = new PIDLoop();
@@ -73,7 +76,9 @@ public class TeleOpDriveToPoint
 
 //    private DriveType selectedDriveType = DriveType.MECANUM;
 
-//    public TeleOpDriveToPoint(LinearOpMode opmode)
+
+
+//    public DriveToPoint(LinearOpMode opmode)
 //    {
 //        myOpMode = opmode;
 //    }

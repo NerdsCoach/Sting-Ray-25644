@@ -17,8 +17,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Libs.GoBilda.DriveToPoint;
@@ -36,7 +34,7 @@ import teamCode.subsystems.StingRayArmSubsystem;
 @Autonomous(name="Pin Point Auto Samples", group="Pinpoint")
 //@Disabled
 
-public class PinPointAutoSamples extends LinearOpMode
+public class PinPointAutoBaskets extends LinearOpMode
 {
 
     private DcMotor leftFront;
@@ -81,8 +79,8 @@ public class PinPointAutoSamples extends LinearOpMode
         PARK_ASCENT_1,
         PARKED, PICKUP_SAMPLE_4_TURN, PICKUP_SAMPLE_4_DRIVE,
     }
-
-    static final Pose2DUnNormalized NET_ZONE = new Pose2DUnNormalized(DistanceUnit.MM, 250, 470, UnnormalizedAngleUnit.DEGREES, -45);
+//                                                                                x=250, y=470
+    static final Pose2DUnNormalized NET_ZONE = new Pose2DUnNormalized(DistanceUnit.MM, 240, 480, UnnormalizedAngleUnit.DEGREES, -45);
     static final Pose2DUnNormalized PrePickUpSample2 = new Pose2DUnNormalized(DistanceUnit.MM, 400, 420, UnnormalizedAngleUnit.DEGREES, 0);
     static final Pose2DUnNormalized PickUpSample2 = new Pose2DUnNormalized(DistanceUnit.MM, 643, 420, UnnormalizedAngleUnit.DEGREES, 0);
     static final Pose2DUnNormalized PrePickUpSample3 = new Pose2DUnNormalized(DistanceUnit.MM, 400, 675, UnnormalizedAngleUnit.DEGREES, 0);
@@ -359,15 +357,16 @@ public class PinPointAutoSamples extends LinearOpMode
                     break;
 
                 case PICKUP_SAMPLE_4_TURN:
+                    resetRuntime();
                     telemetry.addLine("347!");
-                    if(nav.driveTo(odo.getPosition(), PickUpSample4Turn, 0.5, 0))
+                    if(nav.driveTo(odo.getPosition(), PickUpSample4Turn, 0.5, 0) || getRuntime() > 3)
                     {
                         stateMachine = StateMachine.PICKUP_SAMPLE_4_DRIVE;
                     }
                     break;
 
                 case PICKUP_SAMPLE_4_DRIVE:
-                    if(nav.driveTo(odo.getPosition(), PickUpSample4Drive, 0.6, .5))
+                    if(nav.driveTo(odo.getPosition(), PickUpSample4Drive, 0.6, .5) || getRuntime() >5)
                     {
                         telemetry.addLine("Picked up Sample 4!");
                         this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake

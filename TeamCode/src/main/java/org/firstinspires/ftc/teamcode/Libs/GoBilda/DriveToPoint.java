@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Libs.GoBilda;
 
-import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.RADIANS;
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.MM;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

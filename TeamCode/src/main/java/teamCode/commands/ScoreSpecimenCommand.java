@@ -18,6 +18,7 @@ import static teamCode.commands.ScoreSpecimenCommand.StateMachine.SCORE_SPECIMEN
 import static teamCode.commands.ScoreSpecimenCommand.StateMachine.PRESCORE_SPECIMEN;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -127,15 +128,17 @@ public class ScoreSpecimenCommand extends CommandBase
                 this.m_intakeWheelSubsystem.spinIntake(-0.5);//Start intake
                 this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
                 this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
+                new WaitCommand(2000);
                 System.out.println("3");
 
-            if (nav.driveTo(m_pinPointOdometrySubsystem.getPosition(),ObservationZone, 0.4, 0))
+            if (nav.driveTo(m_pinPointOdometrySubsystem.getPosition(),ObservationZone, 0.4, 3))
                 {
                     System.out.println("4");
                     this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
                     stateMachine = PRE_PICK_UP_SPECIMEN;
                 }
             System.out.println("5");
+                new WaitCommand(7000);
             break;
 
             case PRE_PICK_UP_SPECIMEN:

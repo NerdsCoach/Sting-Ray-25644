@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
+
 import teamCode.commands.ArmFudgeFactorDownCommand;
 import teamCode.commands.ArmFudgeFactorUpCommand;
 import teamCode.commands.ArmPositionCloseSampleCommand;
@@ -125,7 +127,7 @@ public class DemoRobotContainer extends CommandOpMode
     private SlideFudgeInCommand m_slideFudgeInCommand;
     private SlideFudgeOutCommand m_slideFudgeOutCommand;
     private ClimbArmReleaseCommand m_releaseCLimberArmCommand;
-    private GoBildaPinpointDriver m_odo;
+    private org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver m_odo;
     private PinPointOdometryCommand m_pinPointOdometryCommand;
 //    private TestPose2DTeleOp m_TestPose2DTeleOp;
 
@@ -138,10 +140,10 @@ public class DemoRobotContainer extends CommandOpMode
     @Override
     public void initialize()
     {
-        this.m_odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
+        this.m_odo = hardwareMap.get(org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver.class, "odo");
         this.m_odo.setOffsets(68, -178);//these are tuned for Sting-Ray 3110-0002-0001 Product Insight #1
-        this.m_odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        this.m_odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        this.m_odo.setEncoderResolution(org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        this.m_odo.setEncoderDirections(org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
         m_odo.resetPosAndIMU();
 
@@ -225,60 +227,59 @@ public class DemoRobotContainer extends CommandOpMode
 
 
 
-        this.m_intakeWheelCommand = new IntakeWheelCommand(this.m_intakeWheelSubsystem, () -> this.m_driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER),
-                () -> this.m_driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER));
-        this.m_intakeWheelSubsystem.setDefaultCommand(this.m_intakeWheelCommand);
-
+//        this.m_intakeWheelCommand = new IntakeWheelCommand(this.m_intakeWheelSubsystem, () -> this.m_driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER),
+//                () -> this.m_driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER));
+//        this.m_intakeWheelSubsystem.setDefaultCommand(this.m_intakeWheelCommand);
 
 
         /* Event Commands */
 
-        this.m_resetHomeCommand = new ResetHomeCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem);
-        this.m_resetHomeButton = (new GamepadButton(this.m_driver2, GamepadKeys.Button.START))
-                .whenPressed(this.m_resetHomeCommand);
+//        this.m_resetHomeCommand = new ResetHomeCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem);
+//        this.m_resetHomeButton = (new GamepadButton(this.m_driver2, GamepadKeys.Button.START))
+//                .whenPressed(this.m_resetHomeCommand);
 
-        this.m_slideFudgeInCommand = new SlideFudgeInCommand(m_slideArmSubsystem);
-        this.m_slideFudgeInButton = (new GamepadButton(this.m_driver2, GamepadKeys.Button.BACK))
-                .whileHeld(this.m_slideFudgeInCommand);
+//        this.m_slideFudgeInCommand = new SlideFudgeInCommand(m_slideArmSubsystem);
+//        this.m_slideFudgeInButton = (new GamepadButton(this.m_driver2, GamepadKeys.Button.BACK))
+//                .whileHeld(this.m_slideFudgeInCommand);
 
-        this.m_slideFudgeOutCommand = new SlideFudgeOutCommand(m_slideArmSubsystem);
-        this.m_slideFudgeOutButton = (new GamepadButton(this.m_driver2, GamepadKeys.Button.LEFT_STICK_BUTTON))
-                .whileHeld(this.m_slideFudgeOutCommand);
+//        this.m_slideFudgeOutCommand = new SlideFudgeOutCommand(m_slideArmSubsystem);
+//        this.m_slideFudgeOutButton = (new GamepadButton(this.m_driver2, GamepadKeys.Button.LEFT_STICK_BUTTON))
+//                .whileHeld(this.m_slideFudgeOutCommand);
 
-        this.m_armFudgeFactorUpCommand = new ArmFudgeFactorUpCommand(m_liftArmSubsystem);
-        this.m_dpadRight = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_RIGHT))
-                .whenPressed(this.m_armFudgeFactorUpCommand);
+//        this.m_armFudgeFactorUpCommand = new ArmFudgeFactorUpCommand(m_liftArmSubsystem);
+//        this.m_dpadRight = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_RIGHT))
+//                .whenPressed(this.m_armFudgeFactorUpCommand);
 
-        this.m_armFudgeFactorDownCommand = new ArmFudgeFactorDownCommand(m_liftArmSubsystem);
-        this.m_dpadLeft = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_LEFT))
-                .whenPressed(this.m_armFudgeFactorDownCommand);
+//        this.m_armFudgeFactorDownCommand = new ArmFudgeFactorDownCommand(m_liftArmSubsystem);
+//        this.m_dpadLeft = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_LEFT))
+//                .whenPressed(this.m_armFudgeFactorDownCommand);
 
 
 
-        this.m_armPositionCloseSampleCommand = new ArmPositionCloseSampleCommand(m_liftArmSubsystem, m_slideArmSubsystem, this.m_intakePivotSubsystem);
-        this.m_x = (new GamepadButton(this.m_driver2, GamepadKeys.Button.X))
-                .whenPressed(this.m_armPositionCloseSampleCommand);
+//        this.m_armPositionCloseSampleCommand = new ArmPositionCloseSampleCommand(m_liftArmSubsystem, m_slideArmSubsystem, this.m_intakePivotSubsystem);
+//        this.m_x = (new GamepadButton(this.m_driver2, GamepadKeys.Button.X))
+//                .whenPressed(this.m_armPositionCloseSampleCommand);
 
-        this.m_armPositionSubmersiblePickUpCommand = new ArmPositionMidSampleCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
-        this.m_a = (new GamepadButton(this.m_driver2, GamepadKeys.Button.A))
-                .whenPressed(this.m_armPositionSubmersiblePickUpCommand);
+//        this.m_armPositionSubmersiblePickUpCommand = new ArmPositionMidSampleCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
+//        this.m_a = (new GamepadButton(this.m_driver2, GamepadKeys.Button.A))
+//                .whenPressed(this.m_armPositionSubmersiblePickUpCommand);
 
-        this.m_armPositionFarSampleCommand = new ArmPositionFarSampleCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
-        this.m_b = (new GamepadButton(this.m_driver2, GamepadKeys.Button.B))
-                .whenPressed(this.m_armPositionFarSampleCommand);
+//        this.m_armPositionFarSampleCommand = new ArmPositionFarSampleCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
+//        this.m_b = (new GamepadButton(this.m_driver2, GamepadKeys.Button.B))
+//                .whenPressed(this.m_armPositionFarSampleCommand);
 
-        this.m_armPositionHighBasketCommand = new ArmPositionHighBasketCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
-        this.m_y = (new GamepadButton(this.m_driver2, GamepadKeys.Button.Y))
-                .whenPressed(this.m_armPositionHighBasketCommand);
+//        this.m_armPositionHighBasketCommand = new ArmPositionHighBasketCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
+//        this.m_y = (new GamepadButton(this.m_driver2, GamepadKeys.Button.Y))
+//                .whenPressed(this.m_armPositionHighBasketCommand);
 
-        this.m_armPositionHighChamberCommand = new ArmPositionHighChamberCommand(m_liftArmSubsystem, m_slideArmSubsystem, this.m_intakePivotSubsystem);
-        this.m_dpadTop = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_UP))
-                .whenPressed(this.m_armPositionHighChamberCommand);
+//        this.m_armPositionHighChamberCommand = new ArmPositionHighChamberCommand(m_liftArmSubsystem, m_slideArmSubsystem, this.m_intakePivotSubsystem);
+//        this.m_dpadTop = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_UP))
+//                .whenPressed(this.m_armPositionHighChamberCommand);
 
-        this.m_armPositionScoreHighChamberCommand = new ArmPositionScoreHighChamberCommand
-                (m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem, m_intakeWheelSubsystem);
-        this.m_dpadBottom = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_DOWN))
-                .whenPressed(this.m_armPositionScoreHighChamberCommand);
+//        this.m_armPositionScoreHighChamberCommand = new ArmPositionScoreHighChamberCommand
+//                (m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem, m_intakeWheelSubsystem);
+//        this.m_dpadBottom = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_DOWN))
+//                .whenPressed(this.m_armPositionScoreHighChamberCommand);
 
         this.m_armPositionTravelCommand = new ArmPositionTravelCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
         this.m_leftBumper = (new GamepadButton(this.m_driver2, GamepadKeys.Button.LEFT_BUMPER))
@@ -290,9 +291,9 @@ public class DemoRobotContainer extends CommandOpMode
         this.m_releaseClimbButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.Y))
                 .whenPressed(this.m_releaseCLimberArmCommand);
 
-        this.m_intakePivotCommand = new IntakePivotCommand(this.m_intakePivotSubsystem);
-        this.m_rightBumper = (new GamepadButton(this.m_driver2, GamepadKeys.Button.RIGHT_BUMPER))
-                .whenPressed(this.m_intakePivotCommand);
+//        this.m_intakePivotCommand = new IntakePivotCommand(this.m_intakePivotSubsystem);
+//        this.m_rightBumper = (new GamepadButton(this.m_driver2, GamepadKeys.Button.RIGHT_BUMPER))
+//                .whenPressed(this.m_intakePivotCommand);
 
         this.m_ascentArmCommand = new StingrayAscent1ArmCommand(this.m_ascentArmSubsystem);
         this.m_leftBumper = (new GamepadButton(this.m_driver1, GamepadKeys.Button.LEFT_BUMPER))

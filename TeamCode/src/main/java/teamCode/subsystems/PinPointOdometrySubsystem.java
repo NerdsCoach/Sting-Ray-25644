@@ -2,30 +2,28 @@ package teamCode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
+import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
+import org.firstinspires.ftc.teamcode.Libs.GoBilda.TeleOpDriveToPoint;
 
 import teamCode.Auto.Pose2DUnNormalized;
-import teamCode.GoBildaPinpointDriver;
 
 public class PinPointOdometrySubsystem extends SubsystemBase
 {
-    GoBildaPinpointDriver odo;
     private double oldTime = 0;
 
-
     private Pose2DUnNormalized testPose = new Pose2DUnNormalized(DistanceUnit.MM, 100, 100, UnnormalizedAngleUnit.DEGREES, 0.0);
+    private org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver m_odo;
 
-    private final GoBildaPinpointDriver m_odo;
 
     public PinPointOdometrySubsystem(GoBildaPinpointDriver odo)
     {
         this.m_odo = odo;
-//        this.m_odo.setOffsets(68,-178);
-//        this.m_odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-//        this.m_odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-//        this.m_odo.setPosition(new Pose2DUnNormalized(DistanceUnit.MM, 0,0, UnnormalizedAngleUnit.DEGREES, 0.0));
+        this.m_odo.setOffsets(68,-178);
+        this.m_odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        this.m_odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        this.m_odo.setPosition(new Pose2DUnNormalized(DistanceUnit.MM, 0,0, UnnormalizedAngleUnit.DEGREES, 0.0));
     }
 
     public void resetOdo()
