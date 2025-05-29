@@ -1,33 +1,20 @@
 package teamCode.commands;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.linearOpMode;
-
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
-import com.arcrobotics.ftclib.hardware.motors.CRServo;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 import org.firstinspires.ftc.teamcode.Libs.GoBilda.DriveToPoint;
 import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
-import org.firstinspires.ftc.teamcode.Libs.GoBilda.TeleOpDriveToPoint;
+//import org.firstinspires.ftc.teamcode.Libs.GoBilda.TeleOpDriveToPoint;
 
 import teamCode.Auto.Pose2DUnNormalized;
 import teamCode.subsystems.DriveSubsystem;
-import teamCode.subsystems.IntakePivotSubsystem;
-import teamCode.subsystems.IntakeWheelSubsystem;
-import teamCode.subsystems.LiftArmSubsystem;
 import teamCode.subsystems.PinPointOdometrySubsystem;
-import teamCode.subsystems.SlideArmSubsystem;
-import teamCode.subsystems.StingRayArmSubsystem;
+
 
 //@Disabled
 public class TestPose2DTeleOp extends CommandBase
@@ -45,9 +32,8 @@ public class TestPose2DTeleOp extends CommandBase
         public int specimen = 0;
 
         public GoBildaPinpointDriver m_odo; // Declare OpMode member for the Odometry Computer
-        public TeleOpDriveToPoint nav = new TeleOpDriveToPoint(); //OpMode member for the point-to-point navigation class
-//        public DriveToPoint nav = new DriveToPoint(LinearOpMode opmode);
-
+//        public TeleOpDriveToPoint nav = new TeleOpDriveToPoint(); //OpMode member for the point-to-point navigation class
+        DriveToPoint nav = new DriveToPoint(); //OpMode member for the point-to-point navigation class
 
 
     public TestPose2DTeleOp( DriveSubsystem driveSubsystem, GoBildaPinpointDriver odo, PinPointOdometrySubsystem pinPointOdometrySubsystem, DcMotor lF, DcMotor rF, DcMotor lB, DcMotor rB)
@@ -66,13 +52,12 @@ public class TestPose2DTeleOp extends CommandBase
         @Override
     public void initialize()
     {
-////        this.m_odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
+//        this.m_odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
 //        this.m_odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
 //        this.m_odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 //        this.m_odo.getPosition();
-////        this.m_odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
+//        this.m_odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
 //        this.m_odo.setOffsets(68, -178);//these are tuned for Sting-Ray 3110-0002-0001 Product Insight #1
-
     }
 
     @Override
@@ -84,10 +69,10 @@ public class TestPose2DTeleOp extends CommandBase
                     new Pose2DUnNormalized(DistanceUnit.MM, 100, 100, UnnormalizedAngleUnit.DEGREES, -180),
                     0.7, 0);
 
-//            m_leftFront.setPower(nav.getMotorPower(TeleOpDriveToPoint.DriveMotor.LEFT_FRONT));
-//            m_rightFront.setPower(nav.getMotorPower(TeleOpDriveToPoint.DriveMotor.RIGHT_FRONT));
-//            m_leftBack.setPower(nav.getMotorPower(TeleOpDriveToPoint.DriveMotor.LEFT_BACK));
-//            m_rightBack.setPower(nav.getMotorPower(TeleOpDriveToPoint.DriveMotor.RIGHT_BACK));
+            m_leftFront.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.LEFT_FRONT));
+            m_rightFront.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.RIGHT_FRONT));
+            m_leftBack.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.LEFT_BACK));
+            m_rightBack.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.RIGHT_BACK));
         }
 
 //nav calculates the power to set to each motor in a mecanum or tank drive. Use nav.getMotorPower to find that value.

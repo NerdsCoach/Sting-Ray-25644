@@ -21,7 +21,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
-import org.firstinspires.ftc.teamcode.Libs.GoBilda.TeleOpDriveToPoint;
+//import org.firstinspires.ftc.teamcode.Libs.GoBilda.TeleOpDriveToPoint;
 
 import teamCode.Auto.Pose2DUnNormalized;
 import teamCode.commands.ArmFudgeFactorDownCommand;
@@ -31,6 +31,7 @@ import teamCode.commands.ArmPositionMidSampleCommand;
 import teamCode.commands.ArmPositionTravelCommand;
 import teamCode.commands.ClimbArmReleaseCommand;
 //import teamCode.commands.TimerCommand;
+import teamCode.commands.GrabBatCommand;
 import teamCode.commands.ScoreSpecimenCommand;
 import teamCode.commands.StingrayAscent1ArmCommand;
 import teamCode.commands.DriveFieldOrientedCommand;
@@ -51,6 +52,7 @@ import teamCode.commands.TestPose2DTeleOp;
 import teamCode.commands.TimerCommand;
 import teamCode.subsystems.DriveSubsystem;
 //import teamCode.subsystems.TimerSubsystem;
+import teamCode.subsystems.GrabBatSubsystem;
 import teamCode.subsystems.PinPointOdometrySubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
@@ -103,6 +105,7 @@ public class RobotContainer extends CommandOpMode {
     private Button m_climbArmFudgeUp;
     private Button m_climbArmFudgeDown;
     private Button m_autoScoreButton;
+    private Button m_grabBat;
 
     /* Motors */
     private DcMotor m_slideArmMotor;
@@ -127,7 +130,7 @@ public class RobotContainer extends CommandOpMode {
     private GyroSubsystem m_gyroSubsystem;
     private PinPointOdometrySubsystem m_pinPointOdometrySubsystem;
     private TimerSubsystem m_timerSubsystem;
-
+    private GrabBatSubsystem m_grabBatSubsystem;
 
     /* Commands */
     private DriveFieldOrientedCommand m_driveFieldOrientedCommand;
@@ -155,6 +158,7 @@ public class RobotContainer extends CommandOpMode {
     private TestPose2DTeleOp m_TestPose2DTeleOp;
 //    public TeleOpDriveToPoint nav = new TeleOpDriveToPoint(this.CommandOpMode);
     private ScoreSpecimenCommand m_scoreSpecimenCommand;
+    private GrabBatCommand m_grabBatCommand;
 
     private com.qualcomm.robotcore.hardware.TouchSensor m_touchSensor;
     private boolean touchSensorIsPressed = false;
@@ -233,7 +237,7 @@ public class RobotContainer extends CommandOpMode {
         this.m_gyroSubsystem = new GyroSubsystem(this.m_imu);
         this.m_pinPointOdometrySubsystem = new PinPointOdometrySubsystem(this.m_odo);
         this.m_timerSubsystem = new TimerSubsystem(this.m_driver1, this.m_driver2);
-
+        this.m_grabBatSubsystem = new GrabBatSubsystem(hardwareMap, "grabBatServo");
         Pose2DUnNormalized NET_ZONE = new Pose2DUnNormalized(DistanceUnit.MM, 240, 480, UnnormalizedAngleUnit.DEGREES, -45);
 
 
@@ -296,9 +300,9 @@ public class RobotContainer extends CommandOpMode {
         this.m_x = (new GamepadButton(this.m_driver2, GamepadKeys.Button.X))
                 .whenPressed(this.m_armPositionCloseSampleCommand);
 
-        this.m_armPositionSubmersiblePickUpCommand = new ArmPositionMidSampleCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
-        this.m_a = (new GamepadButton(this.m_driver2, GamepadKeys.Button.A))
-                .whenPressed(this.m_armPositionSubmersiblePickUpCommand);
+//        this.m_armPositionSubmersiblePickUpCommand = new ArmPositionMidSampleCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
+//        this.m_a = (new GamepadButton(this.m_driver2, GamepadKeys.Button.A))
+//                .whenPressed(this.m_armPositionSubmersiblePickUpCommand);
 
         this.m_armPositionFarSampleCommand = new ArmPositionFarSampleCommand(m_liftArmSubsystem, m_slideArmSubsystem, m_intakePivotSubsystem);
         this.m_b = (new GamepadButton(this.m_driver2, GamepadKeys.Button.B))
@@ -317,10 +321,13 @@ public class RobotContainer extends CommandOpMode {
         this.m_dpadBottom = (new GamepadButton(this.m_driver2, GamepadKeys.Button.DPAD_DOWN))
                 .whenPressed(this.m_armPositionScoreHighChamberCommand);
 
-        this.m_armPositionTravelCommand = new ArmPositionTravelCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
-        this.m_leftBumper = (new GamepadButton(this.m_driver2, GamepadKeys.Button.LEFT_BUMPER))
-                .whenPressed(this.m_armPositionTravelCommand);
+//        this.m_armPositionTravelCommand = new ArmPositionTravelCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
+//        this.m_leftBumper = (new GamepadButton(this.m_driver2, GamepadKeys.Button.LEFT_BUMPER))
+//                .whenPressed(this.m_armPositionTravelCommand);
 
+        this.m_armPositionTravelCommand = new ArmPositionTravelCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
+        this.m_a = (new GamepadButton(this.m_driver1, GamepadKeys.Button.A))
+                .whenPressed(this.m_armPositionTravelCommand);
 
         this.m_releaseCLimberArmCommand = new ClimbArmReleaseCommand(m_liftArmSubsystem);
         this.m_releaseClimbButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.Y))
@@ -338,6 +345,9 @@ public class RobotContainer extends CommandOpMode {
         this.m_gyroResetButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.START))
                 .whenPressed(this.m_resetGyroCommand);
 
+        this.m_grabBatCommand = new GrabBatCommand(this.m_grabBatSubsystem);
+        this.m_rightBumper = (new GamepadButton(this.m_driver1, GamepadKeys.Button.RIGHT_BUMPER))
+                .whenPressed(this.m_grabBatCommand);
     }
 
 //        for (int i = 1; i>0; i+=0)

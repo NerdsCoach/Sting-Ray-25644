@@ -77,7 +77,8 @@ public class DelayPinPointAutoSpecimen extends LinearOpMode
     public int specimen = 0;
 
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
-    DriveToPoint nav = new DriveToPoint(this); //OpMode member for the point-to-point navigation class
+//    DriveToPoint nav = new DriveToPoint(this); //OpMode member for the point-to-point navigation class
+    DriveToPoint nav = new DriveToPoint(); //OpMode member for the point-to-point navigation class
 
     // Positions and Measurements
     public Pose2DUnNormalized Submersible = new Pose2DUnNormalized(DistanceUnit.MM, 630, ySpecScore, UnnormalizedAngleUnit.DEGREES,  -180);

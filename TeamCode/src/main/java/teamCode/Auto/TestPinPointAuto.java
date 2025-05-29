@@ -62,7 +62,9 @@ public class TestPinPointAuto extends LinearOpMode
     private final ElapsedTime holdTimer = new ElapsedTime();
 
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
-    DriveToPoint nav = new DriveToPoint(this); //OpMode member for the point-to-point navigation class
+//    DriveToPoint nav = new DriveToPoint(this); //OpMode member for the point-to-point navigation class
+    DriveToPoint nav = new DriveToPoint(); //OpMode member for the point-to-point navigation class
+
 
     enum StateMachine
     {

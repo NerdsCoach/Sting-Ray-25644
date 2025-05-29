@@ -25,8 +25,9 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
+import org.firstinspires.ftc.teamcode.Libs.GoBilda.DriveToPoint;
 import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
-import org.firstinspires.ftc.teamcode.Libs.GoBilda.TeleOpDriveToPoint;
+//import org.firstinspires.ftc.teamcode.Libs.GoBilda.TeleOpDriveToPoint;
 
 import teamCode.Auto.Pose2DUnNormalized;
 
@@ -69,7 +70,8 @@ public class ScoreSpecimenCommand extends CommandBase
     public int specimen = 0;
 
     public GoBildaPinpointDriver m_odo; // Declare OpMode member for the Odometry Computer
-    public TeleOpDriveToPoint nav = new TeleOpDriveToPoint(); //OpMode member for the point-to-point navigation class
+//    public TeleOpDriveToPoint nav = new TeleOpDriveToPoint(); //OpMode member for the point-to-point navigation class
+    DriveToPoint nav = new DriveToPoint(); //OpMode member for the point-to-point navigation class
 
     // Positions and Measurements
     public Pose2DUnNormalized Submersible = new Pose2DUnNormalized(DistanceUnit.MM, 630, ySpecScore, UnnormalizedAngleUnit.DEGREES,  -180);
@@ -211,10 +213,10 @@ public class ScoreSpecimenCommand extends CommandBase
                 break;
 
         }
-        m_leftFront.setPower(nav.getMotorPower(TeleOpDriveToPoint.DriveMotor.LEFT_FRONT));
-        m_rightFront.setPower(nav.getMotorPower(TeleOpDriveToPoint.DriveMotor.RIGHT_FRONT));
-        m_leftBack.setPower(nav.getMotorPower(TeleOpDriveToPoint.DriveMotor.LEFT_BACK));
-        m_rightBack.setPower(nav.getMotorPower(TeleOpDriveToPoint.DriveMotor.RIGHT_BACK));
+        m_leftFront.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.LEFT_FRONT));
+        m_rightFront.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.RIGHT_FRONT));
+        m_leftBack.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.LEFT_BACK));
+        m_rightBack.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.RIGHT_BACK));
     }
 //nav calculates the power to set to each motor in a mecanum or tank drive. Use nav.getMotorPower to find that value.
 
