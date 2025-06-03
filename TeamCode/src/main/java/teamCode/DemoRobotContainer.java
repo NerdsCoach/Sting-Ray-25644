@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
+import teamCode.GoBildaPinpointDriver;
 
 import teamCode.commands.ArmFudgeFactorDownCommand;
 import teamCode.commands.ArmFudgeFactorUpCommand;
@@ -31,7 +31,6 @@ import teamCode.commands.ClimbArmReleaseCommand;
 import teamCode.commands.DemoDriveFieldOrientedCommand;
 import teamCode.commands.IntakePivotCommand;
 import teamCode.commands.IntakeWheelCommand;
-import teamCode.commands.PinPointOdometryCommand;
 import teamCode.commands.ResetGyroCommand;
 import teamCode.commands.ResetHomeCommand;
 import teamCode.commands.SlideFudgeInCommand;
@@ -42,7 +41,7 @@ import teamCode.subsystems.GyroSubsystem;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.IntakeWheelSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
-import teamCode.subsystems.PinPointOdometrySubsystem;
+//import teamCode.subsystems.PinPointOdometrySubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.StingRayArmSubsystem;
 
@@ -104,7 +103,7 @@ public class DemoRobotContainer extends CommandOpMode
     private IntakeWheelSubsystem m_intakeWheelSubsystem;
     private StingRayArmSubsystem m_ascentArmSubsystem;
     private GyroSubsystem m_gyroSubsystem;
-    private PinPointOdometrySubsystem m_pinPointOdometrySubsystem;
+//    private PinPointOdometrySubsystem m_pinPointOdometrySubsystem;
 
 
     /* Commands */
@@ -127,9 +126,8 @@ public class DemoRobotContainer extends CommandOpMode
     private SlideFudgeInCommand m_slideFudgeInCommand;
     private SlideFudgeOutCommand m_slideFudgeOutCommand;
     private ClimbArmReleaseCommand m_releaseCLimberArmCommand;
-    private org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver m_odo;
-    private PinPointOdometryCommand m_pinPointOdometryCommand;
-//    private TestPose2DTeleOp m_TestPose2DTeleOp;
+    private teamCode.GoBildaPinpointDriver m_odo;
+//    private TestPose2DTeleOpCommand m_TestPose2DTeleOp;
 
     private TouchSensor m_touchSensor;
     private boolean touchSensorIsPressed = false;
@@ -140,10 +138,10 @@ public class DemoRobotContainer extends CommandOpMode
     @Override
     public void initialize()
     {
-        this.m_odo = hardwareMap.get(org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver.class, "odo");
+        this.m_odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
         this.m_odo.setOffsets(68, -178);//these are tuned for Sting-Ray 3110-0002-0001 Product Insight #1
-        this.m_odo.setEncoderResolution(org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        this.m_odo.setEncoderDirections(org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        this.m_odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        this.m_odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
         m_odo.resetPosAndIMU();
 
@@ -195,14 +193,14 @@ public class DemoRobotContainer extends CommandOpMode
 
         /* Subsystems */
 
-        this.m_demoDriveSubsystem = new DemoDriveSubsystem(this.m_drive, this.m_imu/*, this.m_goBilda*/);
+        this.m_demoDriveSubsystem = new DemoDriveSubsystem(this.m_drive, this.m_odo/*, this.m_goBilda*/);
         this.m_slideArmSubsystem = new SlideArmSubsystem(this.m_slideArmMotor);
         this.m_liftArmSubsystem = new LiftArmSubsystem(this.m_liftArmMotor)/*() -> this.m_pIDController.calculate(this.m_liftArmMotor.getCurrentPosition()))*/;
         this.m_intakePivotSubsystem = new IntakePivotSubsystem(hardwareMap, "intakePivotServo");
         this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo, this.m_touchSensor);
         this.m_ascentArmSubsystem = new StingRayArmSubsystem(hardwareMap, "ascentArmServo");
-        this.m_gyroSubsystem = new GyroSubsystem(this.m_imu);
-        this.m_pinPointOdometrySubsystem = new PinPointOdometrySubsystem(this.m_odo);
+        this.m_gyroSubsystem = new GyroSubsystem(this.m_odo);
+//        this.m_pinPointOdometrySubsystem = new PinPointOdometrySubsystem(this.m_odo,this.leftFront,this.rightFront,this.leftBack,this.rightBack);
 
 
         register(this.m_demoDriveSubsystem);
@@ -221,7 +219,7 @@ public class DemoRobotContainer extends CommandOpMode
 
 
 
-//        this.m_TestPose2DTeleOp = new TestPose2DTeleOp(this.m_driveSubsystem, this.m_pinPointOdometrySubsystem,this.leftFront, this.rightFront, this.leftBack, this.rightBack);
+//        this.m_TestPose2DTeleOp = new TestPose2DTeleOpCommand(this.m_driveSubsystem, this.m_pinPointOdometrySubsystem,this.leftFront, this.rightFront, this.leftBack, this.rightBack);
 //        this.m_autoScoreButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.A))
 //                .whenPressed(this.m_TestPose2DTeleOp);
 

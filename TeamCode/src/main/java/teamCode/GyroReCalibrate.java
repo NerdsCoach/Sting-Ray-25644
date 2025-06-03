@@ -1,10 +1,7 @@
-package teamCode.Auto;
+package teamCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.teamcode.Libs.GoBilda.DriveToPoint;
-import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
 
 @Autonomous(name="Gyro ReCalibrate", group="Pinpoint")
 //@Disabled

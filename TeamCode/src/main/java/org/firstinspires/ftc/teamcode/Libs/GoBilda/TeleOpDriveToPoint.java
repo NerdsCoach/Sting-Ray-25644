@@ -10,7 +10,7 @@
 //import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 //import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 //
-//import teamCode.Auto.Pose2DUnNormalized;
+//import teamCode.Pose2DUnNormalized;
 //
 //
 //public class TeleOpDriveToPoint

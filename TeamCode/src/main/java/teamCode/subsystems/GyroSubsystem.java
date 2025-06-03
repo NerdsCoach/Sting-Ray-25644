@@ -3,17 +3,20 @@ package teamCode.subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import teamCode.GoBildaPinpointDriver;
+
 public class GyroSubsystem extends SubsystemBase
 {
-    public final IMU m_imu;
+//    public final IMU m_imu;
+    private GoBildaPinpointDriver m_odo;
 
-    public GyroSubsystem(IMU imu)
+    public GyroSubsystem(GoBildaPinpointDriver odo)
     {
-       this.m_imu = imu;
+       this.m_odo = odo;
     }
 
     public void resetGyro()
     {
-        this.m_imu.resetYaw();
+        this.m_odo.recalibrateIMU();
     }
 }

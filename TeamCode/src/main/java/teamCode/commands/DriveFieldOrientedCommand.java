@@ -3,6 +3,7 @@ package teamCode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 import java.util.function.DoubleSupplier;
 import teamCode.subsystems.DriveSubsystem;
+import teamCode.subsystems.GyroSubsystem;
 
 public class DriveFieldOrientedCommand extends CommandBase
 {
@@ -11,11 +12,12 @@ public class DriveFieldOrientedCommand extends CommandBase
     public DoubleSupplier m_leftY;
     public DoubleSupplier m_rightX;
     public DoubleSupplier m_rightY;
+    public GyroSubsystem m_gyroSubsystem;
 
     public DriveFieldOrientedCommand(DriveSubsystem driveSubsystem, DoubleSupplier leftX, DoubleSupplier leftY, DoubleSupplier rightX, DoubleSupplier rightY)
     {
        this.m_driveSubsystem = driveSubsystem;
-       addRequirements(m_driveSubsystem);
+       addRequirements(m_driveSubsystem, m_gyroSubsystem);
 
        this.m_leftX = leftX;
        this.m_leftY = leftY;

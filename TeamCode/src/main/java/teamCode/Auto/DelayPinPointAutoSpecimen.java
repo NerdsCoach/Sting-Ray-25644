@@ -21,11 +21,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
-import org.firstinspires.ftc.teamcode.Libs.GoBilda.DriveToPoint;
-import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
+import teamCode.DriveToPoint;
+import teamCode.GoBildaPinpointDriver;
 
 import java.util.Locale;
 
+import teamCode.Pose2DUnNormalized;
 import teamCode.commands.ArmIntakeResetCommand;
 import teamCode.commands.ArmPositionCloseSampleCommand;
 import teamCode.commands.ArmPositionHighBasketCommand;
@@ -81,15 +82,15 @@ public class DelayPinPointAutoSpecimen extends LinearOpMode
     DriveToPoint nav = new DriveToPoint(); //OpMode member for the point-to-point navigation class
 
     // Positions and Measurements
-    public Pose2DUnNormalized Submersible = new Pose2DUnNormalized(DistanceUnit.MM, 630, ySpecScore, UnnormalizedAngleUnit.DEGREES,  -180);
-    public Pose2DUnNormalized ScoreSpecimen = new Pose2DUnNormalized(DistanceUnit.MM, 450, ySpecScore, UnnormalizedAngleUnit.DEGREES, -180);
-    public Pose2DUnNormalized PreSampleDrive = new Pose2DUnNormalized(DistanceUnit.MM, 450, -700, UnnormalizedAngleUnit.DEGREES, -90);
-    public Pose2DUnNormalized StrafeToSample = new Pose2DUnNormalized(DistanceUnit.MM, 1200, -700, UnnormalizedAngleUnit.DEGREES, -90);
-    public Pose2DUnNormalized ForwardToSample = new Pose2DUnNormalized(DistanceUnit.MM, 1200, -900, UnnormalizedAngleUnit.DEGREES, -90);
-    public Pose2DUnNormalized ObservationZone = new Pose2DUnNormalized(DistanceUnit.MM, 75, -900, UnnormalizedAngleUnit.DEGREES, -90);
-    final Pose2DUnNormalized PickUpSpecimen = new Pose2DUnNormalized(DistanceUnit.MM, 70, -1150, UnnormalizedAngleUnit.DEGREES, -90);
-    final Pose2DUnNormalized PreSubmersible = new Pose2DUnNormalized(DistanceUnit.MM, 300, 0, UnnormalizedAngleUnit.DEGREES, -180);
-    final Pose2DUnNormalized CollectSpecimen = new Pose2DUnNormalized(DistanceUnit.MM, 70, -1220, UnnormalizedAngleUnit.DEGREES, -90);
+    public teamCode.Pose2DUnNormalized Submersible = new teamCode.Pose2DUnNormalized(DistanceUnit.MM, 630, ySpecScore, UnnormalizedAngleUnit.DEGREES,  -180);
+    public teamCode.Pose2DUnNormalized ScoreSpecimen = new teamCode.Pose2DUnNormalized(DistanceUnit.MM, 450, ySpecScore, UnnormalizedAngleUnit.DEGREES, -180);
+    public teamCode.Pose2DUnNormalized PreSampleDrive = new teamCode.Pose2DUnNormalized(DistanceUnit.MM, 450, -700, UnnormalizedAngleUnit.DEGREES, -90);
+    public teamCode.Pose2DUnNormalized StrafeToSample = new teamCode.Pose2DUnNormalized(DistanceUnit.MM, 1200, -700, UnnormalizedAngleUnit.DEGREES, -90);
+    public teamCode.Pose2DUnNormalized ForwardToSample = new teamCode.Pose2DUnNormalized(DistanceUnit.MM, 1200, -900, UnnormalizedAngleUnit.DEGREES, -90);
+    public teamCode.Pose2DUnNormalized ObservationZone = new teamCode.Pose2DUnNormalized(DistanceUnit.MM, 75, -900, UnnormalizedAngleUnit.DEGREES, -90);
+    final teamCode.Pose2DUnNormalized PickUpSpecimen = new teamCode.Pose2DUnNormalized(DistanceUnit.MM, 70, -1150, UnnormalizedAngleUnit.DEGREES, -90);
+    final teamCode.Pose2DUnNormalized PreSubmersible = new teamCode.Pose2DUnNormalized(DistanceUnit.MM, 300, 0, UnnormalizedAngleUnit.DEGREES, -180);
+    final teamCode.Pose2DUnNormalized CollectSpecimen = new teamCode.Pose2DUnNormalized(DistanceUnit.MM, 70, -1220, UnnormalizedAngleUnit.DEGREES, -90);
 
 
     public enum StateMachine

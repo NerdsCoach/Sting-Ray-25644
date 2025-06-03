@@ -40,8 +40,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-import teamCode.Auto.Pose2DUnNormalized;
-
 
 @I2cDeviceType
 @DeviceProperties(

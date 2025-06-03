@@ -1,15 +1,11 @@
-package org.firstinspires.ftc.teamcode.Libs.GoBilda;
+package teamCode;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.MM;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
-
-import teamCode.Auto.Pose2DUnNormalized;
 
 
 public class DriveToPoint
@@ -79,12 +75,10 @@ public class DriveToPoint
 //        myOpMode = opmode;
 //    }
 
-
     public void setDriveType(DriveType driveType)
     {
         selectedDriveType = driveType;
     }
-
 
     public void setXYCoefficients(double p, double d, double acceleration, DistanceUnit unit, double tolerance)
     {
@@ -193,9 +187,6 @@ public class DriveToPoint
         }
         return false;
     }
-
-
-
 
     public boolean intakeHold(Pose2DUnNormalized currentPosition, Pose2DUnNormalized targetPosition, double power, double holdTime)
     {
@@ -313,7 +304,6 @@ public class DriveToPoint
         rightBackMotorOutput  = right;
     }
 
-
     private double calculatePID(Pose2DUnNormalized currentPosition, Pose2DUnNormalized targetPosition, Direction direction)
     {
         if(direction == Direction.x)
@@ -327,7 +317,6 @@ public class DriveToPoint
             double yError = targetPosition.getY(MM) - currentPosition.getY(MM);
             return yPID.calculateAxisPID(yError, pGain, dGain, accel, PIDTimer.seconds());
             //            p.0.008, d.00001, accel 10
-
         }
         if(direction == Direction.h)
         {
@@ -375,6 +364,13 @@ public class DriveToPoint
         }
 
     }
+
+//    {
+//        this.m_leftFront.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.LEFT_FRONT));
+//        this.m_rightFront.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.RIGHT_FRONT));
+//        this.m_leftBack.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.LEFT_BACK));
+//        this.m_rightBack.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.RIGHT_BACK));
+//    }
 }
 
 class PIDLoop
@@ -416,5 +412,4 @@ class PIDLoop
 
         return output;
     }
-
 }

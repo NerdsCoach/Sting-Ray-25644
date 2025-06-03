@@ -12,6 +12,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import java.util.function.DoubleSupplier;
 
+import teamCode.GoBildaPinpointDriver;
+import teamCode.Pose2DUnNormalized;
+
 public class DemoDriveSubsystem extends SubsystemBase
 {
     public MecanumDrive m_drive;
@@ -25,20 +28,20 @@ public class DemoDriveSubsystem extends SubsystemBase
     private int m_bLPos;
     private int m_bRPos;
 
-    private Orientation m_lastRecordedAngle;
+    private double m_lastRecordedAngle;
     private double m_currentAngle;
     private double error;
 
-    IMU m_imu;
+//    private PinPointOdometrySubsystem m_pinPointOdometrySubsystem;
+    private GoBildaPinpointDriver m_odo;
 
-    private PinPointOdometrySubsystem m_pinPointOdometrySubsystem;
 
-    public DemoDriveSubsystem(MecanumDrive drive, IMU imu)
+    public DemoDriveSubsystem(MecanumDrive drive, teamCode.GoBildaPinpointDriver odo)
     {
         this.m_drive = drive;
-        this.m_lastRecordedAngle = new Orientation();
+//        this.m_lastRecordedAngle = new Orientation();
         this.m_currentAngle = 0.0;
-        this.m_imu = imu;
+        this.m_odo = odo;
     }
 
 //    public DriveSubsystem(MecanumDrive drive, IMU m_imu, GoBildaPinpointDriver pinPoint)
@@ -58,7 +61,7 @@ public class DemoDriveSubsystem extends SubsystemBase
                         leftX * leftX * leftX * -0.7,//-1 //-0.7 for slow
                         leftY * leftY * leftY * -1.0,//-1
                         getJoystickAngle(rightX, rightY),
-                        this.m_imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES)
+                        Math.toDegrees(m_odo.getHeading())
                 );
 //        System.out.println("Error: " + error);
 //        getTurnPower(rightX, rightY);
@@ -73,10 +76,10 @@ public class DemoDriveSubsystem extends SubsystemBase
     {
         m_drive.driveFieldCentric
                 (
-                        this.m_pinPointOdometrySubsystem.getDeltaPosition(targetX.getAsDouble())[0],
-                        this.m_pinPointOdometrySubsystem.getDeltaPosition(targetY.getAsDouble())[1],
+                        this.getDeltaPosition(targetX.getAsDouble())[0],
+                        this.getDeltaPosition(targetY.getAsDouble())[1],
                         getTurnPower(true,0),
-                        this.m_imu.getRobotYawPitchRollAngles().getYaw()
+                        Math.toDegrees(m_odo.getHeading())
                 );
     }
 
@@ -107,7 +110,8 @@ public class DemoDriveSubsystem extends SubsystemBase
 
     public void turnTo(boolean deadband, double angle)
     {
-        Orientation orientation = m_imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        double orientation = Math.toDegrees(m_odo.getHeading());
+        m_odo.update();
         double desiredAngle;
         if (deadband)
         {
@@ -115,10 +119,10 @@ public class DemoDriveSubsystem extends SubsystemBase
         }
         else
         {
-            desiredAngle = orientation.firstAngle;
+            desiredAngle = orientation;
         }
 
-        error = desiredAngle - orientation.firstAngle;
+        error = desiredAngle - orientation;
 
         if(error > 180)
         {
@@ -140,15 +144,15 @@ public class DemoDriveSubsystem extends SubsystemBase
     }
     public void resetAngle()
     {
-        m_lastRecordedAngle = m_imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); // .getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.YXZ, BNO055IMU.AngleUnit.DEGREES.toAngleUnit());
+        m_odo.update();
+        m_lastRecordedAngle = Math.toDegrees(m_odo.getHeading());
         m_currentAngle = 0;
     }
 
     public double getAngle()
     {
-        Orientation orientation = this.m_imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-        double deltaAngle = orientation.firstAngle - m_lastRecordedAngle.firstAngle;
+        double orientation = Math.toDegrees(m_odo.getHeading());
+        double deltaAngle = orientation - m_lastRecordedAngle;
 
         if (deltaAngle > 180)
         {
@@ -162,5 +166,28 @@ public class DemoDriveSubsystem extends SubsystemBase
         m_currentAngle += deltaAngle;
         m_lastRecordedAngle = orientation;
         return m_currentAngle;
+    }
+    public void resetOdo()
+    {
+        this.m_odo.resetPosAndIMU();
+    }
+
+    public Pose2DUnNormalized getPosition()
+    {
+        return this.m_odo.getPosition();
+    }
+
+    public void updateOdo()
+    {
+        this.m_odo.update();
+    }
+
+    public double[] getDeltaPosition(double target)
+    {
+        return new double[]
+                {
+                        (target - m_odo.getPosX()) / target,
+                        (target - m_odo.getPosY()) / target
+                };
     }
 }

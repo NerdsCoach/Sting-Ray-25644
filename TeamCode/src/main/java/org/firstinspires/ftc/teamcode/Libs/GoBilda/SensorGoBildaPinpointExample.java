@@ -32,7 +32,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit
 
 import java.util.Locale;
 
-import teamCode.Auto.Pose2DUnNormalized;
+import teamCode.Pose2DUnNormalized;
 
 import teamCode.GoBildaPinpointDriver;
 

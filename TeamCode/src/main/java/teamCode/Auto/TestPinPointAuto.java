@@ -10,14 +10,14 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
-import org.firstinspires.ftc.teamcode.Libs.GoBilda.DriveToPoint;
-import org.firstinspires.ftc.teamcode.Libs.GoBilda.GoBildaPinpointDriver;
+import teamCode.DriveToPoint;
+import teamCode.GoBildaPinpointDriver;
 
 import java.util.Locale;
 
+import teamCode.Pose2DUnNormalized;
 import teamCode.commands.ArmIntakeResetCommand;
 import teamCode.commands.ArmPositionCloseSampleCommand;
 import teamCode.commands.ArmPositionHighBasketCommand;
@@ -209,7 +209,7 @@ public class TestPinPointAuto extends LinearOpMode
                         telemetry.addLine("Ready to pick up Sample 2!");
                         stateMachine = StateMachine.PICKUP_SAMPLE_2;
                     }
-                break;
+                    break;
 
 
                 case PICKUP_SAMPLE_2:
@@ -232,11 +232,11 @@ public class TestPinPointAuto extends LinearOpMode
 
                 case DRIVE_TO_SAMPLE_3:  //drive to the Sample 2
                     if (nav.driveTo(odo.getPosition(), PrePickUpSample3, 0.4, .5))
-                {
+                    {
                     telemetry.addLine("Ready to pick up Sample 3!");
                     stateMachine = StateMachine.PICKUP_SAMPLE_3;
-                }
-                break;
+                    }
+                    break;
 
 
                 case PICKUP_SAMPLE_3:
