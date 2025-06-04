@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -53,6 +54,7 @@ import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.StingRayArmSubsystem;
 import teamCode.subsystems.TimerSubsystem;
 
+@Disabled
 @TeleOp(name = "Test")
 public class AutomatedRobotContainer extends CommandOpMode {
     //    public boolean m_inEndgame;

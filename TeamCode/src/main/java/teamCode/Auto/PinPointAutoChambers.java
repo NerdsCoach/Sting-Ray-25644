@@ -44,7 +44,7 @@ import teamCode.subsystems.StingRayArmSubsystem;
 @Autonomous(name="PinPointAutoSpecimen", group="Pinpoint")
 //@Disabled
 
-public class PinPointAutoSpecimen extends LinearOpMode
+public class PinPointAutoChambers extends LinearOpMode
 {
     //Initializing Motors & Servos
     private DcMotor leftFront;

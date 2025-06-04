@@ -30,6 +30,10 @@ import teamCode.commands.ClimbArmReleaseCommand;
 //import teamCode.commands.TimerCommand;
 import teamCode.commands.GrabBatCommand;
 //import teamCode.commands.ScoreSpecimenCommand;
+import teamCode.commands.Pose2DNetZoneCommand;
+import teamCode.commands.Pose2DObservationZoneCommand;
+import teamCode.commands.Pose2DScoreChamberCommand;
+import teamCode.commands.Pose2DSubmersibleCommand;
 import teamCode.commands.StingrayAscent1ArmCommand;
 import teamCode.commands.DriveFieldOrientedCommand;
 import teamCode.commands.ArmPositionCloseSampleCommand;
@@ -143,6 +147,10 @@ public class RobotContainer extends CommandOpMode {
     private IntakePivotCommand m_intakePivotCommand;
     private IntakeWheelCommand m_intakeWheelCommand;
     private StingrayAscent1ArmCommand m_ascentArmCommand;
+    private Pose2DNetZoneCommand m_pose2DNetZoneCommand;
+    private Pose2DObservationZoneCommand m_pose2DObservationZoneCommand;
+    private Pose2DScoreChamberCommand m_pose2DScoreChamberCommand;
+    private Pose2DSubmersibleCommand m_pose2DSubmersibleCommand;
     private ResetGyroCommand m_resetGyroCommand;
     private ResetHomeCommand m_resetHomeCommand;
     private SlideFudgeInCommand m_slideFudgeInCommand;
@@ -258,13 +266,21 @@ public class RobotContainer extends CommandOpMode {
 
         /* Event Commands */
 
-//        this.m_TestPose2DTeleOpCommand = new TestPose2DTeleOpCommand(this.m_driveSubsystem, this.m_odo, this.m_pinPointOdometrySubsystem, this.leftFront, this.rightFront, this.leftBack, this.rightBack);
-////        this.m_scoreSpecimenCommand = new ScoreSpecimenCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem, this.m_intakeWheelSubsystem, this.m_driveSubsystem, this.m_pinPointOdometrySubsystem, this.leftFront, this.rightFront, this.leftBack, this.rightBack);
-//        this.m_autoScoreButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.X))
-//                .whileHeld(this.m_TestPose2DTeleOpCommand);
+        this.m_pose2DNetZoneCommand = new Pose2DNetZoneCommand(this.m_driveSubsystem, this.m_odo,
+                this.leftFront, this.rightFront, this.leftBack,this.rightBack);
+        new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_LEFT).whenPressed(this.m_pose2DNetZoneCommand);
 
+        this.m_pose2DSubmersibleCommand= new Pose2DSubmersibleCommand(this.m_driveSubsystem, this.m_odo,
+                this.leftFront, this.rightFront, this.leftBack,this.rightBack);
+        new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_UP).whenPressed(this.m_pose2DSubmersibleCommand);
 
+        this.m_pose2DScoreChamberCommand = new Pose2DScoreChamberCommand(this.m_driveSubsystem, this.m_odo,
+                this.leftFront, this.rightFront, this.leftBack,this.rightBack);
+        new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_DOWN).whenPressed(this.m_pose2DScoreChamberCommand);
 
+        this.m_pose2DObservationZoneCommand = new Pose2DObservationZoneCommand(this.m_driveSubsystem, this.m_odo,
+                this.leftFront, this.rightFront, this.leftBack,this.rightBack);
+        new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_RIGHT).whenPressed(this.m_pose2DObservationZoneCommand);
 
         this.m_resetHomeCommand = new ResetHomeCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem);
         this.m_resetHomeButton = (new GamepadButton(this.m_driver2, GamepadKeys.Button.START))
