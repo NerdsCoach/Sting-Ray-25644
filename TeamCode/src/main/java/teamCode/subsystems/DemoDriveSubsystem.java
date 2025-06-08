@@ -23,36 +23,21 @@ public class DemoDriveSubsystem extends SubsystemBase
     private DcMotor m_bLMotor;
     private DcMotor m_bRMotor;
 
-    private int m_fLPos;
-    private int m_fRPos;
-    private int m_bLPos;
-    private int m_bRPos;
 
     private double m_lastRecordedAngle;
     private double m_currentAngle;
     private double error;
 
-//    private PinPointOdometrySubsystem m_pinPointOdometrySubsystem;
     private GoBildaPinpointDriver m_odo;
 
 
     public DemoDriveSubsystem(MecanumDrive drive, teamCode.GoBildaPinpointDriver odo)
     {
         this.m_drive = drive;
-//        this.m_lastRecordedAngle = new Orientation();
         this.m_currentAngle = 0.0;
         this.m_odo = odo;
     }
 
-//    public DriveSubsystem(MecanumDrive drive, IMU m_imu, GoBildaPinpointDriver pinPoint)
-//    {
-//        this.m_drive = drive;
-//        this.m_lastRecordedAngle = new Orientation();
-//        this.m_currentAngle = 0.0;
-//        this.m_imu = m_imu;
-//        this.m_pinPointOdometrySubsystem = new PinPointOdometrySubsystem(pinPoint);
-//
-//    }
 
     public void headingDrive(double leftX, double leftY, double rightX, double rightY)
     {
@@ -63,13 +48,6 @@ public class DemoDriveSubsystem extends SubsystemBase
                         getJoystickAngle(rightX, rightY),
                         Math.toDegrees(m_odo.getHeading())
                 );
-//        System.out.println("Error: " + error);
-//        getTurnPower(rightX, rightY);
-
-//        System.out.println("Error: " + error);
-//        System.out.println("Error: " + error);
-//        System.out.println(this.m_imu.getRobotYawPitchRollAngles().getYaw());
-//        System.out.println("Turn angle: " + Math.atan2(rightX, rightY * -1) * -1 * (180 / Math.PI));
     }
 
     public void autoHeadingDrive (DoubleSupplier targetX, DoubleSupplier targetY, DoubleSupplier targetAngle)
@@ -98,8 +76,6 @@ public class DemoDriveSubsystem extends SubsystemBase
         {
             double motorPower = 0.4;//.5 for normal//0.4 is best for slow
             error = error - getAngle();
-//            this.m_robot.driveWithMotorPowers(motorPower, -motorPower, motorPower, -motorPower);
-//            this.m_drive.driveWithMotorPowers(motorPower, -motorPower, motorPower, -motorPower);
             return motorPower * error / 100 + (0.1 * (error / Math.abs(error)));
         }
         else

@@ -27,14 +27,6 @@ import teamCode.GoBildaPinpointDriver;
 import java.util.Locale;
 
 import teamCode.Pose2DUnNormalized;
-import teamCode.commands.ArmIntakeResetCommand;
-import teamCode.commands.ArmPositionCloseSampleCommand;
-import teamCode.commands.ArmPositionHighBasketCommand;
-import teamCode.commands.ArmPositionHighChamberCommand;
-import teamCode.commands.ArmPositionTravelCommand;
-import teamCode.commands.IntakePivotCommand;
-import teamCode.commands.SlideFudgeInCommand;
-import teamCode.commands.StingrayAscent1ArmCommand;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.IntakeWheelSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
@@ -59,14 +51,6 @@ public class DelayPinPointAutoChambers extends LinearOpMode
     private LiftArmSubsystem m_liftArmSubsystem;
     private SlideArmSubsystem m_slideArmSubsystem;
     private IntakeWheelSubsystem m_intakeWheelSubsystem;
-    private ArmPositionHighBasketCommand m_armPositionHighBasketCommand;
-    private ArmPositionHighChamberCommand m_armPositionHighChamberCommand;
-    private ArmPositionTravelCommand m_armPositionHomeCommand;
-    private ArmPositionCloseSampleCommand m_armPositionCloseSampleCommand;
-    private ArmIntakeResetCommand m_armIntakeResetCommand;
-    private IntakePivotCommand m_intakePivotCommand;
-    private StingrayAscent1ArmCommand m_ascentArmCommand;
-    private SlideFudgeInCommand m_slideFudgeInCommand;
     private TouchSensor m_touch;
     private final ElapsedTime holdTimer = new ElapsedTime();
 
@@ -78,7 +62,6 @@ public class DelayPinPointAutoChambers extends LinearOpMode
     public int specimen = 0;
 
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
-//    DriveToPoint nav = new DriveToPoint(this); //OpMode member for the point-to-point navigation class
     DriveToPoint nav = new DriveToPoint(); //OpMode member for the point-to-point navigation class
 
     // Positions and Measurements
@@ -133,8 +116,6 @@ public class DelayPinPointAutoChambers extends LinearOpMode
 
         odo.resetPosAndIMU();
 
-        //nav.setXYCoefficients(0.02,0.002,0.0,DistanceUnit.MM,12);
-        //nav.setYawCoefficients(1,0,0.0, AngleUnit.DEGREES,2);
         nav.setDriveType(DriveToPoint.DriveType.MECANUM);
 
         StateMachine stateMachine;
@@ -161,13 +142,6 @@ public class DelayPinPointAutoChambers extends LinearOpMode
         this.m_slideArmSubsystem = new SlideArmSubsystem(this.m_slideArmMotor);
         this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo, this.m_touch);
 
-        this.m_armPositionHomeCommand = new ArmPositionTravelCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
-        this.m_armPositionCloseSampleCommand = new ArmPositionCloseSampleCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
-        this.m_armPositionHighBasketCommand = new ArmPositionHighBasketCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
-        this.m_armPositionHighChamberCommand = new ArmPositionHighChamberCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem, this.m_intakePivotSubsystem);
-        this.m_intakePivotCommand = new IntakePivotCommand(this.m_intakePivotSubsystem);
-        this.m_ascentArmCommand = new StingrayAscent1ArmCommand(this.m_ascentArmSubsystem);
-        //this.m_armFudgeFactorUpCommand = new ArmFudgeFactorUpCommand(this.m_liftArmSubsystem);
 
         this.m_slideArmSubsystem.slideArm(kSlideArmHome);
         waitForStart();

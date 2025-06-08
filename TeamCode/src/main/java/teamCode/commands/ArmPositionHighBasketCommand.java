@@ -32,6 +32,7 @@ public class ArmPositionHighBasketCommand extends CommandBase
     public void execute()
     {
         this.m_liftArmSubsystem.liftArm(Constants.LiftArmConstants.kLiftArmHighBasket);
+
         if (m_liftArmSubsystem.atTarget(Constants.LiftArmConstants.kLiftArmHighBasket))
         {
             this.m_slideArmSubsystem.slideArm(Constants.SlideArmConstants.kSlideArmHighBasket);

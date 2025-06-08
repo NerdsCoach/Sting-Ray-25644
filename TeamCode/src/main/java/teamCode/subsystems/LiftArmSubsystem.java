@@ -11,7 +11,6 @@ public class LiftArmSubsystem extends SubsystemBase
     {
         this.m_liftArmMotor = liftArmMotor;
         this.m_liftArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        this.m_liftArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.m_liftArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 

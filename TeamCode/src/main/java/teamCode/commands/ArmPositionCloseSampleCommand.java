@@ -32,11 +32,12 @@ public class ArmPositionCloseSampleCommand extends CommandBase
     public void execute()
     {
         this.m_liftArmSubsystem.liftArm(Constants.LiftArmConstants.kLiftArmCloseSample);
-       if (m_liftArmSubsystem.atTarget(Constants.LiftArmConstants.kLiftArmCloseSample))
-       {
+
+        if (m_liftArmSubsystem.atTarget(Constants.LiftArmConstants.kLiftArmCloseSample))
+        {
            this.m_slideArmSubsystem.slideArm(Constants.SlideArmConstants.kSlideArmCloseSample);
            this.m_intakePivotSubsystem.pivotIntake(Constants.PivotIntakeConstants.kIntakePivotPickUp);
-       }
+        }
     }
 
     @Override

@@ -20,7 +20,7 @@ public class TimerSubsystem extends SubsystemBase
 
     public void inEndGame(double timer)
     {
-        if(timer > 85.0 && timer <87.0 )
+        if(timer > 85.0 && timer < 86.5 )
         {
             this.m_gamepad1.gamepad.rumble(1000);
             this.m_gamepad2.gamepad.rumble(1000);

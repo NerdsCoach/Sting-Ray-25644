@@ -31,6 +31,7 @@ public class ArmPositionLowBasketCommand extends CommandBase
     public void execute()
     {
         this.m_liftArmSubsystem.liftArm(Constants.LiftArmConstants.kLiftArmLowBasket);
+
         if (m_liftArmSubsystem.atTarget(Constants.LiftArmConstants.kLiftArmLowBasket))
         {
             this.m_slideArmSubsystem.slideArm(Constants.SlideArmConstants.kSlideArmLowBasket);

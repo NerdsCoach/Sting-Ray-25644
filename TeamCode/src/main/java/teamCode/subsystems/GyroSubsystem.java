@@ -7,7 +7,6 @@ import teamCode.GoBildaPinpointDriver;
 
 public class GyroSubsystem extends SubsystemBase
 {
-//    public final IMU m_imu;
     private GoBildaPinpointDriver m_odo;
 
     public GyroSubsystem(GoBildaPinpointDriver odo)

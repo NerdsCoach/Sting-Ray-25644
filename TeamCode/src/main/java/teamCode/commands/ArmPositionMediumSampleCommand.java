@@ -34,6 +34,7 @@ public class ArmPositionMediumSampleCommand extends CommandBase
     public void execute()
     {
         this.m_liftArmSubsystem.liftArm(kLiftArmFarSample);
+
         if (m_liftArmSubsystem.atTarget(kSlideArmFarSample))
         {
             this.m_slideArmSubsystem.slideArm(kSlideArmFarSample);

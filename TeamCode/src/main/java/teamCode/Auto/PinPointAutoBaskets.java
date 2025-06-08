@@ -55,10 +55,7 @@ public class PinPointAutoBaskets extends LinearOpMode
     private final ElapsedTime holdTimer = new ElapsedTime();
 
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
-//    DriveToPoint nav = new DriveToPoint(this); //OpMode member for the point-to-point navigation class
     DriveToPoint nav = new DriveToPoint(); //OpMode member for the point-to-point navigation class
-
-    private Object AutoDriveSubsystem;
 
 
     enum StateMachine
@@ -94,18 +91,6 @@ public class PinPointAutoBaskets extends LinearOpMode
     static final Pose2DUnNormalized PickUpSample4Drive = new Pose2DUnNormalized(DistanceUnit.MM, 850, 690, UnnormalizedAngleUnit.DEGREES, 45);
     static final Pose2DUnNormalized PrePark = new Pose2DUnNormalized(DistanceUnit.MM, 1165, 390, UnnormalizedAngleUnit.DEGREES, 90);
     static final Pose2DUnNormalized ParkAscent1 = new Pose2DUnNormalized(DistanceUnit.MM, 1270, -220, UnnormalizedAngleUnit.DEGREES, 90);
-//    static final Pose2D NET_ZONE = new Pose2D(DistanceUnit.MM, 250, 470, AngleUnit.DEGREES, -45);
-//    static final Pose2D PrePickUpSample2 = new Pose2D(DistanceUnit.MM, 400, 420, AngleUnit.DEGREES, 0);
-//    static final Pose2D PickUpSample2 = new Pose2D(DistanceUnit.MM, 643, 420, AngleUnit.DEGREES, 0);
-//    static final Pose2D PrePickUpSample3 = new Pose2D(DistanceUnit.MM, 400, 675, AngleUnit.DEGREES, 0);
-//    static final Pose2D PickUpSample3 = new Pose2D(DistanceUnit.MM, 680, 675, AngleUnit.DEGREES, 0);
-//    static final Pose2D PrePickUpSample4 = new Pose2D(DistanceUnit.MM, 600, 570,AngleUnit.DEGREES, 52);
-//    static final Pose2D PickUpSample4 = new Pose2D(DistanceUnit.MM, 670, 675,AngleUnit.DEGREES, 50);
-//    static final Pose2D PickUpSample4Turn = new Pose2D(DistanceUnit.MM, 760, 690, AngleUnit.DEGREES, 40);
-//    static final Pose2D PickUpSample4Drive = new Pose2D(DistanceUnit.MM, 850, 690,AngleUnit.DEGREES, 45);
-//    static final Pose2D PrePark = new Pose2D(DistanceUnit.MM, 1165, 390, AngleUnit.DEGREES, 90);
-//    static final Pose2D ParkAscent1 = new Pose2D(DistanceUnit.MM, 1270, -220, AngleUnit.DEGREES, 90);
-
 
     @Override
     public void runOpMode()
@@ -133,9 +118,6 @@ public class PinPointAutoBaskets extends LinearOpMode
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
         odo.resetPosAndIMU();
-
-        //nav.setXYCoefficients(0.02,0.002,0.0,DistanceUnit.MM,12);
-        //nav.setYawCoefficients(1,0,0.0, UnnormalizedAngleUnit.DEGREES,2);
         nav.setDriveType(DriveToPoint.DriveType.MECANUM);
 
         StateMachine stateMachine;
@@ -449,7 +431,6 @@ public class PinPointAutoBaskets extends LinearOpMode
             telemetry.addData("current state:",stateMachine);
 
             Pose2DUnNormalized pos = odo.getPosition();
-//            Pose2D pos = odo.getPosition();
             String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(UnnormalizedAngleUnit.DEGREES));
 //            String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
             telemetry.addData("Position", data);

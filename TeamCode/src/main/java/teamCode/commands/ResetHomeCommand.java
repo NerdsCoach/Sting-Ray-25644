@@ -14,9 +14,8 @@ ResetHomeCommand extends CommandBase
     public ResetHomeCommand(LiftArmSubsystem liftArmSubsystem, SlideArmSubsystem slideArmSubsystem)
     {
         this.m_liftArmSubsystem = liftArmSubsystem;
-        addRequirements(this.m_liftArmSubsystem);
         this.m_slideArmSubsystem = slideArmSubsystem;
-        addRequirements(this.m_slideArmSubsystem);
+        addRequirements(this.m_liftArmSubsystem, this.m_slideArmSubsystem);
     }
 
     @Override

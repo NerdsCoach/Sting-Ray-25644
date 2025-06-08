@@ -17,7 +17,6 @@ import teamCode.Pose2DUnNormalized;
 public class DriveSubsystem extends SubsystemBase
 {
     public MecanumDrive m_drive;
-
     private DcMotor m_leftFront;
     private DcMotor m_rightFront;
     private DcMotor m_leftBack;
@@ -25,34 +24,24 @@ public class DriveSubsystem extends SubsystemBase
 
     private GoBildaPinpointDriver m_odo;
     DriveToPoint nav = new DriveToPoint();
-//    private int m_fLPos;
-//    private int m_fRPos;
-//    private int m_bLPos;
-//    private int m_bRPos;
 
     private double m_lastRecordedAngle;
     private double m_currentAngle;
     private double error;
 
-//    IMU m_imu;
 
-//    private PinPointOdometrySubsystem m_pinPointOdometrySubsystem;
 
 
     public DriveSubsystem(MecanumDrive drive, teamCode.GoBildaPinpointDriver odo)
     {
         this.m_drive = drive;
-//        this.m_lastRecordedAngle = new Orientation();
         this.m_currentAngle = 0.0;
         this.m_odo = odo;
         this.m_odo.setOffsets(68,-178);
         this.m_odo.setEncoderResolution(teamCode.GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         this.m_odo.setEncoderDirections(teamCode.GoBildaPinpointDriver.EncoderDirection.REVERSED, teamCode.GoBildaPinpointDriver.EncoderDirection.FORWARD);
         this.m_odo.setPosition(new Pose2DUnNormalized(DistanceUnit.MM, 0,0, UnnormalizedAngleUnit.DEGREES, 0.0));
-//        this.m_leftFront = leftFront;
-//        this.m_rightFront = rightFront;
-//        this.m_leftBack = leftBack;
-//        this.m_rightBack = rightBack;
+
     }
 
     public void headingDrive(double leftX, double leftY, double rightX, double rightY)
@@ -65,12 +54,6 @@ public class DriveSubsystem extends SubsystemBase
                         Math.toDegrees(m_odo.getHeading())
                 );
         m_odo.update();
-//        System.out.println("Error: " + error);
-//        getTurnPower(rightX, rightY);
-
-//        System.out.println("Error: " + error);
-//        System.out.println("Error: " + error);
-//        System.out.println("Turn angle: " + Math.atan2(rightX, rightY * -1) * -1 * (180 / Math.PI));
     }
 
     public void autoHeadingDrive (DoubleSupplier targetX, DoubleSupplier targetY, DoubleSupplier targetAngle)
@@ -99,8 +82,6 @@ public class DriveSubsystem extends SubsystemBase
         {
             double motorPower = 0.5;//.5 for normal//0.4 is best for slow
             error = error - getAngle();
-//            this.m_robot.driveWithMotorPowers(motorPower, -motorPower, motorPower, -motorPower);
-//            this.m_drive.driveWithMotorPowers(motorPower, -motorPower, motorPower, -motorPower);
             return motorPower * error / 100 + (0.1 * (error / Math.abs(error)));
         }
         else

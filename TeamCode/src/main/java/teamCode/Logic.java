@@ -13,8 +13,8 @@ public class Logic
 
     public static final class DriveTrainConstants
     {
-
     }
+
     public static final class WaitClass
     {
         /**

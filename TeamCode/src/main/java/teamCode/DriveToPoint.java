@@ -60,8 +60,6 @@ public class DriveToPoint
     private final ElapsedTime holdTimer = new ElapsedTime();
     private final ElapsedTime PIDTimer = new ElapsedTime();
 
-//    private LinearOpMode myOpMode; //todo: consider if this is required
-
     private final PIDLoop xPID = new PIDLoop();
     private final PIDLoop yPID = new PIDLoop();
     private final PIDLoop hPID = new PIDLoop();
@@ -69,11 +67,6 @@ public class DriveToPoint
     private final PIDLoop xTankPID = new PIDLoop();
 
     private DriveType selectedDriveType = DriveType.MECANUM;
-
-//    public DriveToPoint(LinearOpMode opmode)
-//    {
-//        myOpMode = opmode;
-//    }
 
     public void setDriveType(DriveType driveType)
     {
@@ -364,13 +357,6 @@ public class DriveToPoint
         }
 
     }
-
-//    {
-//        this.m_leftFront.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.LEFT_FRONT));
-//        this.m_rightFront.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.RIGHT_FRONT));
-//        this.m_leftBack.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.LEFT_BACK));
-//        this.m_rightBack.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.RIGHT_BACK));
-//    }
 }
 
 class PIDLoop

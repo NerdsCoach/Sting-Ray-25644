@@ -14,9 +14,10 @@ public class TimerCommand extends CommandBase
     public TimerCommand(TimerSubsystem timerSubsystem, DoubleSupplier timer)
     {
         this.m_timerSubsystem = timerSubsystem;
-        addRequirements(m_timerSubsystem);
         this.m_timer = timer;
-    }
+
+        addRequirements(m_timerSubsystem);
+            }
     @Override
     public void initialize()
     {
@@ -26,8 +27,6 @@ public class TimerCommand extends CommandBase
     public void execute()
     {
         this.m_timerSubsystem.inEndGame(m_timer.getAsDouble());
-//        if(m_timer.getAsDouble() > 5 && m_timer.getAsDouble() <7 ){gamepad1.rumble(2000);}
     }
-
 
 }

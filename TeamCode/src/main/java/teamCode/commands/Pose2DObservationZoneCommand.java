@@ -72,7 +72,7 @@ public class Pose2DObservationZoneCommand extends CommandBase
     {
         if
         (this.nav.driveTo(m_odo.getPosition(), new Pose2DUnNormalized
-                        (DistanceUnit.MM, 75, -900, UnnormalizedAngleUnit.DEGREES, -135),
+                        (DistanceUnit.MM, 230, -690, UnnormalizedAngleUnit.DEGREES, -135),
                 0.4, 0))
         {
             return true;

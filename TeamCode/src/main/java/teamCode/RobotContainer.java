@@ -10,16 +10,13 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
-import teamCode.GoBildaPinpointDriver;
 
 import teamCode.commands.ArmFudgeFactorDownCommand;
 import teamCode.commands.ArmFudgeFactorUpCommand;
@@ -27,9 +24,9 @@ import teamCode.commands.ArmPositionFarSampleCommand;
 import teamCode.commands.ArmPositionMidSampleCommand;
 import teamCode.commands.ArmPositionTravelCommand;
 import teamCode.commands.ClimbArmReleaseCommand;
-//import teamCode.commands.TimerCommand;
+import teamCode.commands.DriveManateeModeCommand;
+import teamCode.commands.DriveSpeedCommand;
 import teamCode.commands.GrabBatCommand;
-//import teamCode.commands.ScoreSpecimenCommand;
 import teamCode.commands.Pose2DNetZoneCommand;
 import teamCode.commands.Pose2DObservationZoneCommand;
 import teamCode.commands.Pose2DScoreChamberCommand;
@@ -45,15 +42,13 @@ import teamCode.commands.IntakePivotCommand;
 import teamCode.commands.IntakeWheelCommand;
 import teamCode.commands.ResetGyroCommand;
 import teamCode.commands.ResetHomeCommand;
-
 import teamCode.commands.SlideFudgeInCommand;
 import teamCode.commands.SlideFudgeOutCommand;
 import teamCode.commands.TestPose2DTeleOpCommand;
 import teamCode.commands.TimerCommand;
+
 import teamCode.subsystems.DriveSubsystem;
-//import teamCode.subsystems.TimerSubsystem;
 import teamCode.subsystems.GrabBatSubsystem;
-//import teamCode.subsystems.PinPointOdometrySubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
 import teamCode.subsystems.IntakePivotSubsystem;
@@ -64,9 +59,7 @@ import teamCode.subsystems.TimerSubsystem;
 
 @TeleOp(name = "Sting-Ray")
 public class RobotContainer extends CommandOpMode {
-    //    public boolean m_inEndgame;
-//    private double m_endGameTime;
-//    private double m_oneMinute;
+
     private ElapsedTime timer;
 
     /* Drivetrain */
@@ -81,9 +74,6 @@ public class RobotContainer extends CommandOpMode {
     /* Gamepad */
     private GamepadEx m_driver1;
     private GamepadEx m_driver2;
-
-//    private Gamepad gamepad1;
-
 
     private Button m_leftBumper;
     private Button m_rightBumper;
@@ -106,16 +96,17 @@ public class RobotContainer extends CommandOpMode {
     private Button m_climbArmFudgeDown;
     private Button m_autoScoreButton;
     private Button m_grabBat;
+    private Button m_manateeButton;
 
     /* Motors */
-    private DcMotor m_slideArmMotor;
-    private DcMotor m_liftArmMotor;
-    private CRServo m_intakeWheelServo;
-
     public DcMotor leftFront;
     public DcMotor rightFront;
     public DcMotor leftBack;
     public DcMotor rightBack;
+    private DcMotor m_slideArmMotor;
+    private DcMotor m_liftArmMotor;
+
+    private CRServo m_intakeWheelServo;
 
     /* Sensors */
     private TouchSensor m_touch;
@@ -128,12 +119,13 @@ public class RobotContainer extends CommandOpMode {
     private IntakeWheelSubsystem m_intakeWheelSubsystem;
     private StingRayArmSubsystem m_ascentArmSubsystem;
     private GyroSubsystem m_gyroSubsystem;
-//    private PinPointOdometrySubsystem m_pinPointOdometrySubsystem;
     private TimerSubsystem m_timerSubsystem;
     private GrabBatSubsystem m_grabBatSubsystem;
 
     /* Commands */
     private DriveFieldOrientedCommand m_driveFieldOrientedCommand;
+    private DriveManateeModeCommand m_driveManateeModeCommand;
+
     private ArmFudgeFactorUpCommand m_armFudgeFactorUpCommand;
     private ArmFudgeFactorDownCommand m_armFudgeFactorDownCommand;
     private ArmPositionCloseSampleCommand m_armPositionCloseSampleCommand;
@@ -144,28 +136,33 @@ public class RobotContainer extends CommandOpMode {
     private ArmPositionLowBasketCommand m_armPositionLowBasketCommand;
     private ArmPositionScoreHighChamberCommand m_armPositionScoreHighChamberCommand;
     private ArmPositionTravelCommand m_armPositionTravelCommand;
+
+    private SlideFudgeInCommand m_slideFudgeInCommand;
+    private SlideFudgeOutCommand m_slideFudgeOutCommand;
+    private ClimbArmReleaseCommand m_releaseCLimberArmCommand;
+
     private IntakePivotCommand m_intakePivotCommand;
     private IntakeWheelCommand m_intakeWheelCommand;
     private StingrayAscent1ArmCommand m_ascentArmCommand;
+
     private Pose2DNetZoneCommand m_pose2DNetZoneCommand;
     private Pose2DObservationZoneCommand m_pose2DObservationZoneCommand;
     private Pose2DScoreChamberCommand m_pose2DScoreChamberCommand;
     private Pose2DSubmersibleCommand m_pose2DSubmersibleCommand;
+
     private ResetGyroCommand m_resetGyroCommand;
     private ResetHomeCommand m_resetHomeCommand;
-    private SlideFudgeInCommand m_slideFudgeInCommand;
-    private SlideFudgeOutCommand m_slideFudgeOutCommand;
-    private ClimbArmReleaseCommand m_releaseCLimberArmCommand;
+
     private teamCode.GoBildaPinpointDriver m_odo;
     private TimerCommand m_timerCommand;
+    double Runtime;
     private TestPose2DTeleOpCommand m_TestPose2DTeleOpCommand;
-//    private ScoreSpecimenCommand m_scoreSpecimenCommand;
     private GrabBatCommand m_grabBatCommand;
 
     private com.qualcomm.robotcore.hardware.TouchSensor m_touchSensor;
     private boolean touchSensorIsPressed = false;
+    public double m_turbo;
 
-    double Runtime;
 
     /* PID */
     private PIDController m_pIDController;
@@ -173,14 +170,6 @@ public class RobotContainer extends CommandOpMode {
     @Override
     public void initialize()
     {
-        this.m_odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
-        this.m_odo.setOffsets(68, -178);//these are tuned for Sting-Ray 3110-0002-0001 Product Insight #1
-        this.m_odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        this.m_odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-
-//        m_odo.recalibrateIMU();
-
-
         /* Drivetrain */
         this.leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         this.rightFront = hardwareMap.get(DcMotor.class, "rightFront");
@@ -196,16 +185,13 @@ public class RobotContainer extends CommandOpMode {
                 );
 
 
-
         /* IMU */
-        this.m_imu = hardwareMap.get(IMU.class, "m_imu");
-        this.m_imuParameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
-        ));
+        this.m_odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
+        this.m_odo.setOffsets(68, -178);//these are tuned for Sting-Ray 3110-0002-0001 Product Insight #1
+        this.m_odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        this.m_odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
-
-        this.m_imu.initialize(this.m_imuParameters);
+//        m_odo.recalibrateIMU();
 
 
         /* Gamepad */
@@ -222,7 +208,6 @@ public class RobotContainer extends CommandOpMode {
 
         /* Sensors */
         this.m_touchSensor = hardwareMap.get(com.qualcomm.robotcore.hardware.TouchSensor.class, "intakeTouchSensor");
-
         this.m_pIDController = new PIDController(0, 0, 0);
         this.m_pIDController.setPID(0.0, 0.0, 0.0);
 
@@ -237,10 +222,8 @@ public class RobotContainer extends CommandOpMode {
         this.m_intakeWheelSubsystem = new IntakeWheelSubsystem(this.m_intakeWheelServo, this.m_touchSensor);
         this.m_ascentArmSubsystem = new StingRayArmSubsystem(hardwareMap, "ascentArmServo");
         this.m_gyroSubsystem = new GyroSubsystem(this.m_odo);
-//        this.m_pinPointOdometrySubsystem = new PinPointOdometrySubsystem(this.m_odo,this.leftFront,this.rightFront,this.leftBack,this.rightBack);
         this.m_timerSubsystem = new TimerSubsystem(this.m_driver1, this.m_driver2);
         this.m_grabBatSubsystem = new GrabBatSubsystem(hardwareMap, "grabBatServo");
-        Pose2DUnNormalized NET_ZONE = new Pose2DUnNormalized(DistanceUnit.MM, 240, 480, UnnormalizedAngleUnit.DEGREES, -45);
 
 
         register(this.m_driveSubsystem);
@@ -249,8 +232,12 @@ public class RobotContainer extends CommandOpMode {
 
         /* Default Commands */
 
+
+
         this.m_driveFieldOrientedCommand = new DriveFieldOrientedCommand(this.m_driveSubsystem, () -> this.m_driver1.getLeftX(),
                 () -> this.m_driver1.getLeftY(), () -> this.m_driver1.getRightX(), () -> this.m_driver1.getRightY());
+        this.m_driveManateeModeCommand = new DriveManateeModeCommand(this.m_driveSubsystem, () -> this.m_driver1.getLeftX(),
+            () -> this.m_driver1.getLeftY(), () -> this.m_driver1.getRightX(), () -> this.m_driver1.getRightY());
         this.m_driveSubsystem.setDefaultCommand(this.m_driveFieldOrientedCommand);
 
         this.m_timerCommand = new TimerCommand (this.m_timerSubsystem, () -> getRuntime());
@@ -263,24 +250,9 @@ public class RobotContainer extends CommandOpMode {
         this.m_intakeWheelSubsystem.setDefaultCommand(this.m_intakeWheelCommand);
 
 
-
         /* Event Commands */
-
-        this.m_pose2DNetZoneCommand = new Pose2DNetZoneCommand(this.m_driveSubsystem, this.m_odo,
-                this.leftFront, this.rightFront, this.leftBack,this.rightBack);
-        new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_LEFT).whenPressed(this.m_pose2DNetZoneCommand);
-
-        this.m_pose2DSubmersibleCommand= new Pose2DSubmersibleCommand(this.m_driveSubsystem, this.m_odo,
-                this.leftFront, this.rightFront, this.leftBack,this.rightBack);
-        new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_UP).whenPressed(this.m_pose2DSubmersibleCommand);
-
-        this.m_pose2DScoreChamberCommand = new Pose2DScoreChamberCommand(this.m_driveSubsystem, this.m_odo,
-                this.leftFront, this.rightFront, this.leftBack,this.rightBack);
-        new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_DOWN).whenPressed(this.m_pose2DScoreChamberCommand);
-
-        this.m_pose2DObservationZoneCommand = new Pose2DObservationZoneCommand(this.m_driveSubsystem, this.m_odo,
-                this.leftFront, this.rightFront, this.leftBack,this.rightBack);
-        new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_RIGHT).whenPressed(this.m_pose2DObservationZoneCommand);
+        this.m_manateeButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.B))
+                .toggleWhenPressed(this.m_driveFieldOrientedCommand, this.m_driveManateeModeCommand);
 
         this.m_resetHomeCommand = new ResetHomeCommand(this.m_liftArmSubsystem, this.m_slideArmSubsystem);
         this.m_resetHomeButton = (new GamepadButton(this.m_driver2, GamepadKeys.Button.START))
@@ -335,9 +307,25 @@ public class RobotContainer extends CommandOpMode {
         this.m_xButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.A))
                 .whenPressed(this.m_armPositionTravelCommand);
 
-        this.m_releaseCLimberArmCommand = new ClimbArmReleaseCommand(m_liftArmSubsystem);
-        this.m_releaseClimbButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.Y))
-                .whenPressed(this.m_releaseCLimberArmCommand);
+//        this.m_releaseCLimberArmCommand = new ClimbArmReleaseCommand(m_liftArmSubsystem);
+//        this.m_releaseClimbButton = (new GamepadButton(this.m_driver1, GamepadKeys.Button.Y))
+//                .whenPressed(this.m_releaseCLimberArmCommand);
+
+//        this.m_pose2DNetZoneCommand = new Pose2DNetZoneCommand(this.m_driveSubsystem, this.m_odo,
+//                this.leftFront, this.rightFront, this.leftBack,this.rightBack);
+//        new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_LEFT).whenPressed(this.m_pose2DNetZoneCommand);
+//
+//        this.m_pose2DSubmersibleCommand= new Pose2DSubmersibleCommand(this.m_driveSubsystem, this.m_odo,
+//                this.leftFront, this.rightFront, this.leftBack,this.rightBack);
+//        new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_UP).whenPressed(this.m_pose2DSubmersibleCommand);
+//
+//        this.m_pose2DScoreChamberCommand = new Pose2DScoreChamberCommand(this.m_driveSubsystem, this.m_odo,
+//                this.leftFront, this.rightFront, this.leftBack,this.rightBack);
+//        new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_DOWN).whenPressed(this.m_pose2DScoreChamberCommand);
+//
+//        this.m_pose2DObservationZoneCommand = new Pose2DObservationZoneCommand(this.m_driveSubsystem, this.m_odo,
+//                this.leftFront, this.rightFront, this.leftBack,this.rightBack);
+//        new GamepadButton(this.m_driver1, GamepadKeys.Button.DPAD_RIGHT).whenPressed(this.m_pose2DObservationZoneCommand);
 
         this.m_intakePivotCommand = new IntakePivotCommand(this.m_intakePivotSubsystem);
         this.m_rightBumper = (new GamepadButton(this.m_driver2, GamepadKeys.Button.RIGHT_BUMPER))
@@ -355,7 +343,7 @@ public class RobotContainer extends CommandOpMode {
         this.m_rightBumper = (new GamepadButton(this.m_driver1, GamepadKeys.Button.RIGHT_BUMPER))
                 .whenPressed(this.m_grabBatCommand);
     }
-
+//    {
 //        for (int i = 1; i>0; i+=0)
 //        {
 //            telemetry.addData("Lift Arm", this.m_liftArmMotor.getCurrentPosition());
@@ -363,4 +351,13 @@ public class RobotContainer extends CommandOpMode {
 //            telemetry.update();
 //        }
 //    }
+//{
+//        for (int i = 1; i>0; i+=0)
+//        {
+//            telemetry.addData("Lift Arm", this.m_liftArmMotor.getCurrentPosition());
+//            telemetry.addData("Slide Arm", this.m_slideArmMotor.getCurrentPosition());
+//            telemetry.update();
+//        }
+//    }
+
 }
