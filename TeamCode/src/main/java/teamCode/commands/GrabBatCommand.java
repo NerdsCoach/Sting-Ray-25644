@@ -6,7 +6,7 @@ import teamCode.subsystems.GrabBatSubsystem;
 
 public class GrabBatCommand extends CommandBase
 {
-    private static final double m_closedPos = 0.7;
+    private static final double m_closedPos = 0.8;
     private static final double m_openPos = 0.3;
     private final GrabBatSubsystem m_grabBatSubsystem;
     private int m_position;

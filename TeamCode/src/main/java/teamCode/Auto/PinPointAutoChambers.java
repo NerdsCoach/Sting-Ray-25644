@@ -27,13 +27,14 @@ import teamCode.GoBildaPinpointDriver;
 import java.util.Locale;
 
 import teamCode.Pose2DUnNormalized;
+import teamCode.PoseStorage;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.IntakeWheelSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.StingRayArmSubsystem;
 
-@Autonomous(name="PinPointAutoSpecimen", group="Pinpoint")
+@Autonomous(name="PinPointAutoChambers", group="Pinpoint")
 //@Disabled
 
 public class PinPointAutoChambers extends LinearOpMode
@@ -54,6 +55,7 @@ public class PinPointAutoChambers extends LinearOpMode
     private TouchSensor m_touch;
     private final ElapsedTime holdTimer = new ElapsedTime();
 
+
     public int ySpecScore = 20;
     public int yDriveToSample = -700;
     public int ySampleCollect = -900;
@@ -66,8 +68,8 @@ public class PinPointAutoChambers extends LinearOpMode
 
 
     // Positions and Measurements
-    public Pose2DUnNormalized Submersible = new Pose2DUnNormalized(DistanceUnit.MM, 630, ySpecScore, UnnormalizedAngleUnit.DEGREES,  -180);
-    public Pose2DUnNormalized ScoreSpecimen = new Pose2DUnNormalized(DistanceUnit.MM, 450, ySpecScore, UnnormalizedAngleUnit.DEGREES, -180);
+    public Pose2DUnNormalized Submersible = new Pose2DUnNormalized(DistanceUnit.MM, 630,  PoseStorage.ySpecScore, UnnormalizedAngleUnit.DEGREES,  -180);
+    public Pose2DUnNormalized ScoreSpecimen = new Pose2DUnNormalized(DistanceUnit.MM, 450,  PoseStorage.ySpecScore, UnnormalizedAngleUnit.DEGREES, -180);
     public Pose2DUnNormalized PreSampleDrive = new Pose2DUnNormalized(DistanceUnit.MM, 450, -700, UnnormalizedAngleUnit.DEGREES, -90);
     public Pose2DUnNormalized StrafeToSample = new Pose2DUnNormalized(DistanceUnit.MM, 1200, -700, UnnormalizedAngleUnit.DEGREES, -90);
     public Pose2DUnNormalized ForwardToSample = new Pose2DUnNormalized(DistanceUnit.MM, 1200, -900, UnnormalizedAngleUnit.DEGREES, -90);
@@ -122,6 +124,14 @@ public class PinPointAutoChambers extends LinearOpMode
         stateMachine = StateMachine.WAITING_FOR_START;
 
 
+
+
+
+        PoseStorage.ySpecScore = 20;
+
+
+
+
         telemetry.addData("Status", "Initialized");
         telemetry.addData("X offset", odo.getXOffset());
         telemetry.addData("Y offset", odo.getYOffset());
@@ -167,7 +177,7 @@ public class PinPointAutoChambers extends LinearOpMode
                     Once driveTo returns true, it prints a telemetry line and moves the state machine forward.
                      */
                     nav.driveTo(odo.getPosition(),
-                            new Pose2DUnNormalized(DistanceUnit.MM, 630, ySpecScore, UnnormalizedAngleUnit.DEGREES, -180),
+                            new Pose2DUnNormalized(DistanceUnit.MM, 630,  PoseStorage.ySpecScore, UnnormalizedAngleUnit.DEGREES, -180),
                             0.6, .1);
 
                     this.m_liftArmSubsystem.liftArm(kLiftArmHighChamber);
@@ -178,7 +188,7 @@ public class PinPointAutoChambers extends LinearOpMode
                     }
                     if (this.m_slideArmSubsystem.atTarget(kSlideArmHighChamber))
                     {
-                        this.m_intakeWheelSubsystem.spinIntake(-0.75);//Score on High Chamber #1
+                        this.m_intakeWheelSubsystem.spinIntake(-1.0);//Score on High Chamber #1
                         telemetry.addLine("Ready to Score!");
                         stateMachine = StateMachine.PRESCORE_SPECIMEN;
                     }
@@ -195,12 +205,13 @@ public class PinPointAutoChambers extends LinearOpMode
                 case SCORE_SPECIMEN: /*Drive Away*/
                     resetRuntime();
                     if (nav.driveTo(odo.getPosition(),
-                            new Pose2DUnNormalized(DistanceUnit.MM, 450, ySpecScore, UnnormalizedAngleUnit.DEGREES, -180),
+                            new Pose2DUnNormalized(DistanceUnit.MM, 450,  PoseStorage.ySpecScore, UnnormalizedAngleUnit.DEGREES, -180),
                             0.7, 0) || getRuntime() > 3)
                     {
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
                         telemetry.addLine("SCORE!!!");
-                        ySpecScore = ySpecScore + 70;
+                        PoseStorage.ySpecScore = PoseStorage.ySpecScore + 40;
+//                        ySpecScore = ySpecScore + 70;
                         specimen = specimen + 1;
                         stateMachine = StateMachine.COUNTER_SCORE;
                     }
@@ -244,7 +255,9 @@ public class PinPointAutoChambers extends LinearOpMode
                     break;
 
                 case FORWARD_TO_SAMPLE:
-                    if (nav.driveTo(odo.getPosition(), ForwardToSample,0.7, 0))
+                    resetRuntime();
+
+                    if (nav.driveTo(odo.getPosition(), ForwardToSample,0.7, 0) || getRuntime() > 3)
                     {
                         this.m_intakeWheelSubsystem.spinIntake(0.6);//Emergency Spit out Specimen
                         stateMachine = StateMachine.OBSERVATION_ZONE;
@@ -252,10 +265,13 @@ public class PinPointAutoChambers extends LinearOpMode
                     break;
 
                 case OBSERVATION_ZONE:
+                    resetRuntime();
+
+
                     this.m_intakeWheelSubsystem.spinIntake(-0.5);//Start intake
                     this.m_liftArmSubsystem.liftArm(kLiftArmCloseSample);
                     this.m_slideArmSubsystem.slideArm(kSlideArmCloseSample);
-                    if (nav.driveTo(odo.getPosition(),ObservationZone, 0.4, 0))
+                    if (nav.driveTo(odo.getPosition(),ObservationZone, 0.4, 0)|| getRuntime() > 3)
                     {
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
                         samples = samples + 1;
@@ -286,7 +302,8 @@ public class PinPointAutoChambers extends LinearOpMode
 
                 case PICK_UP_SPECIMEN:
 //                    this.m_slideArmSubsystem.slideArm(75);
-                    if (nav.driveTo(odo.getPosition(), odo.getPosition(), 0.5, 0.5))
+                    resetRuntime();
+                    if (nav.driveTo(odo.getPosition(), odo.getPosition(), 0.5, 0.5)|| getRuntime() > 3)
                     {
                         this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
                         this.m_intakePivotSubsystem.pivotIntake(kIntakePivotScore);
@@ -309,6 +326,8 @@ public class PinPointAutoChambers extends LinearOpMode
                     {
                         this.m_intakeWheelSubsystem.spinIntake(0.0);//Turn off intake
                         stateMachine = StateMachine.PARKED;
+                        System.out.println("End Position");
+                        System.out.println(odo.getPosition());
                     }
                     break;
             }
@@ -322,6 +341,10 @@ public class PinPointAutoChambers extends LinearOpMode
         telemetry.addData("Spec Scored = ", (specimen));
 //        telemetry.addData("y2 = ", (ySampleCollect));
         Pose2DUnNormalized pos = odo.getPosition();
+
+
+//        PoseStorage.poseStorage.currentPose = odo.getPosition();
+
 
         String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(UnnormalizedAngleUnit.DEGREES));
 

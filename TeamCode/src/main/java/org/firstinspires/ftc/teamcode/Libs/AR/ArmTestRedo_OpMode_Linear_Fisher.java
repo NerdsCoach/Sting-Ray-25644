@@ -2,6 +2,7 @@
 //
 ////import android.util.Log;
 //
+//import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 //import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -14,6 +15,7 @@
 // * Creation Date: 11/3/2024
 // ---------------------------------------------------------------------------------------------------
 //*/
+//@Disabled
 //@TeleOp(name="ArmTestRedo with Lights: Linear OpMode", group="Linear OpMode")
 //public class ArmTestRedo_OpMode_Linear_Fisher extends LinearOpMode
 //{

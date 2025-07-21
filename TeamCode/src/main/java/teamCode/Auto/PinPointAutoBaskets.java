@@ -25,6 +25,7 @@ import teamCode.GoBildaPinpointDriver;
 import java.util.Locale;
 
 import teamCode.Pose2DUnNormalized;
+import teamCode.PoseStorage;
 import teamCode.commands.StingrayAscent1ArmCommand;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.IntakeWheelSubsystem;
@@ -32,7 +33,7 @@ import teamCode.subsystems.LiftArmSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.StingRayArmSubsystem;
 
-@Autonomous(name="Pin Point Auto Samples", group="Pinpoint")
+@Autonomous(name="Pin Point Auto Baskets", group="Pinpoint")
 //@Disabled
 
 public class PinPointAutoBaskets extends LinearOpMode
@@ -275,7 +276,8 @@ public class PinPointAutoBaskets extends LinearOpMode
 
 
                 case PICKUP_SAMPLE_3:
-                    if(nav.driveTo(odo.getPosition(), PickUpSample3, 0.4, 0))
+                    resetRuntime();
+                    if(nav.driveTo(odo.getPosition(), PickUpSample3, 0.4, 0)|| getRuntime() > 2)
                     {
                         telemetry.addLine("Picked up Sample 3!");
                         this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
@@ -335,7 +337,8 @@ public class PinPointAutoBaskets extends LinearOpMode
                 break;
 
                 case PICKUP_SAMPLE_4:
-                    if(nav.driveTo(odo.getPosition(), PickUpSample4, 0.5, 0))
+                    resetRuntime();
+                    if(nav.driveTo(odo.getPosition(), PickUpSample4, 0.5, 0)|| getRuntime() > 3)
                     {
                         stateMachine = StateMachine.PICKUP_SAMPLE_4_TURN;
                     }
@@ -417,6 +420,8 @@ public class PinPointAutoBaskets extends LinearOpMode
                     {
                         telemetry.addLine("Parked!");
                         stateMachine = StateMachine.PARKED;
+                        System.out.println("End Position");
+                        System.out.println(odo.getPosition());
                     }
                     break;
             }
@@ -429,6 +434,12 @@ public class PinPointAutoBaskets extends LinearOpMode
             rightBack.setPower(nav.getMotorPower(DriveToPoint.DriveMotor.RIGHT_BACK));
 
             telemetry.addData("current state:",stateMachine);
+
+
+
+//            PoseStorage.poseStorage.currentPose = odo.getPosition();
+
+
 
             Pose2DUnNormalized pos = odo.getPosition();
             String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(UnnormalizedAngleUnit.DEGREES));

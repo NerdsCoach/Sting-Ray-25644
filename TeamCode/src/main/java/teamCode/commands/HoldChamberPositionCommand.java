@@ -1,0 +1,39 @@
+package teamCode.commands;
+
+import com.arcrobotics.ftclib.command.CommandBase;
+
+import teamCode.subsystems.GyroSubsystem;
+
+public class HoldChamberPositionCommand extends CommandBase
+{
+    public GyroSubsystem m_gyroSubsystem;
+
+    public HoldChamberPositionCommand(GyroSubsystem gyroSubsystem)
+    {
+        this.m_gyroSubsystem = gyroSubsystem;
+        addRequirements(this.m_gyroSubsystem);
+    }
+
+    @Override
+    public void initialize()
+    {
+
+    }
+
+    @Override
+    public void execute()
+    {
+        m_gyroSubsystem.holdChamberPose();
+    }
+
+    @Override
+    public void end(boolean interrupted)
+    {
+    }
+
+    @Override
+    public boolean isFinished()
+    {
+        return true;
+    }
+}

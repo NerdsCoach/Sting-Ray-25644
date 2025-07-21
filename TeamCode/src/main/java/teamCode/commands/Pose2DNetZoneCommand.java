@@ -10,6 +10,7 @@ import teamCode.DriveToPoint;
 import teamCode.GoBildaPinpointDriver;
 import teamCode.Pose2DUnNormalized;
 import teamCode.subsystems.DriveSubsystem;
+import teamCode.subsystems.GyroSubsystem;
 
 //@Disabled
 public class Pose2DNetZoneCommand extends CommandBase
@@ -20,9 +21,11 @@ public class Pose2DNetZoneCommand extends CommandBase
         private DcMotor m_leftBack;
         private DcMotor m_rightBack;
         public DriveSubsystem m_driveSubsystem;
+        public GyroSubsystem m_gyroSubsystem;
 
 
-        public GoBildaPinpointDriver m_odo; // Declare OpMode member for the Odometry Computer
+
+    public GoBildaPinpointDriver m_odo; // Declare OpMode member for the Odometry Computer
         DriveToPoint nav = new DriveToPoint(); //OpMode member for the point-to-point navigation class
 
         public int ySpecScore = 20;
@@ -39,7 +42,7 @@ public class Pose2DNetZoneCommand extends CommandBase
             this.m_leftBack = LEFT_BACK;
             this.m_rightBack = RIGHT_BACK;
 
-            addRequirements(m_driveSubsystem);
+            addRequirements(m_driveSubsystem,m_gyroSubsystem);
         }
 
 

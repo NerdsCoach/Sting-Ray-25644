@@ -1,6 +1,10 @@
 package teamCode.Auto;
 
 import static teamCode.Constants.LiftArmConstants.kLiftArmIntakeReset;
+import static teamCode.PoseStorage.odoHeading;
+import static teamCode.PoseStorage.xEncoder;
+import static teamCode.PoseStorage.yEncoder;
+import static teamCode.PoseStorage.yReading;
 
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -18,6 +22,7 @@ import teamCode.GoBildaPinpointDriver;
 import java.util.Locale;
 
 import teamCode.Pose2DUnNormalized;
+import teamCode.PoseStorage;
 import teamCode.commands.ArmIntakeResetCommand;
 import teamCode.commands.ArmPositionCloseSampleCommand;
 import teamCode.commands.ArmPositionHighBasketCommand;
@@ -61,7 +66,7 @@ public class TestPinPointAuto extends LinearOpMode
     private TouchSensor m_touch;
     private final ElapsedTime holdTimer = new ElapsedTime();
 
-    GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
+    GoBildaPinpointDriver m_odo; // Declare OpMode member for the Odometry Computer
 //    DriveToPoint nav = new DriveToPoint(this); //OpMode member for the point-to-point navigation class
     DriveToPoint nav = new DriveToPoint(); //OpMode member for the point-to-point navigation class
 
@@ -110,7 +115,6 @@ public class TestPinPointAuto extends LinearOpMode
     static final Pose2DUnNormalized PrePark = new Pose2DUnNormalized(DistanceUnit.MM, 1165, 390, UnnormalizedAngleUnit.DEGREES, 90);
     static final Pose2DUnNormalized ParkAscent1 = new Pose2DUnNormalized(DistanceUnit.MM, 1270, -220, UnnormalizedAngleUnit.DEGREES, 90);
 
-
     @Override
     public void runOpMode()
     {
@@ -131,12 +135,13 @@ public class TestPinPointAuto extends LinearOpMode
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
-        odo.setOffsets(68, -178);//these are tuned for Sting-Ray 3110-0002-0001 Product Insight #1
-        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        m_odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
+        m_odo.setOffsets(68, -178);//these are tuned for Sting-Ray 3110-0002-0001 Product Insight #1
+        m_odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        m_odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
-        odo.resetPosAndIMU();
+//        m_odo.resetPosAndIMU();
+        this.m_odo.setPosition(PoseStorage.zero);
 
         //nav.setXYCoefficients(0.02,0.002,0.0,DistanceUnit.MM,12);
         //nav.setYawCoefficients(1,0,0.0, AngleUnit.DEGREES,2);
@@ -147,10 +152,10 @@ public class TestPinPointAuto extends LinearOpMode
 
 
         telemetry.addData("Status", "Initialized");
-        telemetry.addData("X offset", odo.getXOffset());
-        telemetry.addData("Y offset", odo.getYOffset());
-        telemetry.addData("Device Version Number:", odo.getDeviceVersion());
-        telemetry.addData("Device Scalar", odo.getYawScalar());
+        telemetry.addData("X offset", m_odo.getXOffset());
+        telemetry.addData("Y offset", m_odo.getYOffset());
+        telemetry.addData("Device Version Number:", m_odo.getDeviceVersion());
+        telemetry.addData("Device Scalar", m_odo.getYawScalar());
         telemetry.update();
 
         this.m_liftArmMotor = hardwareMap.get(DcMotor.class, "liftArmMotor");
@@ -177,7 +182,7 @@ public class TestPinPointAuto extends LinearOpMode
 
         while (opModeIsActive())
         {
-            odo.update();
+            m_odo.update();
 
             switch (stateMachine)
             {
@@ -194,7 +199,7 @@ public class TestPinPointAuto extends LinearOpMode
                     the robot has reached the target, and has been there for (holdTime) seconds.
                     Once driveTo returns true, it prints a telemetry line and moves the state machine forward.
                      */
-                    if (nav.driveTo(odo.getPosition(), NET_ZONE, 0.5, 0))
+                    if (nav.driveTo(m_odo.getPosition(), NET_ZONE, 0.5, 0))
                     {
                         telemetry.addLine("Score Sample 1");
                         stateMachine = StateMachine.DRIVE_TO_SAMPLE_2;
@@ -204,7 +209,7 @@ public class TestPinPointAuto extends LinearOpMode
 
 
                 case DRIVE_TO_SAMPLE_2:  //drive to the Sample 2
-                    if (nav.driveTo(odo.getPosition(), PrePickUpSample2, 0.4, 0))
+                    if (nav.driveTo(m_odo.getPosition(), PrePickUpSample2, 0.4, 0))
                     {
                         telemetry.addLine("Ready to pick up Sample 2!");
                         stateMachine = StateMachine.PICKUP_SAMPLE_2;
@@ -214,7 +219,7 @@ public class TestPinPointAuto extends LinearOpMode
 
                 case PICKUP_SAMPLE_2:
                     telemetry.addLine("Yes!");
-                    if(nav.driveTo(odo.getPosition(), PickUpSample2, 0.3, 0))
+                    if(nav.driveTo(m_odo.getPosition(), PickUpSample2, 0.3, 0))
                     {
                         stateMachine = StateMachine.TURN_OFF_INTAKE_2;
                     }
@@ -222,7 +227,7 @@ public class TestPinPointAuto extends LinearOpMode
 
 
                 case TURN_OFF_INTAKE_2:
-                    if(nav.driveTo(odo.getPosition(), NET_ZONE, 0.4,0))
+                    if(nav.driveTo(m_odo.getPosition(), NET_ZONE, 0.4,0))
                     {
                         telemetry.addLine("Ready to drive 3");
                         stateMachine = StateMachine.DRIVE_TO_SAMPLE_3;
@@ -231,7 +236,7 @@ public class TestPinPointAuto extends LinearOpMode
 
 
                 case DRIVE_TO_SAMPLE_3:  //drive to the Sample 2
-                    if (nav.driveTo(odo.getPosition(), PrePickUpSample3, 0.4, .5))
+                    if (nav.driveTo(m_odo.getPosition(), PrePickUpSample3, 0.4, .5))
                     {
                     telemetry.addLine("Ready to pick up Sample 3!");
                     stateMachine = StateMachine.PICKUP_SAMPLE_3;
@@ -241,7 +246,7 @@ public class TestPinPointAuto extends LinearOpMode
 
                 case PICKUP_SAMPLE_3:
 
-                    if(nav.driveTo(odo.getPosition(), PickUpSample3, 0.3, 0))
+                    if(nav.driveTo(m_odo.getPosition(), PickUpSample3, 0.3, 0))
                     {
                         stateMachine = StateMachine.SCORE_SAMPLE_3;
                     }
@@ -249,10 +254,12 @@ public class TestPinPointAuto extends LinearOpMode
 
 
                 case SCORE_SAMPLE_3:
-                    if (nav.driveTo(odo.getPosition(), NET_ZONE, 0.4, 0))
+                    if (nav.driveTo(m_odo.getPosition(), NET_ZONE, 0.4, 9.0))
                     {
                         telemetry.addLine("Score Sample 3");
                         stateMachine = StateMachine.TURN_OFF_INTAKE_3;
+//                        posi = this.m_odo.getPositionDegrees();
+
                     }
                     break;
 
@@ -268,10 +275,20 @@ public class TestPinPointAuto extends LinearOpMode
 
             telemetry.addData("current state:",stateMachine);
 
-            Pose2DUnNormalized pos = odo.getPosition();
+            Pose2DUnNormalized pos = m_odo.getPosition();
+
+//            currentPose = m_odo.getPosition();
+            xEncoder = this.m_odo.getPosX();
+            yEncoder = this.m_odo.getPosY();
+            odoHeading = this.m_odo.getHeading();
+
+
             String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(UnnormalizedAngleUnit.DEGREES));
             telemetry.addData("Position", data);
-
+//            telemetry.addData("PoseStorage",posi);
+            telemetry.addData("X",xEncoder);
+            telemetry.addData("Y",yReading);
+            telemetry.addData("Heading",odoHeading);
             telemetry.update();
 
         }

@@ -68,7 +68,7 @@
 //    private TouchSensor m_touch;
 //    private final ElapsedTime holdTimer = new ElapsedTime();
 //
-//    GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
+//    GoBildaPinpointDriver m_odo; // Declare OpMode member for the Odometry Computer
 //    DriveToPoint nav = new DriveToPoint(this); //OpMode member for the point-to-point navigation class
 //
 //    enum StateMachine
@@ -124,12 +124,12 @@
 //        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
 //        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 //
-//        odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
-//        odo.setOffsets(68, -178);//these are tuned for Sting-Ray 3110-0002-0001 Product Insight #1
-//        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-//        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+//        m_odo = hardwareMap.get(GoBildaPinpointDriver.class,"m_odo");
+//        m_odo.setOffsets(68, -178);//these are tuned for Sting-Ray 3110-0002-0001 Product Insight #1
+//        m_odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+//        m_odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 //
-//        odo.resetPosAndIMU();
+//        m_odo.resetPosAndIMU();
 //
 //        //nav.setXYCoefficients(0.02,0.002,0.0,DistanceUnit.MM,12);
 //        //nav.setYawCoefficients(1,0,0.0, UnnormalizedAngleUnit.DEGREES,2);
@@ -140,10 +140,10 @@
 //
 //
 //        telemetry.addData("Status", "Initialized");
-//        telemetry.addData("X offset", odo.getXOffset());
-//        telemetry.addData("Y offset", odo.getYOffset());
-//        telemetry.addData("Device Version Number:", odo.getDeviceVersion());
-//        telemetry.addData("Device Scalar", odo.getYawScalar());
+//        telemetry.addData("X offset", m_odo.getXOffset());
+//        telemetry.addData("Y offset", m_odo.getYOffset());
+//        telemetry.addData("Device Version Number:", m_odo.getDeviceVersion());
+//        telemetry.addData("Device Scalar", m_odo.getYawScalar());
 //        telemetry.update();
 //
 //        this.m_liftArmMotor = hardwareMap.get(DcMotor.class, "liftArmMotor");
@@ -170,7 +170,7 @@
 //
 //        while (opModeIsActive())
 //        {
-//            odo.update();
+//            m_odo.update();
 //
 //            switch (stateMachine)
 //            {
@@ -187,7 +187,7 @@
 //                    the robot has reached the target, and has been there for (holdTime) seconds.
 //                    Once driveTo returns true, it prints a telemetry line and moves the state machine forward.
 //                     */
-//                    if (nav.driveTo(odo.getPosition(),
+//                    if (nav.driveTo(m_odo.getPosition(),
 //                            new Pose2DUnNormalized(DistanceUnit.MM, 250, 470, UnnormalizedAngleUnit.DEGREES, -45),
 //                            0.5, 0))
 //                    {
@@ -212,7 +212,7 @@
 //
 //                case TURN_OFF_INTAKE_1:
 //                    holdTimer.reset();
-//                    if(nav.driveTo(odo.getPosition(), NET_ZONE, 0.4,2.0))
+//                    if(nav.driveTo(m_odo.getPosition(), NET_ZONE, 0.4,2.0))
 //                    {
 //                        this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
 //                        this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
@@ -232,7 +232,7 @@
 //                        this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
 //                        this.m_intakeWheelSubsystem.spinIntake(-1.0);//Turn On intake
 //                    }
-//                    if (nav.driveTo(odo.getPosition(), PrePickUpSample2, 0.4, .5))
+//                    if (nav.driveTo(m_odo.getPosition(), PrePickUpSample2, 0.4, .5))
 //                    {
 //                        telemetry.addLine("Ready to pick up Sample 2!");
 //                        stateMachine = StateMachine.PICKUP_SAMPLE_2;
@@ -242,7 +242,7 @@
 //
 //                case PICKUP_SAMPLE_2:
 //                    telemetry.addLine("Yes!");
-//                    if(nav.driveTo(odo.getPosition(), PickUpSample2, 0.3, 0))
+//                    if(nav.driveTo(m_odo.getPosition(), PickUpSample2, 0.3, 0))
 //                    {
 //                        telemetry.addLine("Picked up Sample 2!");
 //                        this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
@@ -254,7 +254,7 @@
 //
 //
 //                case SCORE_SAMPLE_2:
-//                    if (nav.driveTo(odo.getPosition(), NET_ZONE, 0.4, 0))
+//                    if (nav.driveTo(m_odo.getPosition(), NET_ZONE, 0.4, 0))
 //                    {
 //                        telemetry.addLine("Score Sample 1");
 //                    }
@@ -277,7 +277,7 @@
 //
 //                case TURN_OFF_INTAKE_2:
 //                    holdTimer.reset();
-//                    if(nav.driveTo(odo.getPosition(), NET_ZONE, 0.4,2.0))
+//                    if(nav.driveTo(m_odo.getPosition(), NET_ZONE, 0.4,2.0))
 //                    {
 //                        this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
 //                        this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
@@ -298,7 +298,7 @@
 //                    this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
 //                    this.m_intakeWheelSubsystem.spinIntake(-1.0);//Turn On intake
 //                }
-//                if (nav.driveTo(odo.getPosition(), PrePickUpSample3, 0.4, .5))
+//                if (nav.driveTo(m_odo.getPosition(), PrePickUpSample3, 0.4, .5))
 //                {
 //                    telemetry.addLine("Ready to pick up Sample 3!");
 //                    stateMachine = StateMachine.PICKUP_SAMPLE_3;
@@ -308,7 +308,7 @@
 //
 //                case PICKUP_SAMPLE_3:
 //                    telemetry.addLine("Yes!");
-//                    if(nav.driveTo(odo.getPosition(), PickUpSample3, 0.3, 0))
+//                    if(nav.driveTo(m_odo.getPosition(), PickUpSample3, 0.3, 0))
 //                    {
 //                        telemetry.addLine("Picked up Sample 3!");
 //                        this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
@@ -320,7 +320,7 @@
 //
 //
 //                case SCORE_SAMPLE_3:
-//                    if (nav.driveTo(odo.getPosition(), NET_ZONE, 0.4, 0))
+//                    if (nav.driveTo(m_odo.getPosition(), NET_ZONE, 0.4, 0))
 //                    {
 //                        telemetry.addLine("Score Sample 3");
 //                    }
@@ -343,7 +343,7 @@
 //
 //                case TURN_OFF_INTAKE_3:
 //                    holdTimer.reset();
-//                    if(nav.driveTo(odo.getPosition(), NET_ZONE, 0.4,2.0))
+//                    if(nav.driveTo(m_odo.getPosition(), NET_ZONE, 0.4,2.0))
 //                    {
 //                        this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
 //                        this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
@@ -363,7 +363,7 @@
 //                    this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
 //                    this.m_intakeWheelSubsystem.spinIntake(-1.0);//Turn On intake
 //                }
-//                if (nav.driveTo(odo.getPosition(), PrePickUpSample4, 0.4, .5))
+//                if (nav.driveTo(m_odo.getPosition(), PrePickUpSample4, 0.4, .5))
 //                {
 //                    telemetry.addLine("Ready to pick up Sample 4!");
 //                    stateMachine = StateMachine.PICKUP_SAMPLE_4;
@@ -373,7 +373,7 @@
 //
 //                case PICKUP_SAMPLE_4:
 //                    telemetry.addLine("Yes!");
-//                    if(nav.driveTo(odo.getPosition(), PickUpSample4, 0.5, .5))
+//                    if(nav.driveTo(m_odo.getPosition(), PickUpSample4, 0.5, .5))
 //                    {
 //                        telemetry.addLine("Picked up Sample 4!");
 //                        this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
@@ -385,7 +385,7 @@
 //
 //
 //                case SCORE_SAMPLE_4:
-//                    if (nav.driveTo(odo.getPosition(), NET_ZONE, 0.4, 0))
+//                    if (nav.driveTo(m_odo.getPosition(), NET_ZONE, 0.4, 0))
 //                    {
 //                        telemetry.addLine("Score Sample 4");
 //                    }
@@ -408,7 +408,7 @@
 //
 //                case TURN_OFF_INTAKE_4:
 //                    holdTimer.reset();
-//                    if(nav.driveTo(odo.getPosition(), NET_ZONE, 0.4,2.0))
+//                    if(nav.driveTo(m_odo.getPosition(), NET_ZONE, 0.4,2.0))
 //                    {
 //                        this.m_intakeWheelSubsystem.spinIntake(0.0);//Stop intake
 //                        this.m_intakePivotSubsystem.pivotIntake(kIntakePivotPickUp);
@@ -427,7 +427,7 @@
 //
 //
 //                    case PRE_PARK:
-//                    if(nav.driveTo(odo.getPosition(), PrePark,0.5,0.0))
+//                    if(nav.driveTo(m_odo.getPosition(), PrePark,0.5,0.0))
 //                    {
 //                        this.m_ascentArmCommand.autoAscent();
 //                        this.m_ascentArmSubsystem.ascentArm(0.78);
@@ -438,7 +438,7 @@
 //
 //
 //                case PARK_ASCENT_1:
-//                    if(nav.driveTo(odo.getPosition(), ParkAscent1,0.5,0.0))
+//                    if(nav.driveTo(m_odo.getPosition(), ParkAscent1,0.5,0.0))
 //                    {
 //                        telemetry.addLine("Parked!");
 //                        stateMachine = StateMachine.PARKED;
@@ -455,7 +455,7 @@
 //
 //            telemetry.addData("current state:",stateMachine);
 //
-//            Pose2DUnNormalized pos = odo.getPosition();
+//            Pose2DUnNormalized pos = m_odo.getPosition();
 //            String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(UnnormalizedAngleUnit.DEGREES));
 //            telemetry.addData("Position", data);
 //

@@ -386,12 +386,32 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
      * relative to that new, more accurate position.
      * @param pos a Pose2D describing the robot's new position.
      */
-    public Pose2DUnNormalized setPosition(Pose2DUnNormalized pos){
+
+
+    public Pose2DUnNormalized setPosition(Pose2DUnNormalized pos)
+    {
         writeByteArray(Register.X_POSITION,(floatToByteArray((float) pos.getX(DistanceUnit.MM), ByteOrder.LITTLE_ENDIAN)));
         writeByteArray(Register.Y_POSITION,(floatToByteArray((float) pos.getY(DistanceUnit.MM),ByteOrder.LITTLE_ENDIAN)));
         writeByteArray(Register.H_ORIENTATION,(floatToByteArray((float) pos.getHeading(UnnormalizedAngleUnit.RADIANS),ByteOrder.LITTLE_ENDIAN)));
         return pos;
     }
+
+    public void setPosX(double posX, DistanceUnit distanceUnit)
+    {
+        writeByteArray(Register.X_POSITION,(floatToByteArray((float) distanceUnit.toMm(posX), ByteOrder.LITTLE_ENDIAN)));
+    }
+    public void setPosY(double posY, DistanceUnit distanceUnit)
+    {
+        writeByteArray(Register.Y_POSITION,(floatToByteArray((float) distanceUnit.toMm(posY), ByteOrder.LITTLE_ENDIAN)));
+    }
+    public void setHeading(double heading, UnnormalizedAngleUnit unnormalizedAngleUnit)
+    {
+        writeByteArray(Register.H_ORIENTATION,(floatToByteArray((float) unnormalizedAngleUnit.toDegrees(heading), ByteOrder.LITTLE_ENDIAN)));
+    }
+
+
+
+
 
     /**
      * Checks the deviceID of the Odometry Computer. Should return 1.
@@ -494,6 +514,8 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
     /**
      * @return a Pose2D containing the estimated position of the robot
      */
+
+
     public Pose2DUnNormalized getPosition()
     {
         return new Pose2DUnNormalized(DistanceUnit.MM,
@@ -501,6 +523,14 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
                 yPosition,
                 UnnormalizedAngleUnit.RADIANS,
                 hOrientation);
+    }
+    public Pose2DUnNormalized getPositionDegrees()
+    {
+        return new Pose2DUnNormalized(DistanceUnit.MM,
+                xPosition,
+                yPosition,
+                UnnormalizedAngleUnit.RADIANS,
+                hOrientation/ Math.PI * 180.0);
     }
 
 

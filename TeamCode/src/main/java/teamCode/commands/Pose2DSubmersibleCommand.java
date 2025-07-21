@@ -9,7 +9,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit
 import teamCode.DriveToPoint;
 import teamCode.GoBildaPinpointDriver;
 import teamCode.Pose2DUnNormalized;
+import teamCode.PoseStorage;
 import teamCode.subsystems.DriveSubsystem;
+import teamCode.subsystems.GyroSubsystem;
 
 //@Disabled
 public class Pose2DSubmersibleCommand extends CommandBase
@@ -20,12 +22,13 @@ public class Pose2DSubmersibleCommand extends CommandBase
         private DcMotor m_leftBack;
         private DcMotor m_rightBack;
         public DriveSubsystem m_driveSubsystem;
+        public GyroSubsystem m_gyroSubsystem;
 
 
-        public GoBildaPinpointDriver m_odo; // Declare OpMode member for the Odometry Computer
+    public GoBildaPinpointDriver m_odo; // Declare OpMode member for the Odometry Computer
         DriveToPoint nav = new DriveToPoint(); //OpMode member for the point-to-point navigation class
 
-        public int ySpecScore;
+//        public static int ySpecScore;
         public int specimen = 0;
 
     public Pose2DSubmersibleCommand(DriveSubsystem driveSubsystem, GoBildaPinpointDriver odo,
@@ -39,7 +42,7 @@ public class Pose2DSubmersibleCommand extends CommandBase
             this.m_leftBack = LEFT_BACK;
             this.m_rightBack = RIGHT_BACK;
 
-            addRequirements(m_driveSubsystem);
+            addRequirements(m_driveSubsystem, m_gyroSubsystem);
         }
 
 
@@ -68,17 +71,16 @@ public class Pose2DSubmersibleCommand extends CommandBase
     }
 
     @Override
-    public boolean isFinished()
-    {
+    public boolean isFinished() {
         if
         (this.nav.driveTo(m_odo.getPosition(), new Pose2DUnNormalized
-                        (DistanceUnit.MM, 630, ySpecScore, UnnormalizedAngleUnit.DEGREES, -180),
+                        (DistanceUnit.MM, 630, PoseStorage.ySpecScore, UnnormalizedAngleUnit.DEGREES, -180),
                 0.6, 0))
         {
+//            ySpecScore = ySpecScore + 30;
             return true;
         }
         return false;
     }
 
 }
-

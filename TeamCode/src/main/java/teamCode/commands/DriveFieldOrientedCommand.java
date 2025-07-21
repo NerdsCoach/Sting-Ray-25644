@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import java.util.function.DoubleSupplier;
 import teamCode.subsystems.DriveSubsystem;
 import teamCode.subsystems.GyroSubsystem;
+import teamCode.subsystems.GamepadSubsystem;
 
 public class DriveFieldOrientedCommand extends CommandBase
 {
@@ -13,11 +14,13 @@ public class DriveFieldOrientedCommand extends CommandBase
     public DoubleSupplier m_rightX;
     public DoubleSupplier m_rightY;
     public GyroSubsystem m_gyroSubsystem;
+    public GamepadSubsystem m_gamepadSubsystem;
 
-    public DriveFieldOrientedCommand(DriveSubsystem driveSubsystem, DoubleSupplier leftX, DoubleSupplier leftY, DoubleSupplier rightX, DoubleSupplier rightY)
+    public DriveFieldOrientedCommand(DriveSubsystem driveSubsystem, GamepadSubsystem gamepadSubsystem, DoubleSupplier leftX, DoubleSupplier leftY, DoubleSupplier rightX, DoubleSupplier rightY)
     {
        this.m_driveSubsystem = driveSubsystem;
-       addRequirements(m_driveSubsystem, m_gyroSubsystem);
+       this.m_gamepadSubsystem = gamepadSubsystem;
+       addRequirements(m_driveSubsystem, m_gyroSubsystem );
 
        this.m_leftX = leftX;
        this.m_leftY = leftY;
@@ -40,5 +43,6 @@ public class DriveFieldOrientedCommand extends CommandBase
                        m_rightX.getAsDouble(),
                        m_rightY.getAsDouble()
                );
+//       this.m_gamepadSubsystem.speedTurbo();
     }
 }

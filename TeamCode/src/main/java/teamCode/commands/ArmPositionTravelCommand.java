@@ -2,6 +2,7 @@ package teamCode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import teamCode.Constants;
+import teamCode.PoseStorage;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
@@ -32,6 +33,10 @@ public class ArmPositionTravelCommand extends CommandBase
     public void execute()
     {
         this.m_slideArmSubsystem.slideArm(Constants.SlideArmConstants.kSlideArmHome);
+        System.out.println(PoseStorage.xEncoder);
+        System.out.println(PoseStorage.yEncoder);
+        System.out.println(PoseStorage.odoHeading);
+
 
         if (m_slideArmSubsystem.atTarget(Constants.SlideArmConstants.kSlideArmHome))
         {

@@ -27,13 +27,14 @@ import teamCode.GoBildaPinpointDriver;
 import java.util.Locale;
 
 import teamCode.Pose2DUnNormalized;
+import teamCode.PoseStorage;
 import teamCode.subsystems.IntakePivotSubsystem;
 import teamCode.subsystems.IntakeWheelSubsystem;
 import teamCode.subsystems.LiftArmSubsystem;
 import teamCode.subsystems.SlideArmSubsystem;
 import teamCode.subsystems.StingRayArmSubsystem;
 
-@Autonomous(name="DelayPinPointAutoSpecimen", group="Pinpoint")
+@Autonomous(name="DelayPinPointAutoChambers", group="Pinpoint")
 //@Disabled
 
 public class DelayPinPointAutoChambers extends LinearOpMode
@@ -324,6 +325,12 @@ public class DelayPinPointAutoChambers extends LinearOpMode
         telemetry.addData("Spec Scored = ", (specimen));
 //        telemetry.addData("y2 = ", (ySampleCollect));
         Pose2DUnNormalized pos = odo.getPosition();
+
+
+
+//        PoseStorage.poseStorage.currentPose = odo.getPosition();
+
+
 
         String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(UnnormalizedAngleUnit.DEGREES));
 
