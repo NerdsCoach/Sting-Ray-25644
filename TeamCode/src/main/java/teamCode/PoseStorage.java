@@ -22,5 +22,4 @@ public class PoseStorage
 
         public static int ySpecScore;
     }
-
 //}
